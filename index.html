@@ -25,6 +25,7 @@
     </style>
     <script>
         (function() {
+            document.documentElement.style.opacity = '0';
             var lang = 'EN';
             try {
                 lang = localStorage.getItem('portfolioLang') || lang;
@@ -69,7 +70,7 @@
         ============================================================ */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         * { cursor: none; }
-        html { scroll-behavior: smooth; overflow-x: hidden; }
+        html { scroll-behavior: smooth; overflow-x: hidden; transition: opacity 0.15s; }
 
         body {
             background-color: #ffffff;
@@ -1951,7 +1952,10 @@
     const langToggle = document.querySelector('.lang-toggle');
     const languageStorageKey = 'portfolioLang';
     const setLanguage = (lang) => {
-        if (!langToggle) return;
+        if (!langToggle) {
+            document.documentElement.style.opacity = '';
+            return;
+        }
         langToggle.dataset.lang = lang;
         document.body.dataset.lang = lang;
         document.documentElement.setAttribute('data-initial-lang', lang);
@@ -1964,6 +1968,7 @@
             opt.classList.toggle('active', isActive);
             opt.classList.toggle('inactive', !isActive);
         });
+        document.documentElement.style.opacity = '';
     };
     if (langToggle) {
         let initialLang = langToggle.dataset.lang || document.body.dataset.lang || 'EN';
