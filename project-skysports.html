@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Case Study: Sky Sports AI-Personalised Sports App</title>
+    <title>Sky Sports AI App | Linyun Yu</title>
 
     <link href='https://db.onlinewebfonts.com/c/0d7c90bf2d5c8dcc4fa27a5ba6cbad81?family=Mango+Grotesque' rel='stylesheet'>
     <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap' rel='stylesheet'>
@@ -149,7 +149,7 @@
         }
         .status-dot {
             width: 6px; height: 6px;
-            background: var(--green);
+            background: #22C55E;
             border-radius: 50%; flex-shrink: 0;
             animation: pulse 2.5s ease-in-out infinite;
         }
@@ -248,7 +248,7 @@
             transform: translateX(-50%);
         }
         .mobile-menu-footer .nav-status { display: flex; color: rgba(255,255,255,0.4); }
-        .mobile-menu-footer .status-dot { background: var(--green); }
+        .mobile-menu-footer .status-dot { background: #22C55E; }
 
         /* --- HERO --- */
         .hero {
@@ -578,7 +578,7 @@
             padding: 20px 16px 20px 120px;
             overflow: hidden;
             border-radius: 2px;
-            background: url('source/picture/skysports/synthesis board.jpg') center / cover no-repeat;
+            background: url('assets/images/skysports/synthesis-board.jpg') center / cover no-repeat;
         }
         .research-placeholder-board::after {
             content: '';
@@ -995,6 +995,15 @@
             height: 100%;
             object-fit: fill;
             border-radius: 20px;
+        }
+
+        .story-media-pair--gamification .story-media-card video {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            border-radius: 20px;
+            /* Clip ~4px black recording border on each side (4/720 ≈ 0.56%) */
+            clip-path: inset(0 0.56% round 20px);
         }
 
         .story-screens-row {
@@ -1522,7 +1531,7 @@
 
     <nav id="main-nav">
         <div class="nav-left">
-            <a href="portfolio3-mobile-test.html" class="nav-back">
+            <a href="index.html" class="nav-back">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 BACK
             </a>
@@ -1550,7 +1559,7 @@
 
     <div class="mobile-menu" id="mobile-menu">
         <div class="mobile-menu-inner">
-            <a href="portfolio3-mobile-test.html" class="mobile-menu-link">Back to Portfolio</a>
+            <a href="index.html" class="mobile-menu-link">Back to Portfolio</a>
             <a href="#section-overview" class="mobile-menu-link lang-en">Overview</a>
             <a href="#section-overview" class="mobile-menu-link lang-cn">项目概述</a>
         </div>
@@ -1583,7 +1592,7 @@
             </div>
 
             <div class="hero-visual hero-visual--image reveal-clip">
-                <img src="source/picture/skysports/Background.jpg" alt="Sky Sports app concept screens">
+                <img src="assets/images/skysports/hero.jpg" alt="Sky Sports app concept screens">
             </div>
         </div>
         <p class="story-screen-caption reveal lang-cn" style="text-align: center; margin-top: 20px;">Sky Sports 概念界面总览</p>
@@ -1634,7 +1643,7 @@
                         </div>
 
                         <div class="research-aside">
-                            <img class="research-aside-image reveal" src="source/picture/skysports/service safari.jpg" alt="Service safari pub observation photo">
+                            <img class="research-aside-image reveal" src="assets/images/skysports/service-safari.jpg" alt="Service safari pub observation photo">
                             <p class="story-screen-caption lang-cn">Service safari 酒吧现场照</p>
                             <p class="story-screen-caption lang-en">Image 1: Service safari - pub observation photo</p>
                         </div>
@@ -1667,9 +1676,9 @@
 
                         <figure class="research-figure">
                             <div class="research-figure-frame research-board-visual">
-                                <img class="research-board-bg" src="source/picture/skysports/synthesis board.jpg" alt="Insight synthesis board background">
+                                <img class="research-board-bg" src="assets/images/skysports/synthesis-board.jpg" alt="Insight synthesis board background">
                                 <div class="research-board-mask" aria-hidden="true"></div>
-                                <img class="research-board-overlay" src="source/picture/skysports/insight-board-overlay.svg" alt="Insight synthesis board">
+                                <img class="research-board-overlay" src="assets/images/skysports/insight-board-overlay.svg" alt="Insight synthesis board">
                             </div>
                             <p class="story-screen-caption lang-cn">洞察综合板</p>
                             <p class="story-screen-caption lang-en">Insight synthesis board</p>
@@ -1828,16 +1837,16 @@
                 </div>
                 <div class="story-screens-row story-screens-row--social-flow reveal">
                     <div class="story-screen">
-                        <img src="source/picture/skysports/app/Watch-1.png" alt="Watch tab - create invite">
+                        <img src="assets/images/skysports/watch-1.webp" alt="Watch tab - create invite">
                     </div>
                     <div class="story-screen">
-                        <img src="source/picture/skysports/app/Watch.png" alt="Watch tab - channels and social">
+                        <img src="assets/images/skysports/watch.webp" alt="Watch tab - channels and social">
                     </div>
                     <div class="story-screen">
-                        <img src="source/picture/skysports/app/Social-invites(Judy side).png" alt="Social invites - Judy side">
+                        <img src="assets/images/skysports/social-invites-judy.webp" alt="Social invites - Judy side">
                     </div>
                     <div class="story-screen">
-                        <img src="source/picture/skysports/app/Social-invites(Judy‘s friends).png" alt="Social invite - Judy's friends">
+                        <img src="assets/images/skysports/social-invites-friends.webp" alt="Social invite - Judy’s friends">
                     </div>
                 </div>
             </div>
@@ -1847,10 +1856,10 @@
                 <div class="story-layout">
                     <div class="story-media-pair reveal">
                         <div class="story-media-card">
-                            <img src="source/picture/skysports/app/Social-invites.png" alt="Social invites list">
+                            <img src="assets/images/skysports/social-invites.webp" alt="Social invites list">
                         </div>
                         <div class="story-media-card">
-                            <img src="source/picture/skysports/app/Social-invites-1.png" alt="Social invite - QR code scanning">
+                            <img src="assets/images/skysports/social-invites-1.webp" alt="Social invite - QR code scanning">
                         </div>
                     </div>
                     <div class="story-content">
@@ -1883,10 +1892,12 @@
                     </div>
                     <div class="story-media-pair story-media-pair--gamification reveal">
                         <div class="story-media-card">
-                            <img src="source/picture/skysports/app/Social-select team.png" alt="Gamification team selection screen">
+                            <img src="assets/images/skysports/social-select-team.webp" alt="Gamification team selection screen">
                         </div>
                         <div class="story-media-card">
-                            <img src="source/picture/skysports/app/Social-cheer.gif?v=20260404-0446" alt="Gamification cheer interaction">
+                            <video autoplay loop muted playsinline>
+                                <source src="assets/images/skysports/social-cheer.mp4" type="video/mp4">
+                            </video>
                         </div>
                     </div>
                 </div>
@@ -1897,7 +1908,7 @@
                 <div class="story-layout">
                     <div class="story-media-single reveal">
                         <div class="story-media-card">
-                            <img src="source/picture/skysports/app/shake interaction-tv.jpg" alt="Pub large screen Cheer Battle scene">
+                            <img src="assets/images/skysports/shake-interaction-tv.jpg" alt="Pub large screen Cheer Battle scene">
                         </div>
                     </div>
                     <div class="story-content">
@@ -1922,7 +1933,7 @@
             <div class="section-next-grid">
 
                 <!-- Left: Previous → Shanghai -->
-                <a class="next-card reveal" href="project-shanghai-museum.html">
+                <a class="next-card reveal" href="project-astronomy-museum.html">
                     <span class="next-card-label lang-en">Previous Project</span>
                     <span class="next-card-label lang-cn">上一个项目</span>
                     <h2 class="next-card-title">Shanghai<br>Astronomy<br>Museum</h2>
@@ -1941,7 +1952,7 @@
                 </a>
 
                 <!-- Right: Also → Memorial (loop) -->
-                <a class="next-card reveal" href="project-memorial-content-management-v2.html">
+                <a class="next-card reveal" href="project-memorial-cms.html">
                     <span class="next-card-label lang-en">Also</span>
                     <span class="next-card-label lang-cn">更多</span>
                     <h2 class="next-card-title">Display<br>Content<br>Management</h2>
