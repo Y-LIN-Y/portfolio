@@ -5,12 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Linyun Yu | Portfolio</title>
 
-    <!-- Mango Grotesque — condensed display face (designer-portfolio @font-face) -->
-    <link href="https://db.onlinewebfonts.com/c/0d7c90bf2d5c8dcc4fa27a5ba6cbad81?family=Mango+Grotesque" rel="stylesheet">
-    <!-- Outfit for body, Space Mono for labels -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── LOCAL FONTS ── */
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-SemiBold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-ExtraBold.woff2') format('woff2'); font-weight:800; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:swap; }
+
+        @font-face { font-family:'Outfit'; src:url('assets/fonts/Outfit/Outfit-VariableFont_wght.woff2') format('woff2 supports variations'), url('assets/fonts/Outfit/Outfit-VariableFont_wght.woff2') format('woff2'); font-weight:100 900; font-style:normal; font-display:swap; }
+
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Light.woff2') format('woff2'); font-weight:300; font-style:normal; font-display:swap; }
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Demibold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+
+        @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-Italic.woff2') format('woff2'); font-weight:400; font-style:italic; font-display:swap; }
+        @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-BoldItalic.woff2') format('woff2'); font-weight:700; font-style:italic; font-display:swap; }
+    </style>
     <script>
         (function() {
             var lang = 'EN';
@@ -46,9 +61,9 @@
             --easing:       cubic-bezier(0.19, 1, 0.22, 1);
             --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
             /* fonts (designer-portfolio) */
-            --font-display: 'Mango Grotesque', 'Barlow Condensed', 'Arial Narrow', sans-serif;
+            --font-display: 'Mango Grotesque', 'Arial Narrow', sans-serif;
             --font-cn-display: '方正时尚碑宋 简', 'STSong', 'SimSun', serif;
-            --font-body:    'Outfit', sans-serif;
+            --font-body:    'Outfit', 'MiSans', sans-serif;
             --font-mono:    'Space Mono', monospace;
         }
 
@@ -149,7 +164,7 @@
         }
         .loader-counter {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             font-size: clamp(10rem, 28vw, 30rem);
             line-height: 0.75;
             letter-spacing: -0.015em;
@@ -164,7 +179,7 @@
         .loader-identity { position: relative; z-index: 2; }
         .loader-name {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             font-size: clamp(3rem, 8vw, 8rem);
             line-height: 0.85;
             text-transform: uppercase;
@@ -186,7 +201,7 @@
         }
         .loader-progress-text {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             font-size: clamp(2rem, 4vw, 4rem);
             line-height: 1;
             letter-spacing: 0.01em;
@@ -226,7 +241,7 @@
 
         .brand {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             font-size: 1.15rem;
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -252,7 +267,7 @@
         .nav-items .nav-link {
             font-family: var(--font-body);
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             text-decoration: none;
@@ -274,7 +289,7 @@
         .nav-items-overlay .nav-link {
             font-family: var(--font-body);
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             text-decoration: none;
@@ -488,7 +503,7 @@
         .hero-typo .typo-line .word {
             display: inline-block;
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: -0.02em;
             color: var(--ink);
@@ -777,7 +792,7 @@
         }
         .section-title {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             font-size: clamp(2.2rem, 4.5vw, 4.5rem);
             line-height: 0.9;
             text-transform: uppercase;
@@ -796,7 +811,7 @@
         }
         .about-statement {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             font-size: clamp(5rem, 9vw, 9rem);
             line-height: 0.88;
             text-transform: uppercase;
@@ -828,7 +843,7 @@
         .about-body p + p { margin-top: 24px; }
         .about-body h3 {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             font-size: 1.6rem;
             text-transform: uppercase;
             line-height: 1;
@@ -916,7 +931,7 @@
 
         .contact-headline {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             font-size: clamp(3rem, 9vw, 9rem);
             line-height: 0.82;
             text-transform: uppercase;
@@ -959,7 +974,7 @@
         .contact-email-link:hover { border-color: var(--yellow); }
         .contact-socials-title {
             font-family: var(--font-display);
-            font-weight: 900;
+            font-weight: 700;
             font-size: 1.8rem;
             text-transform: uppercase;
             margin-bottom: 20px;
@@ -1273,7 +1288,7 @@
         .mobile-menu-link {
             font-family: var(--font-display);
             font-size: clamp(2.5rem, 10vw, 4rem);
-            font-weight: 900;
+            font-weight: 700;
             text-transform: uppercase;
             color: #fff;
             text-decoration: none;
