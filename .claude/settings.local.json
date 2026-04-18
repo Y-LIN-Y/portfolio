@@ -13,7 +13,14 @@
       "mcp__playwright__browser_evaluate",
       "mcp__playwright__browser_take_screenshot",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(find /Users/yulinyun/Documents/10Learn/105Code/portfolio/source -type f \\\\\\( -name \"*.jpg\" -o -name \"*.jpeg\" -o -name \"*.png\" -o -name \"*.gif\" -o -name \"*.svg\" \\\\\\) -exec ls -la {} \\\\;)",
+      "Bash(awk '{print $5, $9}')",
+      "Bash(ls -la /Users/yulinyun/Documents/10Learn/105Code/portfolio/*.html)",
+      "Bash(ls /Users/yulinyun/Documents/10Learn/105Code/portfolio/*.html)",
+      "Bash(open /Users/yulinyun/Documents/10Learn/105Code/portfolio/)",
+      "Bash(open /Users/yulinyun/Documents/10Learn/105Code/portfolio/_archive/)"
     ]
   }
 }
