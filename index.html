@@ -1742,8 +1742,8 @@
         </div>
         <div>
             <div class="social-pills">
-                <a href="#" class="social-pill">Resume</a>
-                <a href="#" class="social-pill">LinkedIn</a>
+                <a href="assets/files/resume_linyun_yu_en.pdf" class="resume-link social-pill" target="_blank" rel="noopener noreferrer">Resume</a>
+                <a href="https://www.linkedin.com/in/linyunyu" target="_blank" rel="noopener noreferrer" class="social-pill">LinkedIn</a>
             </div>
         </div>
     </div>
@@ -1752,8 +1752,8 @@
 <!-- ============ SITE FOOTER ============ -->
 <footer class="site-footer">
     <div class="footer-socials">
-        <a href="#">Resume</a>
-        <a href="#">LinkedIn</a>
+        <a class="resume-link" href="assets/files/resume_linyun_yu_en.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
+        <a href="https://www.linkedin.com/in/linyunyu" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </div>
     <span><span class="lang-en">&copy; 2026 Linyun Yu</span><span class="lang-cn">&copy; 2026 Linyun Yu</span></span>
 </footer>
@@ -2383,6 +2383,21 @@ function initReveal () {
     };
     update();
     setInterval(update, 1000);
+})();
+
+// --- Resume link: switch PDF by language ---
+(function () {
+    const updateResumeLink = () => {
+        const lang = document.body.dataset.lang || 'EN';
+        const href = lang === 'CN'
+            ? 'assets/files/resume_linyun_yu_zh.pdf'
+            : 'assets/files/resume_linyun_yu_en.pdf';
+        document.querySelectorAll('a.resume-link').forEach(a => a.href = href);
+    };
+    updateResumeLink();
+    new MutationObserver(updateResumeLink).observe(document.body, {
+        attributes: true, attributeFilter: ['data-lang']
+    });
 })();
 
 </script>

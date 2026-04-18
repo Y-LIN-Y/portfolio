@@ -1980,8 +1980,8 @@
         <span>&copy; 2026 Linyun Yu</span>
         <div class="footer-socials">
             <a href="mailto:yulinyune@gmail.com">Email</a>
-            <a href="#">LinkedIn</a>
-            <a href="#">Resume</a>
+            <a href="https://www.linkedin.com/in/linyunyu" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a class="resume-link" href="assets/files/resume_linyun_yu_en.pdf" target="_blank" rel="noopener noreferrer">Resume</a>
         </div>
     </footer>
 
@@ -2060,6 +2060,19 @@
                     });
                 });
             }
+
+        // --- Resume link: switch PDF by language ---
+        const updateResumeLink = () => {
+            const lang = document.body.dataset.lang || 'EN';
+            const href = lang === 'CN'
+                ? 'assets/files/resume_linyun_yu_zh.pdf'
+                : 'assets/files/resume_linyun_yu_en.pdf';
+            document.querySelectorAll('a.resume-link').forEach(a => a.href = href);
+        };
+        updateResumeLink();
+        new MutationObserver(updateResumeLink).observe(document.body, {
+            attributes: true, attributeFilter: ['data-lang']
+        });
         });
     </script>
 </body>
