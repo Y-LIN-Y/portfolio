@@ -5,9 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sky Sports AI App | Linyun Yu</title>
 
-    <link href='https://db.onlinewebfonts.com/c/0d7c90bf2d5c8dcc4fa27a5ba6cbad81?family=Mango+Grotesque' rel='stylesheet'>
-    <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap' rel='stylesheet'>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ── LOCAL FONTS ── */
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-SemiBold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-ExtraBold.woff2') format('woff2'); font-weight:800; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:swap; }
+
+        @font-face { font-family:'Outfit'; src:url('assets/fonts/Outfit/Outfit-VariableFont_wght.woff2') format('woff2 supports variations'), url('assets/fonts/Outfit/Outfit-VariableFont_wght.woff2') format('woff2'); font-weight:100 900; font-style:normal; font-display:swap; }
+
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Light.woff2') format('woff2'); font-weight:300; font-style:normal; font-display:swap; }
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Medium.woff2') format('woff2'); font-weight:500; font-style:normal; font-display:swap; }
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Demibold.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+        @font-face { font-family:'MiSans'; src:url('assets/fonts/MiSans/woff2/MiSans-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+
+        @font-face { font-family:'Noto Serif SC'; src:url('assets/fonts/Noto_Serif_SC/NotoSerifSC-VariableFont_wght.woff2') format('woff2 supports variations'), url('assets/fonts/Noto_Serif_SC/NotoSerifSC-VariableFont_wght.woff2') format('woff2'); font-weight:100 900; font-style:normal; font-display:swap; }
+
+        @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-Italic.woff2') format('woff2'); font-weight:400; font-style:italic; font-display:swap; }
+        @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-BoldItalic.woff2') format('woff2'); font-weight:700; font-style:italic; font-display:swap; }
+
+        @font-face { font-family:'Caveat'; src:url('assets/fonts/Caveat/Caveat-VariableFont_wght.woff2') format('woff2 supports variations'), url('assets/fonts/Caveat/Caveat-VariableFont_wght.woff2') format('woff2'); font-weight:400 700; font-style:normal; font-display:swap; }
+    </style>
     <script>
         (function() {
             var lang = 'CN';
@@ -37,9 +59,9 @@
             --c-indigo: #6366F1;
             --easing: cubic-bezier(0.19, 1, 0.22, 1);
 
-            --font-display: 'Mango Grotesque', 'Barlow Condensed', 'Arial Narrow', sans-serif;
-            --font-cn-display: 'Noto Serif SC', 'Songti SC', serif;
-            --font-body: 'Outfit', sans-serif;
+            --font-display: 'Mango Grotesque', 'Arial Narrow', sans-serif;
+            --font-cn-display: 'Noto Serif SC', serif;
+            --font-body: 'Outfit', 'MiSans', sans-serif;
             --font-mono: 'Space Mono', monospace;
 
             --spacing-container: 4vw;
@@ -88,6 +110,7 @@
 
         .u-display {
             font-family: var(--font-display);
+            font-weight: 700;
             line-height: 0.88;
             text-transform: uppercase;
         }
@@ -408,6 +431,7 @@
             padding-bottom: 20px;
             border-bottom: 1px solid var(--border);
             position: relative;
+            color: var(--ink-muted);
         }
 
         .section-label::after {
@@ -877,6 +901,8 @@
         }
 
         .story-num {
+            font-family: var(--font-display);
+            font-weight: 700;
             font-size: clamp(4rem, 8vw, 6rem);
             color: #275E48;
             display: block;
@@ -1638,8 +1664,7 @@
                 <div class="research-top">
                     <div class="research-copy">
                         <div class="section-label reveal">
-                            <span class="u-mono lang-cn">Research / 研究过程</span>
-                            <span class="u-mono lang-en">Research</span>
+                            <span class="u-mono">Research / 研究过程</span>
                         </div>
 
                         <div class="research-aside">
@@ -1797,8 +1822,7 @@
     <section class="section-narrative">
         <div class="container">
             <div class="section-label reveal">
-                <span class="u-mono lang-cn">Design Thinking / 设计思路</span>
-                <span class="u-mono lang-en">Design Thinking</span>
+                <span class="u-mono">Design Thinking / 设计思路</span>
             </div>
 
             <!-- 01 -->
@@ -1994,11 +2018,25 @@
                 if (!langToggle) return;
                 langToggle.dataset.lang = lang;
                 document.body.dataset.lang = lang;
+                // Keep html[data-initial-lang] in sync so the inline FOUC-prevention
+                // CSS (which uses !important) doesn't permanently lock the wrong language.
+                document.documentElement.dataset.initialLang = lang;
                 document.documentElement.lang = lang === 'CN' ? 'zh-CN' : 'en';
                 langToggle.querySelectorAll('.lang-opt').forEach(opt => {
                     const isActive = (opt.textContent.trim() === '中' && lang === 'CN') || (opt.textContent.trim() === 'EN' && lang === 'EN');
                     opt.classList.toggle('active', isActive);
                     opt.classList.toggle('inactive', !isActive);
+                });
+                // Force-reveal elements already at/above the viewport fold.
+                // When hidden language content becomes visible, elements that were
+                // scrolled past won't re-enter the viewport, so IntersectionObserver
+                // never fires for them — they'd stay invisible without this fix.
+                requestAnimationFrame(() => {
+                    document.querySelectorAll('.reveal, .reveal-clip, .reveal-left, .reveal-stagger').forEach(el => {
+                        if (el.getBoundingClientRect().top < window.innerHeight) {
+                            el.classList.add('active');
+                        }
+                    });
                 });
                 try {
                     localStorage.setItem(languageStorageKey, lang);
