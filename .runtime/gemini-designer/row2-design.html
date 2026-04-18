@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Row 2 Editorial Component</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- DESIGN SYSTEM & RESET --- */
+        :root {
+            --forest: #275E48;
+            --bg: #EDEBE6;
+            --ink: #0D0D0D;
+            --lavender: #C8B4FF;
+            --ink-muted: #7A7770;
+            --ease: cubic-bezier(0.25, 1, 0.5, 1);
+            --font-display: 'Anton', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            font-family: var(--font-body);
+            color: var(--ink);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- ROW CONTAINER --- */
+        .editorial-row {
+            position: relative;
+            width: 100%;
+            min-height: 80vh; /* Give it room to breathe */
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 4rem 2rem;
+            overflow: hidden;
+            cursor: default; /* Specific cursor requested not to be custom, but avoiding text select cursor on bg */
+        }
+
+        /* --- TYPOGRAPHY STACK --- */
+        /* FEATURE: Main typographic composition with stacked z-indices and blend modes */
+        .headline-stack {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            pointer-events: none; /* Let clicks pass through to potential links, though none here */
+        }
+
+        .word-wrapper {
+            display: block;
+            width: fit-content;
+            will-change: transform; /* Optimize for JS movement */
+        }
+
+        .headline {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 11vw, 12rem);
+            line-height: 0.78; /* Tight stacking */
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            display: block;
+            transform-origin: left center;
+        }
+
+        /* Line 1: DESIGNING */
+        .headline.solid {
+            color: var(--ink);
+        }
+
+        /* Line 2: DIGITAL */
+        .headline.outline {
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--ink);
+            transition: color 0.5s var(--ease);
+            position: relative;
+            z-index: 5; /* Sits above image */
+        }
+
+        /* FEATURE: Hover state where outline fills */
+        .editorial-row:hover .headline.outline {
+            color: var(--ink);
+        }
+
+        /* Line 3: PLANETARIUM */
+        .headline.accent {
+            color: var(--forest);
+            z-index: 2;
+        }
+
+        /* --- IMAGE COMPONENT --- */
+        /* FEATURE: Offset editorial image layout */
+        .project-visual {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            width: 38%;
+            max-width: 600px;
+            min-width: 320px;
+            height: clamp(300px, 40vw, 450px);
+            z-index: 3; /* Sits between outline and accent text visually */
+            transform: translateY(-50%) rotate(2.5deg); /* Initial offset */
+            will-change: transform;
+        }
+
+        .image-card {
+            width: 100%;
+            height: 100%;
+            background-color: #DCD9D0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            filter: grayscale(100%);
+            transition: filter 0.6s var(--ease);
+        }
+
+        /* Image placeholder text styling */
+        .image-card::after {
+            content: 'PROJECT IMAGE 02';
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #999;
+            letter-spacing: 1px;
+            border: 1px solid #BFBFBF;
+            padding: 8px 12px;
+            transform: rotate(-2.5deg); /* Counter-rotate inner text */
+        }
+
+        /* Fake abstract image content using CSS gradients for realism */
+        .image-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.2;
+            background: linear-gradient(135deg, #444 0%, transparent 40%),
+                        radial-gradient(circle at 80% 20%, #275E48 0%, transparent 30%);
+            mix-blend-mode: multiply;
+        }
+
+        /* FEATURE: Image saturation on hover */
+        .editorial-row:hover .image-card {
+            filter: grayscale(0%);
+        }
+
+        /* --- META DATA --- */
+        /* FEATURE: Informational layout anchored to image */
+        .meta-wrapper {
+            position: absolute;
+            bottom: -80px; /* Hanging outside the image wrapper */
+            left: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transform: rotate(-2.5deg); /* Match image counter-rotation logic if desired, or keep straight */
+        }
+
+        .tags-group {
+            display: flex;
+            gap: 0; /* Connected tags */
+        }
+
+        .tag {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            padding: 0.6em 1.2em;
+            line-height: 1;
+            border-radius: 0; /* Strict square corners */
+        }
+
+        .tag.type {
+            background-color: var(--lavender);
+            color: var(--ink);
+        }
+
+        .tag.loc {
+            background-color: var(--ink);
+            color: white;
+        }
+
+        .project-desc {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--ink-muted);
+            max-width: 240px;
+            line-height: 1.4;
+        }
+
+        /* --- RESPONSIVE ADJUSTMENTS --- */
+        @media (max-width: 900px) {
+            .editorial-row {
+                flex-direction: column;
+                justify-content: center;
+                align-items: flex-start;
+                min-height: auto;
+                padding-bottom: 8rem; /* Space for image */
+            }
+
+            .image-wrapper {
+                position: relative; /* Override float behavior */
+            }
+
+            .headline {
+                font-size: 15vw; /* Bigger relative on mobile */
+            }
+            
+            .project-visual {
+                position: relative;
+                width: 70%;
+                right: -20%; /* Push right */
+                top: 0;
+                margin-top: -2rem; /* Overlap upwards */
+                transform: rotate(2deg);
+            }
+            
+            .meta-wrapper {
+                position: absolute;
+                bottom: -20px;
+                left: -40px; /* Offset to feel editorial */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Row 2 Component Container -->
+    <section class="editorial-row" id="row2">
+        
+        <!-- FEATURE: Parallax Text Stack -->
+        <div class="headline-stack">
+            <!-- Line 1: Moves fastest right -->
+            <div class="word-wrapper" data-speed="20" data-direction="1">
+                <h2 class="headline solid">Designing</h2>
+            </div>
+            
+            <!-- Line 2: Moves left (Contrast motion) -->
+            <div class="word-wrapper" data-speed="15" data-direction="-1">
+                <h2 class="headline outline">Digital</h2>
+            </div>
+            
+            <!-- Line 3: Moves slowly right -->
+            <div class="word-wrapper" data-speed="10" data-direction="1">
+                <h2 class="headline accent">Planetarium</h2>
+            </div>
+        </div>
+
+        <!-- FEATURE: Interactive Visual with Metadata -->
+        <div class="project-visual" data-speed="8" data-direction="-1"> <!-- Moves opposite to generic flow -->
+            <div class="image-card">
+                <div class="image-content"></div>
+            </div>
+            
+            <div class="meta-wrapper">
+                <div class="tags-group">
+                    <span class="tag type">Installation</span>
+                    <span class="tag loc">Shanghai</span>
+                </div>
+                <p class="project-desc">
+                    [02] Immersive light mapping for the Shanghai Astronomy Museum hall.
+                </p>
+            </div>
+        </div>
+
+    </section>
+
+    <script>
+        // --- INTERACTION LOGIC ---
+        
+        const row = document.getElementById('row2');
+        const parallaxElements = document.querySelectorAll('[data-speed]');
+        
+        // Physics variables for smooth motion (Lerp)
+        let mouseX = 0;
+        let currentX = 0;
+        let targetX = 0;
+        const windowHalf = window.innerWidth / 2;
+
+        // FEATURE: Mouse movement tracking relative to viewport center
+        document.addEventListener('mousemove', (e) => {
+            // Normalize mouse position from -1 to 1
+            mouseX = (e.clientX - windowHalf) / windowHalf;
+        });
+
+        // Linear interpolation helper
+        function lerp(start, end, t) {
+            return start * (1 - t) + end * t;
+        }
+
+        // FEATURE: Animation Loop
+        function animate() {
+            // Smoothly interpolate current value towards target mouse position
+            targetX = mouseX;
+            currentX = lerp(currentX, targetX, 0.08); // 0.08 = smoothing factor
+
+            parallaxElements.forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-speed'));
+                const direction = parseFloat(el.getAttribute('data-direction'));
+                
+                // Calculate translation based on normalized mouse (-1 to 1) * speed
+                // This creates the parallax offset
+                const xPos = currentX * speed * direction;
+                
+                // For the image container, we need to preserve the CSS rotation
+                // and the translateY centering.
+                if(el.classList.contains('project-visual')) {
+                    // Check if mobile or desktop to maintain layout transforms
+                    const isMobile = window.innerWidth <= 900;
+                    const baseTransform = isMobile 
+                        ? 'rotate(2deg)' 
+                        : 'translateY(-50%) rotate(2.5deg)';
+                    
+                    el.style.transform = `${baseTransform} translateX(${xPos}px)`;
+                } else {
+                    // Text elements just move X
+                    el.style.transform = `translateX(${xPos}px)`;
+                }
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // Start the engine
+        animate();
+
+    </script>
+</body>
+</html>

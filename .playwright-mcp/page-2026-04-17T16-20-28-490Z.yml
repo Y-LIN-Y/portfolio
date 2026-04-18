@@ -1,0 +1,194 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link "BACK" [ref=e4] [cursor=pointer]:
+      - /url: portfolio3-mobile-test.html
+      - img [ref=e5]
+      - text: BACK
+    - generic [ref=e8] [cursor=pointer]:
+      - generic [ref=e10]: EN
+      - generic [ref=e11]: 中
+    - button "Menu" [ref=e12] [cursor=pointer]:
+      - img [ref=e13]
+  - generic:
+    - generic:
+      - link "Back to Portfolio":
+        - /url: portfolio3-mobile-test.html
+      - link "Overview":
+        - /url: "#section-overview"
+    - generic:
+      - generic:
+        - generic: Available for work
+  - banner [ref=e14]:
+    - generic [ref=e15]:
+      - generic [ref=e16]: LARGE-FORMAT DATA VIZ · VENUE OPERATIONS
+      - generic [ref=e17]:
+        - generic [ref=e18]: Shanghai Astronomy Museum
+        - heading "VENUE MANAGEMENT DASHBOARD" [level=1] [ref=e19]:
+          - text: VENUE MANAGEMENT
+          - text: DASHBOARD
+        - generic [ref=e20]: LARGE FORMAT DATA VISUALIZATION SYSTEM
+    - img "Shanghai Astronomy Museum overview dashboard" [ref=e22]
+  - generic [ref=e25]:
+    - generic [ref=e27]:
+      - generic [ref=e28]: BACKGROUND
+      - heading "THE MUSEUM" [level=2] [ref=e29]:
+        - text: THE
+        - text: MUSEUM
+    - generic [ref=e31]:
+      - paragraph [ref=e32]: The Shanghai Astronomy Museum is one of China's largest and most-visited science museums, with multiple exhibition halls, theaters, and public facilities spread across a large campus.
+      - paragraph [ref=e33]: The management team needed a centralized way to monitor visitor flow, building systems, security, and energy usage — all from a single large-format display in the control room.
+  - generic [ref=e35]:
+    - generic [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]: ROLE
+        - generic [ref=e39]: UI/UX Designer
+      - generic [ref=e40]:
+        - generic [ref=e41]: SCOPE
+        - generic [ref=e42]: Large-screen module design, mobile companion design
+      - generic [ref=e43]:
+        - generic [ref=e44]: YEAR
+        - generic [ref=e45]: "2023"
+    - generic [ref=e47]:
+      - paragraph [ref=e48]:
+        - text: The museum's operational data was spread across
+        - strong [ref=e49]: 7 separate systems
+        - text: . This project was about bringing it all into one spatially-anchored interface where problems could be spotted at a glance.
+      - paragraph [ref=e50]: "I designed the entire system end-to-end: the large-screen dashboard with 7 functional modules, plus a companion mobile app for alert response and on-the-go data access."
+  - generic [ref=e52]:
+    - generic [ref=e53]: Design Thinking / 设计思路
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - generic [ref=e56]: "01"
+        - heading "Anchoring Data to Physical Space" [level=3] [ref=e57]
+        - paragraph [ref=e58]: The museum spans three floors (B1, F1, F2), with cameras, fire sensors, and HVAC units distributed across all of them. A flat map can't express floor relationships and spatial positions simultaneously. The 3D model, paired with a floor-switching control, ties each data point to its physical location—making it immediately clear where an issue is.
+      - generic [ref=e59]:
+        - generic [ref=e60]: "02"
+        - heading "Right Visualization for Each Data Type" [level=3] [ref=e61]
+        - paragraph [ref=e62]: "The 7 modules each deal with fundamentally different data: visitor trends, sensor readings, alarm events, equipment status, energy comparisons. Rather than applying one template, I matched each to its best-fit visualization—line charts for trends, ring charts for proportions, color-coded tables for status, annotated points on the 3D model for spatial distribution."
+      - generic [ref=e63]:
+        - generic [ref=e64]: "03"
+        - heading "Visual Hierarchy for Large Screens" [level=3] [ref=e65]
+        - paragraph [ref=e66]: The dashboard is viewed from several meters away—you can't read it like a webpage. Key metrics (4,800 daily visitors, 1.38M kWh monthly electricity) need oversized typography and high contrast. Secondary details like device logs and event tables recede with smaller type and muted colors. The dark background also required careful color calibration.
+      - generic [ref=e67]:
+        - generic [ref=e68]: "04"
+        - heading "Symmetrical Layout for Scanning" [level=3] [ref=e69]
+        - paragraph [ref=e70]: On a large screen, the eye naturally goes to the center first, then out to the sides. Center is always the spatial view, sides are always data panels. Switching modules doesn't require relearning the layout. The two sides also naturally separate data dimensions—electricity vs. water for Energy, device stats vs. personnel events for Security.
+      - generic [ref=e71]:
+        - generic [ref=e72]: "05"
+        - heading "7 Focused Modules vs. One Dense Screen" [level=3] [ref=e73]
+        - paragraph [ref=e74]: Operations, environment, security, mechanical, fire, energy—these are fundamentally different domains with little overlap. Combining them on one screen would exceed readable limits. Seven modules, each focused on one dimension with a shared navigation bar, balance completeness against cognitive load. The Overview page serves as the consolidated entry point.
+  - generic [ref=e75]:
+    - generic [ref=e76]: System Modules / 功能模块
+    - generic [ref=e77]:
+      - img "Overview dashboard for Shanghai Astronomy Museum" [ref=e79]
+      - generic [ref=e80]:
+        - heading "OVERVIEW" [level=3] [ref=e81]
+        - heading "Real-Time Operational Snapshot" [level=4] [ref=e82]
+        - paragraph [ref=e83]: "The landing page aggregates the most critical KPIs: real-time and monthly visitor trends, sub-venue crowding with a congestion index, ticket sales, complaint tracking, and merchandise revenue. Weather and emergency protocol links at the top round out the full-picture view."
+    - generic [ref=e84]:
+      - img "Operations dashboard for Shanghai Astronomy Museum" [ref=e86]
+      - generic [ref=e87]:
+        - heading "OPERATIONS" [level=3] [ref=e88]
+        - heading "Multi-Dimensional Visitor Intelligence" [level=4] [ref=e89]
+        - paragraph [ref=e90]: "The most data-rich module: real-time visitor flow, demographic breakdowns, reservations, equipment rentals, complaint analysis, and merchandise sales. A heat map overlaid on the 3D model shows crowd density across exhibition zones."
+    - generic [ref=e91]:
+      - img "Environment dashboard for Shanghai Astronomy Museum" [ref=e93]
+      - generic [ref=e94]:
+        - heading "ENVIRONMENT" [level=3] [ref=e95]
+        - heading "Zone-Level Conditions at a Glance" [level=4] [ref=e96]
+        - paragraph [ref=e97]: Air quality, noise, illumination, fresh air volume, temperature, and humidity—broken down by zone. Color-coded areas on the 3D model provide spatial orientation; oversized typography on the right highlights current readings and alert thresholds.
+    - generic [ref=e98]:
+      - img "Security dashboard for Shanghai Astronomy Museum" [ref=e100]
+      - generic [ref=e101]:
+        - heading "SECURITY" [level=3] [ref=e102]
+        - 'heading "Three Layers: Devices, Space, Personnel" [level=4] [ref=e103]'
+        - paragraph [ref=e104]: "Left panel: parking and electronic fence status. Center: camera and barrier gate locations on the 3D model. Right panel: patrol routes, anomaly events, and security staff allocation—structured as three progressive layers from devices to space to personnel."
+    - generic [ref=e105]:
+      - img "Mechanical and electrical dashboard for Shanghai Astronomy Museum" [ref=e107]
+      - generic [ref=e108]:
+        - heading "MECHANICAL & ELECTRICAL" [level=3] [ref=e109]:
+          - text: MECHANICAL
+          - text: "& ELECTRICAL"
+        - heading "Five Systems, One View" [level=4] [ref=e110]
+        - paragraph [ref=e111]: Five building systems—water supply, ventilation, lighting, elevators, HVAC—listed by floor with operating, maintenance, and inspection status. Anomalies are highlighted in red for immediate identification.
+    - generic [ref=e112]:
+      - img "Fire safety dashboard for Shanghai Astronomy Museum" [ref=e114]
+      - generic [ref=e115]:
+        - heading "FIRE SAFETY" [level=3] [ref=e116]
+        - heading "Alarm Stats Meets System Health" [level=4] [ref=e117]
+        - paragraph [ref=e118]: "Left: fire alarm statistics and facility status. Right: combustible gas detection, ventilation alerts, and electrical circuit health. A gauge prominently displays the overall system health rate."
+    - generic [ref=e119]:
+      - img "Energy dashboard for Shanghai Astronomy Museum" [ref=e121]
+      - generic [ref=e122]:
+        - heading "ENERGY" [level=3] [ref=e123]
+        - heading "Consumption Trends & Carbon Tracking" [level=4] [ref=e124]
+        - paragraph [ref=e125]: Symmetrical layout with electricity on the left and water on the right, each showing trend charts, monthly totals, and MoM/YoY comparisons. A carbon emissions section at the bottom connects energy data to sustainability metrics.
+  - generic [ref=e126]:
+    - generic [ref=e127]: Companion App / 移动端应用
+    - generic [ref=e128]:
+      - generic [ref=e131]: FROM MONITORING TO RESPONSE
+      - paragraph [ref=e134]: Beyond the large-screen dashboard, I also designed a companion mobile app. The dashboard handles global display and real-time monitoring; the mobile app handles alert delivery and on-site response. Together, they form a complete monitoring-to-action loop.
+    - generic [ref=e135]:
+      - generic [ref=e137]:
+        - generic [ref=e138]:
+          - img "Mobile venue overview home screen" [ref=e139]
+          - paragraph [ref=e140]: Mobile home screen - overview entry with key trend data
+        - generic [ref=e141]:
+          - img "Mobile venue overview details screen" [ref=e142]
+          - paragraph [ref=e143]: Detail view - ticketing and congestion metrics reorganized for vertical browsing
+      - generic [ref=e144]:
+        - heading "DATA ACCESS" [level=3] [ref=e145]
+        - heading "Venue Overview and Data Access" [level=4] [ref=e146]
+        - paragraph [ref=e147]: "The mobile app retains key overview data: monthly visitor trends, sub-venue crowding levels, theater ticket sales, and complaint analysis—all accessible on the go. The information architecture was reorganized for the small screen, shifting from the dashboard's symmetrical side-by-side layout to a vertical card-based flow."
+    - generic [ref=e148]:
+      - generic [ref=e150]:
+        - generic [ref=e151]:
+          - img "Mobile alert overview screen" [ref=e152]
+          - paragraph [ref=e153]: Alert overview - inspect floor locations and incident distribution right after a notification
+        - generic [ref=e154]:
+          - img "Mobile work order handling screen" [ref=e155]
+          - paragraph [ref=e156]: Work order handling - continue incident processing and status updates on mobile
+      - generic [ref=e157]:
+        - heading "ALERT & RESPONSE" [level=3] [ref=e158]:
+          - text: ALERT &
+          - text: RESPONSE
+        - heading "Alert Push and Incident Handling" [level=4] [ref=e159]
+        - paragraph [ref=e160]: "When the system detects an anomaly (e.g., crowding exceeds a threshold), the mobile app delivers a real-time push notification. Tapping the alert shows: the exact location highlighted in red on the 3D model, an event log with timestamps and status, and a system-generated response recommendation. Once the operator confirms resolution, the status syncs back to the main dashboard."
+  - generic [ref=e163]:
+    - link "Previous Project Display Content Management Memorial Museum · Large Screen UI/UX Design Large Screen" [ref=e164] [cursor=pointer]:
+      - /url: project-memorial-content-management-v2.html
+      - generic [ref=e165]: Previous Project
+      - heading "Display Content Management" [level=2] [ref=e166]:
+        - text: Display
+        - text: Content
+        - text: Management
+      - generic [ref=e167]:
+        - generic [ref=e168]:
+          - paragraph [ref=e169]: Memorial Museum · Large Screen
+          - generic [ref=e170]:
+            - generic [ref=e171]: UI/UX Design
+            - generic [ref=e172]: Large Screen
+        - img [ref=e174]
+    - link "Next Project Sky Sports AI-Personalised App Sky Sports · UX Design UX Design Coursework" [ref=e176] [cursor=pointer]:
+      - /url: project-skysports.html
+      - generic [ref=e177]: Next Project
+      - heading "Sky Sports AI-Personalised App" [level=2] [ref=e178]:
+        - text: Sky Sports
+        - text: AI-Personalised
+        - text: App
+      - generic [ref=e179]:
+        - generic [ref=e180]:
+          - paragraph [ref=e181]: Sky Sports · UX Design
+          - generic [ref=e182]:
+            - generic [ref=e183]: UX Design
+            - generic [ref=e184]: Coursework
+        - img [ref=e186]
+  - contentinfo [ref=e188]:
+    - generic [ref=e189]: © 2026 Linyun Yu
+    - generic [ref=e190]:
+      - link "Email" [ref=e191] [cursor=pointer]:
+        - /url: mailto:yulinyune@gmail.com
+      - link "LinkedIn" [ref=e192] [cursor=pointer]:
+        - /url: "#"
+      - link "Resume" [ref=e193] [cursor=pointer]:
+        - /url: "#"

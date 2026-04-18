@@ -1,0 +1,163 @@
+- generic [active] [ref=e1]:
+  - navigation [ref=e2]:
+    - link "BACK" [ref=e4] [cursor=pointer]:
+      - /url: portfolio3-mobile-test.html
+      - img [ref=e5]
+      - text: BACK
+    - generic [ref=e7]: UX DESIGN · MA COURSEWORK
+    - generic [ref=e8]:
+      - generic [ref=e11]: Available for work
+      - generic [ref=e12] [cursor=pointer]:
+        - generic [ref=e14]: EN
+        - generic [ref=e15]: 中
+  - banner [ref=e16]:
+    - generic [ref=e17]: AI PERSONALISATION · SOCIAL VIEWING
+    - generic [ref=e18]:
+      - generic [ref=e20]:
+        - generic [ref=e21]: Sky Sports
+        - heading "AI-Personalised Sports App" [level=1] [ref=e22]:
+          - text: AI-Personalised
+          - text: Sports App
+        - generic [ref=e23]: AI-DRIVEN SOCIAL EXPERIENCE FOR GEN Z FOOTBALL FANS
+        - paragraph [ref=e24]: Sky Sports wanted to reach more viewers under 35, but existing content patterns weren't resonating with this group. This project explored how AI personalisation could make football viewing fit more naturally into young fans' lives.
+      - img "Sky Sports app concept screens" [ref=e26]
+    - paragraph [ref=e27]: Sky Sports concept screens overview
+  - generic [ref=e29]:
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - generic [ref=e32]: ROLE
+        - generic [ref=e33]: UX Designer
+      - generic [ref=e34]:
+        - generic [ref=e35]: SCOPE
+        - generic [ref=e36]: Research, concepting, and UI design
+      - generic [ref=e37]:
+        - generic [ref=e38]: YEAR
+        - generic [ref=e39]: "2025"
+    - paragraph [ref=e42]: "A coursework project in collaboration with Sky Sports, designing an AI-driven personalised experience for Gen Z football fans around the brief: Utilising AI for hyper-personalised experiences."
+  - generic [ref=e45]:
+    - generic [ref=e47]:
+      - generic [ref=e48]: Research
+      - generic [ref=e49]:
+        - img "Service safari pub observation photo" [ref=e50]
+        - paragraph [ref=e51]: "Image 1: Service safari - pub observation photo"
+      - paragraph [ref=e53]: The team conducted semi-structured interviews with 14 university students aged 18-25, spanning participants from the UK, India, China, and Mexico, alongside a service safari at a local pub to observe real watching behaviour in context. Findings were synthesised through affinity mapping into 7 key insights.
+      - paragraph [ref=e55]: The most significant finding was that younger fans are driven by social context rather than football content itself. Cost was the other major barrier, with most participants sharing someone else's subscription. These two findings shifted the design direction away from content recommendation and toward bringing the social experience of watching live football into the app.
+    - generic [ref=e57]:
+      - generic [ref=e58]:
+        - generic [ref=e59]: Key Insights
+        - generic [ref=e60]:
+          - text: 1 · Despite strong brand awareness, Sky Sports is under used by Gen Z, mainly due to
+          - strong [ref=e61]: cost
+          - text: .
+        - generic [ref=e62]:
+          - text: 2 · Users trust
+          - strong [ref=e63]: small, familiar communication
+          - text: environments for sharing content or opinions.
+        - generic [ref=e64]:
+          - text: 3 · Hope for a more
+          - strong [ref=e65]: harmonious environment
+          - text: for different fans knowledge level to avoid conflict.
+        - generic [ref=e66]:
+          - text: 4 · The core needs of users for AI are centered on
+          - strong [ref=e67]: "'efficiency' improvement"
+          - text: and
+          - strong [ref=e68]: "'fun' enhancement"
+          - text: .
+        - generic [ref=e69]:
+          - text: 5 · Users like listening to commentators who give information
+          - strong [ref=e70]: in the style they prefer
+          - text: during the game.
+        - generic [ref=e71]:
+          - text: 6 · Users are concerned about the
+          - strong [ref=e72]: credibility
+          - text: of AI content, fearing they will be misled and manipulated.
+        - generic [ref=e73]:
+          - text: 7 · Users prefer to watch football
+          - strong [ref=e74]: with others
+          - text: as it enhances their live viewing experience.
+      - figure [ref=e75]:
+        - generic [ref=e76]:
+          - img "Insight synthesis board background" [ref=e77]
+          - img "Insight synthesis board"
+        - paragraph [ref=e78]: Insight synthesis board
+  - generic [ref=e80]:
+    - generic [ref=e81]: Design Thinking
+    - generic [ref=e83]:
+      - generic [ref=e84]:
+        - generic [ref=e85]: "01"
+        - heading "Free social features as the entry point" [level=3] [ref=e86]
+      - paragraph [ref=e89]: Subscription cost was the main barrier identified in research. The Social features were designed to be free, removing the need for a personal subscription to participate. Watching at a pub handles content access, while the app organises and enhances the social experience around it, creating an ongoing touchpoint between the brand and younger audiences.
+    - generic [ref=e90]:
+      - generic [ref=e91]:
+        - generic [ref=e92]:
+          - generic [ref=e93]: "02"
+          - 'heading "Social module: closing the loop on planning a watch party" [level=3] [ref=e94]'
+        - generic [ref=e96]:
+          - paragraph [ref=e97]: The Social module has two tabs, Community and Invites. Invites lets users plan a pub viewing session within the app, choosing a venue, time, and friend group. Friends receive the invite, can accept it, and book seats without leaving the app.
+          - paragraph [ref=e98]: The core design challenge was state management. The same invite card needed to show different information and actions depending on the viewer (sender or recipient) and the moment (sent, accepted, one hour before kickoff, at the venue). The solution was a single card component that adapts through changes in button labels and supporting details, keeping the experience consistent across every state without requiring users to reorient themselves.
+      - generic [ref=e99]:
+        - img "Watch tab - create invite" [ref=e101]
+        - img "Watch tab - channels and social" [ref=e103]
+        - img "Social invites - Judy side" [ref=e105]
+        - img "Social invite - Judy's friends" [ref=e107]
+    - generic [ref=e109]:
+      - generic [ref=e110]:
+        - img "Social invites list" [ref=e112]
+        - img "Social invite - QR code scanning" [ref=e114]
+      - generic [ref=e115]:
+        - generic [ref=e116]:
+          - generic [ref=e117]: "03"
+          - 'heading "QR code: making arrival the entry point" [level=3] [ref=e118]'
+        - paragraph [ref=e120]: One hour before kickoff, the invite card CTA shifts to prompt scanning a QR code at the pub table, which opens directly to the Social Live page for that match. Rather than asking users to navigate there themselves, physically arriving at the venue becomes the trigger for entering the in-app experience.
+    - generic [ref=e122]:
+      - generic [ref=e123]:
+        - generic [ref=e124]:
+          - generic [ref=e125]: "04"
+          - 'heading "Gamification: turning natural behaviour into in-app interaction" [level=3] [ref=e126]'
+        - paragraph [ref=e128]: During the match, users can shake their phones to cheer for their team, earning points redeemable for pub discounts or merchandise. The design logic was to register and reward behaviours that already happen naturally at a pub, shouting and reacting, rather than introducing an entirely new action.
+      - generic [ref=e129]:
+        - img "Gamification team selection screen" [ref=e131]
+        - img "Gamification cheer interaction" [ref=e133]
+    - generic [ref=e135]:
+      - img "Pub large screen Cheer Battle scene" [ref=e138]
+      - generic [ref=e139]:
+        - generic [ref=e140]:
+          - generic [ref=e141]: "05"
+          - heading "A concept for phone-to-screen interaction" [level=3] [ref=e142]
+        - paragraph [ref=e144]: As a conceptual extension, the pub's large screen could display a live cheer battle, showing real-time support levels for each team. The thinking was to make individual interactions on personal devices visible in the shared physical space, turning separate participation into a collective in-venue moment.
+  - generic [ref=e147]:
+    - link "Previous Project Shanghai Astronomy Museum Venue Dashboard · Data Viz Data Visualization" [ref=e148] [cursor=pointer]:
+      - /url: project-shanghai-museum.html
+      - generic [ref=e149]: Previous Project
+      - heading "Shanghai Astronomy Museum" [level=2] [ref=e150]:
+        - text: Shanghai
+        - text: Astronomy
+        - text: Museum
+      - generic [ref=e151]:
+        - generic [ref=e152]:
+          - paragraph [ref=e153]: Venue Dashboard · Data Viz
+          - generic [ref=e155]: Data Visualization
+        - img [ref=e157]
+    - link "Also Display Content Management Memorial Museum · Large Screen UI/UX Design Large Screen" [ref=e159] [cursor=pointer]:
+      - /url: project-memorial-content-management-v2.html
+      - generic [ref=e160]: Also
+      - heading "Display Content Management" [level=2] [ref=e161]:
+        - text: Display
+        - text: Content
+        - text: Management
+      - generic [ref=e162]:
+        - generic [ref=e163]:
+          - paragraph [ref=e164]: Memorial Museum · Large Screen
+          - generic [ref=e165]:
+            - generic [ref=e166]: UI/UX Design
+            - generic [ref=e167]: Large Screen
+        - img [ref=e169]
+  - contentinfo [ref=e171]:
+    - generic [ref=e172]: © 2026 Linyun Yu
+    - generic [ref=e173]:
+      - link "Email" [ref=e174] [cursor=pointer]:
+        - /url: mailto:yulinyune@gmail.com
+      - link "LinkedIn" [ref=e175] [cursor=pointer]:
+        - /url: "#"
+      - link "Resume" [ref=e176] [cursor=pointer]:
+        - /url: "#"

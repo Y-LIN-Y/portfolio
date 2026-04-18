@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Archive — Removed Sections</title>
+
+    <!-- Mango Grotesque — condensed display face -->
+    <link href="https://db.onlinewebfonts.com/c/0d7c90bf2d5c8dcc4fa27a5ba6cbad81?family=Mango+Grotesque" rel="stylesheet">
+    <!-- Outfit for body, Space Mono for labels -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg:           #EDEBE6;
+            --bg-warm:      #E5E2DC;
+            --ink:          #0D0D0D;
+            --ink-muted:    #7A7770;
+            --surface:      #E0DDD6;
+            --border:       #D0CCC4;
+            --yellow:       #FFD600;
+            --lavender:     #C8B4FF;
+            --green:        #22C55E;
+            --forest:       #275E48;
+            --easing:       cubic-bezier(0.19, 1, 0.22, 1);
+            --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+            --font-display: 'Mango Grotesque', 'Barlow Condensed', 'Arial Narrow', sans-serif;
+            --font-body:    'Outfit', sans-serif;
+            --font-mono:    'Space Mono', monospace;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--font-body);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Archive header */
+        .archive-header {
+            padding: 60px 48px 40px;
+            border-bottom: 2px solid var(--ink);
+        }
+        .archive-header h1 {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            text-transform: uppercase;
+            line-height: 0.9;
+        }
+        .archive-header p {
+            font-family: var(--font-body);
+            font-size: 15px;
+            color: var(--ink-muted);
+            margin-top: 16px;
+        }
+
+        /* Shared section header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 60px;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(2.2rem, 4.5vw, 4.5rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0em;
+        }
+        .section-tag {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--ink-muted);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 16px 32px;
+            background: var(--ink);
+            color: #fff;
+            text-decoration: none;
+            transition: transform 0.3s var(--easing), box-shadow 0.3s var(--easing);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        .arrow {
+            display: inline-block;
+            transition: transform 0.3s var(--easing);
+        }
+        .btn:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        /* ============================================================
+           WORK 1 — List layout with hover preview
+        ============================================================ */
+        #work {
+            padding: 100px 48px 80px;
+        }
+        .project-list { border-top: 2px solid var(--ink); }
+        .project-row {
+            display: grid;
+            grid-template-columns: 48px 1fr auto;
+            align-items: center;
+            padding: 36px 0;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.35s var(--easing);
+            position: relative;
+        }
+        .project-row:hover {
+            background: var(--surface);
+            padding-left: 24px; padding-right: 24px;
+            margin-left: -24px; margin-right: -24px;
+            border-bottom-color: var(--ink);
+        }
+        .p-index {
+            font-family: var(--font-mono);
+            font-size: 12px; font-weight: 400;
+            color: var(--ink-muted);
+            user-select: none;
+        }
+        .p-title {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(1.8rem, 4.5vw, 4.5rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0em;
+            transition: font-style 0.2s;
+        }
+        .project-row:hover .p-title { font-style: italic; }
+        .p-tag {
+            font-family: var(--font-body);
+            font-size: 12px; font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .p-tag.yellow { background: var(--yellow); border-color: var(--ink); font-weight: 700; }
+        .p-tag.lavender { background: var(--lavender); border-color: var(--ink); font-weight: 700; }
+
+        /* Floating preview */
+        #work-preview {
+            position: fixed;
+            width: 360px; height: 240px;
+            border: 2px solid var(--ink);
+            pointer-events: none; opacity: 0;
+            z-index: 500; top: 0; left: 0;
+            transform: translate(-50%, -55%) scale(0.85);
+            transition: opacity 0.25s, transform 0.4s var(--easing);
+            overflow: hidden; background: var(--surface);
+        }
+        #work-preview.visible { opacity: 1; transform: translate(-50%, -55%) scale(1); }
+        #work-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* ============================================================
+           WORK 2 — Featured project on BOLD yellow background
+        ============================================================ */
+        #work-featured {
+            background: var(--yellow);
+            padding: 100px 48px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            position: relative;
+        }
+        .featured-label {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .featured-label-dot {
+            width: 8px; height: 8px;
+            background: var(--ink);
+            border-radius: 50%;
+        }
+        .featured-title {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(2.5rem, 5.5vw, 5.5rem);
+            line-height: 0.88;
+            text-transform: uppercase;
+            letter-spacing: 0em;
+            margin-bottom: 24px;
+        }
+        .featured-desc {
+            font-family: var(--font-body);
+            font-size: 17px; font-weight: 400;
+            line-height: 1.75;
+            color: #333;
+            max-width: 440px;
+            margin-bottom: 32px;
+        }
+        .featured-tags {
+            display: flex; gap: 8px; margin-bottom: 40px;
+        }
+        .featured-tags span {
+            font-family: var(--font-body);
+            font-size: 11px; font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+            border: 2px solid var(--ink);
+            background: transparent;
+        }
+        .featured-image {
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--ink);
+            aspect-ratio: 16/10;
+        }
+        .featured-image img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s var(--easing);
+        }
+        .featured-image:hover img {
+            transform: scale(1.04);
+        }
+        .featured-image-number {
+            position: absolute;
+            top: 16px; left: 16px;
+            font-family: var(--font-mono);
+            font-size: 12px; font-weight: 700;
+            color: #fff;
+            background: var(--ink);
+            padding: 6px 14px;
+        }
+
+        /* ============================================================
+           WORK 3 — Bento grid layout (asymmetric, varied sizes)
+        ============================================================ */
+        #work-grid {
+            padding: 100px 48px;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 380px 380px;
+            gap: 16px;
+        }
+        .bento-card {
+            position: relative;
+            overflow: hidden;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 28px;
+            transition: transform 0.4s var(--easing);
+        }
+        .bento-card:hover { transform: translateY(-4px); }
+        .bento-card img {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s var(--easing);
+            opacity: 0.85;
+        }
+        .bento-card:hover img { transform: scale(1.08); opacity: 1; }
+
+        .b-wide { grid-column: span 2; }
+        .b-tall { grid-row: span 2; }
+        .b-lavender { background: var(--lavender); }
+        .b-dark { background: var(--ink); color: #fff; }
+
+        .bento-overlay {
+            position: relative; z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+            pointer-events: none;
+        }
+        .bento-number {
+            font-family: var(--font-mono);
+            font-size: 12px; font-weight: 400;
+            margin-bottom: auto;
+            opacity: 0.6;
+        }
+        .bento-title {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(1.6rem, 2.8vw, 2.6rem);
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: 0.04em;
+        }
+        .bento-info {
+            font-family: var(--font-body);
+            font-size: 13px; font-weight: 400;
+            margin-top: 8px;
+            opacity: 0.7;
+        }
+
+        /* ============================================================
+           WHAT I DO — Expressive editorial section
+        ============================================================ */
+        #what-i-do {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: clamp(80px, 10vh, 120px) clamp(24px, 5vw, 48px);
+            border-top: 2px solid var(--ink);
+        }
+
+        .wid-section-label {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--ink-muted);
+            margin-bottom: 4rem;
+            display: block;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 1rem;
+        }
+
+        .wid-display-text {
+            font-family: var(--font-display);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.9;
+            letter-spacing: 0em;
+        }
+
+        .wid-desc {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 1.2vw, 1.25rem);
+            color: var(--ink-muted);
+            max-width: 40ch;
+            line-height: 1.55;
+            margin-top: 1rem;
+        }
+
+        .wid-tag {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            padding: 6px 14px;
+            line-height: 1;
+            border-radius: 0;
+        }
+        .wid-tag-yellow { background: var(--yellow); color: var(--ink); }
+        .wid-tag-lavender { background: var(--lavender); color: var(--ink); }
+        .wid-tag-forest { background: var(--forest); color: #fff; }
+
+        .wid-img-placeholder {
+            background: #DCD9D0;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.6s var(--ease-out);
+        }
+        .wid-img-label {
+            font-family: var(--font-mono);
+            color: var(--ink-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        a.wid-project-link {
+            text-decoration: none;
+            color: inherit;
+        }
+        .wid-project-link:hover .wid-img-placeholder {
+            transform: scale(0.98);
+        }
+
+        .wid-row-1 {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: clamp(2rem, 4vw, 4rem);
+            margin-bottom: 15vh;
+            align-items: start;
+        }
+        .wid-r1-content {
+            padding-top: 2rem;
+        }
+        .wid-r1-header { margin-bottom: 2rem; }
+        .wid-r1-title {
+            font-size: clamp(3rem, 6vw, 5rem);
+            margin-bottom: 1rem;
+            color: var(--forest);
+            letter-spacing: -0.01em;
+        }
+        .wid-r1-img {
+            aspect-ratio: 4/3;
+            width: 100%;
+        }
+
+        .wid-row-2 {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15vh;
+        }
+        .wid-r2-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        .wid-r2-title { font-size: clamp(4rem, 9vw, 9rem); width: 80%; }
+        .wid-r2-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            text-align: right;
+            padding-top: 1rem;
+        }
+        .wid-r2-img { height: 60vh; width: 100%; }
+
+        .wid-row-3 {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: clamp(2rem, 5vw, 4rem);
+            align-items: center;
+            margin-bottom: 10vh;
+        }
+        .wid-r3-img { height: 70vh; }
+        .wid-r3-content { padding-right: 2rem; }
+        .wid-r3-title {
+            font-size: clamp(3rem, 5vw, 5rem);
+            margin-bottom: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .wid-arrow-btn {
+            width: 48px;
+            height: 48px;
+            border: 1px solid var(--ink);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+        }
+        .wid-project-link:hover .wid-arrow-btn {
+            background: var(--ink);
+            color: var(--bg);
+        }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 860px) {
+            #work, #work-grid { padding: 80px 24px; }
+            .project-row { grid-template-columns: 1fr; gap: 12px; }
+            .project-row:hover { margin-left: 0; margin-right: 0; }
+            .p-index { display: none; }
+            .p-tag { justify-self: start; }
+            #work-preview { display: none; }
+
+            #work-featured { grid-template-columns: 1fr; padding: 80px 24px; }
+            .featured-image { aspect-ratio: 16/9; }
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .b-wide, .b-tall { grid-column: span 1; grid-row: span 1; min-height: 280px; }
+
+            /* WID responsive */
+            .wid-row-1, .wid-row-3 { grid-template-columns: 1fr; }
+            .wid-r2-header { flex-direction: column; }
+            .wid-r2-title { width: 100%; }
+            .wid-r2-meta { align-items: flex-start; text-align: left; }
+            .wid-img-placeholder { min-height: 300px; }
+            .wid-r3-img { height: 400px; }
+            .wid-doodle { display: none; }
+        }
+
+        /* Archive section dividers */
+        .archive-divider {
+            padding: 40px 48px 20px;
+            border-top: 1px dashed var(--border);
+            margin-top: 40px;
+        }
+        .archive-divider h2 {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--ink-muted);
+        }
+    </style>
+</head>
+<body>
+
+<div class="archive-header">
+    <h1>Portfolio Archive</h1>
+    <p>Removed sections preserved for reference. These layouts were part of the original designer-portfolio.html.</p>
+</div>
+
+<!-- ============ WORK 1 — List layout ============ -->
+<div class="archive-divider"><h2>Work 1 — List Layout with Hover Preview</h2></div>
+<section id="work">
+    <div class="section-header">
+        <h2 class="section-title">Selected<br>Works</h2>
+        <span class="section-tag" style="margin-bottom: 0;">2022 / 2024</span>
+    </div>
+
+    <div id="work-preview" aria-hidden="true">
+        <img src="" id="preview-img" alt="">
+    </div>
+
+    <div class="project-list">
+        <div class="project-row"
+             data-img="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=800&auto=format&fit=crop">
+            <span class="p-index">01</span>
+            <span class="p-title">Neon Tokyo</span>
+            <span class="p-tag yellow">Web / Experimental</span>
+        </div>
+        <div class="project-row"
+             data-img="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=800&auto=format&fit=crop">
+            <span class="p-index">02</span>
+            <span class="p-title">Type Riot</span>
+            <span class="p-tag lavender">Typography / Identity</span>
+        </div>
+        <div class="project-row"
+             data-img="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop">
+            <span class="p-index">03</span>
+            <span class="p-title">Acid Mode</span>
+            <span class="p-tag yellow">App Design</span>
+        </div>
+        <div class="project-row"
+             data-img="https://images.unsplash.com/photo-1542202029-82929c945ef1?q=80&w=800&auto=format&fit=crop">
+            <span class="p-index">04</span>
+            <span class="p-title">Void Walker</span>
+            <span class="p-tag lavender">Interactive 3D</span>
+        </div>
+    </div>
+</section>
+
+<!-- ============ WORK 2 — Featured on yellow background ============ -->
+<div class="archive-divider"><h2>Work 2 — Featured Project on Yellow Background</h2></div>
+<section id="work-featured">
+    <div>
+        <div class="featured-label">
+            <span class="featured-label-dot"></span>
+            Featured Case Study
+        </div>
+        <h3 class="featured-title">Horizon<br>Dashboard</h3>
+        <div class="featured-tags">
+            <span>Dashboard</span>
+            <span>SaaS</span>
+            <span>2024</span>
+        </div>
+        <p class="featured-desc">
+            A data visualization platform designed for financial analysts.
+            Focused on clarity, real-time updates, and reducing cognitive
+            load in complex data environments.
+        </p>
+        <a href="#" class="btn">View Case Study <span class="arrow">→</span></a>
+    </div>
+    <div class="featured-image">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?q=80&w=900&auto=format&fit=crop"
+             alt="Horizon Dashboard">
+        <div class="featured-image-number">05</div>
+    </div>
+</section>
+
+<!-- ============ WORK 3 — Bento grid ============ -->
+<div class="archive-divider"><h2>Work 3 — Bento Grid Layout</h2></div>
+<section id="work-grid">
+    <div class="section-header">
+        <h2 class="section-title">Experiments<br>& Playground</h2>
+    </div>
+
+    <div class="bento-grid">
+        <div class="bento-card b-wide b-lavender">
+            <div class="bento-overlay">
+                <span class="bento-number">06</span>
+                <div>
+                    <div class="bento-title">Signal<br>Protocol</div>
+                    <div class="bento-info">Brand Identity / 2024</div>
+                </div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?q=80&w=800&auto=format&fit=crop" alt="">
+        </div>
+        <div class="bento-card b-tall b-dark">
+            <div class="bento-overlay">
+                <span class="bento-number" style="color: rgba(255,255,255,0.5);">07</span>
+                <div>
+                    <div class="bento-title" style="color: #fff;">Kinetic<br>Type</div>
+                    <div class="bento-info" style="color: rgba(255,255,255,0.5);">Motion / 2023</div>
+                </div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=800&auto=format&fit=crop" alt="">
+        </div>
+        <div class="bento-card">
+            <div class="bento-overlay">
+                <span class="bento-number">08</span>
+                <div>
+                    <div class="bento-title">Form<br>Factor</div>
+                    <div class="bento-info">Mobile App / 2023</div>
+                </div>
+            </div>
+            <img src="https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?q=80&w=800&auto=format&fit=crop" alt="">
+        </div>
+        <div class="bento-card" style="background: var(--ink); color: #fff;">
+            <div class="bento-overlay">
+                <span class="bento-number" style="color: rgba(255,255,255,0.5);">09</span>
+                <div>
+                    <div class="bento-title" style="color: #fff;">Creative<br>Dev</div>
+                    <div class="bento-info" style="color: rgba(255,255,255,0.5);">Code Art / 2024</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ WHAT I DO — Expressive editorial section ============ -->
+<div class="archive-divider"><h2>What I Do — Editorial Layout (Option A)</h2></div>
+<section id="what-i-do">
+
+    <span class="wid-section-label">SELECTED WORKS 01—03</span>
+
+    <!-- ROW 1: Sky Sports — Content left, image right -->
+    <a href="#" class="wid-project-link wid-row-1">
+        <div class="wid-r1-content">
+            <div class="wid-r1-header">
+                <span class="wid-tag wid-tag-forest">Sky Sports</span>
+                <h2 class="wid-display-text wid-r1-title">Imagining<br>Sports Viewing</h2>
+                <p class="wid-desc">Designing personalised and social viewing experiences for sports audiences.</p>
+            </div>
+        </div>
+        <div class="wid-img-placeholder wid-r1-img">
+            <span class="wid-img-label">Project Image</span>
+        </div>
+    </a>
+
+    <!-- ROW 2: Shanghai Planetarium — Full width title + image -->
+    <a href="#" class="wid-project-link wid-row-2">
+        <div class="wid-r2-header">
+            <h2 class="wid-display-text wid-r2-title">Shanghai Planetarium</h2>
+            <div class="wid-r2-meta">
+                <span class="wid-tag wid-tag-lavender">Immersive Display</span>
+                <p class="wid-desc">Large-scale screen experiences for<br>interactive science exhibitions.</p>
+            </div>
+        </div>
+        <div class="wid-img-placeholder wid-r2-img">
+            <span class="wid-img-label">Project Image</span>
+        </div>
+    </a>
+
+    <!-- ROW 3: Virtual Exhibition — Image left, content right -->
+    <a href="#" class="wid-project-link wid-row-3">
+        <div class="wid-img-placeholder wid-r3-img">
+            <span class="wid-img-label">Project Image</span>
+        </div>
+        <div class="wid-r3-content">
+            <span class="wid-tag wid-tag-yellow">Interactive</span>
+            <h2 class="wid-display-text wid-r3-title">Virtual Exhibition</h2>
+            <p class="wid-desc">Exploring virtual spaces — an interactive platform where users navigate projects in a digital environment.</p>
+            <div class="wid-arrow-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+        </div>
+    </a>
+
+</section>
+
+<script>
+// ============================================================
+// WORK 1 — Floating Image Preview
+// ============================================================
+(function () {
+    const preview = document.getElementById('work-preview');
+    const img     = document.getElementById('preview-img');
+
+    document.querySelectorAll('.project-row').forEach(row => {
+        row.addEventListener('mouseenter', () => {
+            img.src = row.dataset.img || '';
+            preview.classList.add('visible');
+        });
+        row.addEventListener('mouseleave', () => {
+            preview.classList.remove('visible');
+        });
+        row.addEventListener('mousemove', e => {
+            preview.style.left = e.clientX + 'px';
+            preview.style.top  = (e.clientY - 20) + 'px';
+        });
+    });
+})();
+</script>
+</body>
+</html>

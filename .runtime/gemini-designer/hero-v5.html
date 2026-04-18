@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linyun Yu — UX/UI Design Portfolio</title>
+    
+    <style>
+        /* 
+         * PRIMARY TYPOGRAPHY IMPORTS
+         * 1. Outfit (Body)
+         * 2. Space Mono (Technical/Labels)
+         * 3. Mango Grotesque (Display Headline)
+         */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://db.onlinewebfonts.com/c/0d7c90bf2d5c8dcc4fa27a5ba6cbad81?family=Mango+Grotesque');
+
+        :root {
+            /* COLOR PALETTE */
+            --bg-color: #F4F2EE; /* Warm Off-White / Paper */
+            --text-main: #111111; /* Deepest Charcoal */
+            --text-muted: #66665F; /* Warm Gray */
+            --accent-color: #FF2E00; /* ELECTRIC ORANGE-RED (High Impact) */
+            --grid-line: rgba(0, 0, 0, 0.04);
+            
+            /* TYPOGRAPHY TOKENS */
+            --font-display: 'Mango Grotesque', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            
+            --gutter: 2rem;
+            --nav-height: 80px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            cursor: default;
+        }
+
+        /* 
+         * BACKGROUND TEXTURE 
+         * Subtle grid to imply structure/blueprint without visual noise
+         */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 60px 60px; /* Swiss metric feel */
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* 
+         * NAVIGATION 
+         * Frosted glass pill concept
+         */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.5rem var(--gutter);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Alignment tweak */
+        }
+
+        .nav_brand {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 2.5rem;
+            line-height: 1;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .nav_pill {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 0.5rem 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            transition: background 0.3s ease;
+        }
+
+        /* Nav Links */
+        .nav_link {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-decoration: none;
+            color: var(--text-main);
+            text-transform: uppercase;
+            padding: 0.6rem 1.2rem;
+            border-radius: 100px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav_link:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .nav_link.active {
+            background: #fff;
+        }
+        
+        /* The thin progress bar at the bottom of the pill for active state styling - simplified to dot for constraints */
+        .nav_link.active::after {
+            content: '';
+            position: absolute;
+            bottom: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--text-main);
+            border-radius: 50%;
+        }
+
+        .nav_status {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            padding: 0.6rem 1rem;
+            border-radius: 100px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .status_dot {
+            width: 8px;
+            height: 8px;
+            background-color: #00FF66; /* Status Green explicitly */
+            border-radius: 50%;
+            box-shadow: 0 0 8px #00FF66;
+            animation: pulse 2s infinite;
+        }
+
+        /* 
+         * HERO SECTION 
+         */
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Vertically center the massive text */
+            padding-top: var(--nav-height);
+            position: relative;
+        }
+
+        .hero_container {
+            padding: 0 var(--gutter);
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 1. Small Tag */
+        .hero_tag {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            border: 1px solid rgba(0,0,0,0.1);
+            padding: 6px 12px;
+            border-radius: 4px;
+            width: fit-content;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.2s forwards;
+        }
+
+        /* 2. BIG HEADLINE */
+        .hero_headline {
+            font-family: var(--font-display);
+            font-weight: 900; /* Heavy */
+            font-size: clamp(4rem, 11.5vw, 13rem);
+            line-height: 0.88;
+            text-transform: uppercase;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            margin-bottom: 0;
+        }
+
+        .headline_line {
+            display: block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        
+        .headline_line:nth-child(1) { animation-delay: 0.4s; }
+        .headline_line:nth-child(2) { animation-delay: 0.55s; }
+
+        .accent-char {
+            color: var(--accent-color);
+            font-family: inherit; /* Ensure it stays Mango Grotesque */
+        }
+
+        /* 3. Gap handled by margins */
+
+        /* 4. Subtitle */
+        .hero_subtitle {
+            margin-top: clamp(3rem, 5vw, 5rem); /* Generous whitespace */
+            font-family: var(--font-body);
+            font-size: 1.125rem; /* ~18px */
+            line-height: 1.5;
+            color: var(--text-muted);
+            max-width: 480px;
+            opacity: 0;
+            animation: fadeIn 0.8s ease-out 0.8s forwards;
+        }
+
+        /* 5. GAP before bottom bar area */
+        .spacer {
+            height: clamp(4rem, 8vh, 8rem);
+        }
+
+        /* 6. Bottom Bar Grid */
+        .bottom_bar {
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: flex-start;
+            padding-bottom: 4rem;
+            opacity: 0;
+            animation: fadeIn 1s ease 1s forwards;
+        }
+
+        .profile_info h3 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            line-height: 1;
+            text-transform: uppercase;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile_info p {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .cta_group {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            font-family: var(--font-body);
+            font-weight: 500;
+            padding: 1rem 2rem;
+            border-radius: 4px; /* Slight roundness but mostly structured */
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-size: 1rem;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--text-main);
+            color: #fff;
+            border: 1px solid var(--text-main);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color); /* Hover accent pop */
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid rgba(0,0,0,0.2);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-main);
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* 7. Absolute Footer */
+        .absolute_footer {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 0;
+            width: 100%;
+            padding: 0 var(--gutter);
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            mix-blend-mode: multiply;
+        }
+
+        /* Decorative "01" */
+        .decor_number {
+            position: absolute;
+            right: var(--gutter);
+            top: 25vh;
+            font-family: var(--font-display);
+            font-size: 6rem;
+            color: var(--grid-line);
+            opacity: 1;
+            font-weight: 400;
+            z-index: -1;
+            color: rgba(0,0,0,0.05);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 255, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .hero_headline {
+                font-size: 14vw; /* Even larger on tablet relative to width */
+            }
+            .bottom_bar {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .cta_group {
+                justify-content: flex-start;
+            }
+            .nav_pill {
+                display: none; /* Simplify nav on mobile */
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .hero_headline {
+                font-size: 17vw; 
+            }
+            .decor_number { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Background Grid Texture -->
+    <div class="bg-grid"></div>
+
+    <!-- FEATURE: Navigation Bar with Glassmorphism -->
+    <nav id="navbar">
+        <a href="#" class="nav_brand">Linyun Yu</a>
+        
+        <div class="nav_pill">
+            <a href="#" class="nav_link active">Welcome</a>
+            <a href="#" class="nav_link">Work</a>
+            <a href="#" class="nav_link">About</a>
+            <a href="#" class="nav_link">Contact</a>
+        </div>
+
+        <div class="nav_status">
+            <span class="status_dot"></span>
+            <span>Available for work</span>
+        </div>
+    </nav>
+
+    <!-- FEATURE: Main Hero Content -->
+    <header>
+        <div class="decor_number">01</div>
+        <div class="hero_container">
+            
+            <!-- 1. Small Tag -->
+            <div class="hero_tag">Available for Freelance</div>
+            
+            <!-- 2. Big Headline (Equal lines) -->
+            <h1 class="hero_headline">
+                <span class="headline_line">Digital Products</span>
+                <span class="headline_line"><span class="accent-char">&</span> User Experiences</span>
+            </h1>
+
+            <!-- 3 & 4. Subtitle + Gap -->
+            <p class="hero_subtitle">
+                Designing minimal and impactful digital interfaces with a focus on typography, motion, and user-centered craft.
+            </p>
+
+            <div class="spacer"></div>
+
+            <!-- 6. Bottom Info Grid -->
+            <div class="bottom_bar">
+                <div class="profile_info">
+                    <h3>Linyun Yu</h3>
+                    <p>UX / UI Designer, Based in Shanghai</p>
+                </div>
+                
+                <div class="cta_group">
+                    <a href="#work" class="btn btn-primary">View Work &rarr;</a>
+                    <a href="#contact" class="btn btn-outline">Get in Touch</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Absolute Footer Status -->
+        <div class="absolute_footer">
+            <span id="scroll-prompt">↓ Scroll to explore</span>
+            <span id="live-time">00:00:00 CST</span>
+        </div>
+    </header>
+
+    <script>
+        // FEATURE: Live Time Clock (Shanghai Color)
+        function updateTime() {
+            const timeElement = document.getElementById('live-time');
+            const now = new Date();
+            
+            // Format time for Shanghai (China Standard Time)
+            const options = { 
+                timeZone: 'Asia/Shanghai', 
+                hour12: false,
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit'
+            };
+            
+            const timeString = now.toLocaleTimeString('en-US', options);
+            timeElement.textContent = `${timeString} CST`;
+        }
+
+        setInterval(updateTime, 1000);
+        updateTime(); // Initial call
+
+        // FEATURE: Scroll Opacity Logic for Nav
+        const nav = document.getElementById('navbar');
+        const pill = document.querySelector('.nav_pill');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                pill.style.background = 'rgba(255, 255, 255, 0.85)';
+            } else {
+                pill.style.background = 'rgba(255, 255, 255, 0.2)';
+            }
+        });
+
+        // FEATURE: Custom hover interaction for buttons (Magnetic feel simulation)
+        const buttons = document.querySelectorAll('.btn');
+        
+        buttons.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                // Subtle move calculation could go here, 
+                // but keeping it simple CSS hover for performance as requested "Single HTML file"
+            });
+        });
+    </script>
+</body>
+</html>

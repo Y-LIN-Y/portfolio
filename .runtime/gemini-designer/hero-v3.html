@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linyun Yu — UX/UI Portfolio</title>
+    
+    <!-- Google Fonts Import: Matching requested styles -->
+    <!-- Using Antonio as a substitute for Mango Grotesque (High impact, condensed) -->
+    <!-- Using Outfit and Space Mono as requested -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@700&family=Outfit:wght@300;400;500;600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* FEATURE: CSS Variables for Color System & Settings */
+        :root {
+            /* Palette: Etherial/Airy */
+            --bg-base: #f7f8fa;
+            --text-dark: #121212;
+            --text-muted: #5c5c5c;
+            --glass-surface: rgba(255, 255, 255, 0.35);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+            
+            /* Gradients */
+            --blob-1: #e0c3fc; /* Soft Lavender */
+            --blob-2: #cbf3f0; /* Pale Cyan */
+            --blob-3: #ffd6e0; /* Soft Pink */
+            --blob-4: #fff4d6; /* Pale Yellow */
+
+            /* Fonts */
+            --font-display: 'Antonio', 'Impact', sans-serif; /* Proxy for Mango Grotesque */
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            
+            /* Layout */
+            --nav-height: 80px;
+        }
+
+        /* Reset & Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-base);
+            color: var(--text-dark);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            /* Smooth scroll setup */
+            scroll-behavior: smooth;
+        }
+
+        /* FEATURE: Custom Cursor Styling */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--text-dark);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s, background 0.3s;
+            mix-blend-mode: difference;
+            display: none; /* Hidden on touch */
+        }
+        @media (min-width: 1024px) {
+            .cursor { display: block; }
+        }
+        .cursor.hovered {
+            width: 60px;
+            height: 60px;
+            background: white;
+        }
+
+        /* FEATURE: Animated Background Mesh Gradients */
+        .background-stage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: white;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.7;
+            border-radius: 50%;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: var(--blob-1); animation-delay: 0s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: var(--blob-2); animation-delay: -5s; }
+        .blob-3 { top: 30%; left: 40%; width: 40vw; height: 40vw; background: var(--blob-3); animation-delay: -10s; }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        /* FEATURE: Giant Outline Background Typography */
+        .bg-typography {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-display);
+            font-size: 35vw;
+            line-height: 0.8;
+            color: transparent;
+            -webkit-text-stroke: 2px rgba(18, 18, 18, 0.04);
+            white-space: nowrap;
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* FEATURE: Navigation Bar with Glassmorphism */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: normal;
+        }
+
+        .nav-glass-panel {
+            position: absolute;
+            top: 0; 
+            left: 0;
+            right: 0; 
+            height: 100%;
+            background: rgba(255, 255, 255, 0.01); /* Almost invisible initially */
+            backdrop-filter: blur(0px);
+            border-bottom: 1px solid rgba(255,255,255,0);
+            transition: all 0.4s ease;
+            z-index: -1;
+        }
+
+        /* Scrolled state for nav */
+        nav.scrolled .nav-glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .brand {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 8px 12px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Progress loader line under active nav */
+        .nav-progress {
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            height: 2px;
+            background: var(--text-dark);
+            width: 0%; /* JS will animate */
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            border-radius: 20px;
+            transition: background 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.5);
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-dark);
+            background: var(--glass-surface);
+            padding: 8px 16px;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(8px);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #27d963;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #27d963;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* FEATURE: Hero Section Layout */
+        .hero {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            perspective: 1000px;
+            padding: 0 20px;
+        }
+
+        .hero-glass-card {
+            width: 100%;
+            max-width: 1100px;
+            min-height: 600px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px); /* Safari support */
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+            padding: 60px 80px;
+            position: relative;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            align-items: center;
+            gap: 40px;
+            overflow: hidden;
+            /* Entrance Animation */
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUpFade 1s 0.2s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+        }
+        
+        /* Subtle shimmer effect on the glass card */
+        .hero-glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+            pointer-events: none;
+            animation: shimmer 5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border: 1px solid rgba(0,0,0,0.1);
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            width: fit-content;
+            letter-spacing: -0.02em;
+        }
+
+        .headline {
+            font-family: var(--font-display);
+            font-size: 7rem;
+            line-height: 0.85;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            color: var(--text-dark);
+            position: relative;
+            transform: scaleY(1.1); /* Simulate Mango Grotesque stretch if needed */
+        }
+        
+        .headline span {
+            display: block;
+        }
+
+        .subtitle {
+            font-family: var(--font-body);
+            font-size: 1.25rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            max-width: 90%;
+            font-weight: 300;
+        }
+
+        .identity-block {
+            margin-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .avatar-placeholder {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #e0c3fc, #cbf3f0);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .identity-text {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+        }
+        .identity-text strong {
+            display: block;
+            color: var(--text-dark);
+        }
+        .identity-text span {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            font-family: var(--font-body);
+            font-weight: 500;
+            text-decoration: none;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--text-dark);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-dark);
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-dark);
+            background: rgba(255,255,255,0.5);
+        }
+
+        /* Abstract Visual Element in Glass Card */
+        .visual-side {
+            height: 100%;
+            min-height: 400px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 3D-ish CSS Composition */
+        .composition {
+            position: relative;
+            width: 300px;
+            height: 400px;
+        }
+
+        .comp-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            border-radius: 8px;
+            transition: transform 0.2s ease-out;
+        }
+
+        .shape-glass {
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.5);
+            z-index: 2;
+        }
+
+        .shape-gradient {
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg, var(--blob-1), var(--blob-3));
+            opacity: 0.8;
+            z-index: 1;
+            filter: blur(20px);
+        }
+        
+        .decor-circle {
+            position: absolute;
+            right: -40px;
+            top: 40px;
+            width: 120px;
+            height: 120px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            z-index: 3;
+            animation: spin 30s linear infinite;
+        }
+
+        .decor-circle::after {
+            content: "UI UX ART";
+            font-family: var(--font-mono);
+            font-size: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
+
+        /* FEATURE: Footer Area */
+        footer {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 50px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-dark);
+            z-index: 20;
+            pointer-events: none; /* Let clicks pass through */
+        }
+
+        .scroll-hint {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .scroll-line {
+            width: 40px;
+            height: 1px;
+            background: var(--text-dark);
+            position: relative;
+            overflow: hidden;
+        }
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--text-dark);
+            transform: translateX(-100%);
+            animation: loading 2s infinite;
+        }
+
+        @keyframes loading { 0% {transform: translateX(-100%);} 100% {transform: translateX(100%);}}
+
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .hero-glass-card {
+                grid-template-columns: 1fr;
+                padding: 40px;
+                max-width: 90%;
+            }
+            .headline { font-size: 4.5rem; }
+            .visual-side { display: none; } /* Hide complicated graphics on tablet */
+            .bg-typography { font-size: 40vw; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; }
+            .nav-center { display: none; } /* Simplified nav for mobile */
+            .headline { font-size: 3.5rem; }
+            .hero-glass-card { padding: 30px; margin-top: 60px; }
+            footer { padding: 0 20px; bottom: 20px; flex-direction: column; gap: 10px; align-items: center;}
+            .bg-typography { display: none; } /* Remove massive text on small screens */
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- FEATURE: Ambient Background Animation -->
+    <div class="background-stage">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+        <!-- Huge Outline DECOR -->
+        <div class="bg-typography">LINYUN YU</div>
+    </div>
+
+    <!-- FEATURE: Navigation with progress & status -->
+    <nav id="navbar">
+        <div class="nav-glass-panel"></div>
+        <div class="brand hover-target">Linyun Yu</div>
+        
+        <div class="nav-center">
+            <a href="#" class="nav-link hover-target">Welcome</a>
+            <a href="#" class="nav-link hover-target">Work</a>
+            <a href="#" class="nav-link hover-target">About</a>
+            <a href="#" class="nav-link hover-target">Contact</a>
+            <!-- Progress Line Indicator -->
+            <div class="nav-progress" id="navProgress"></div>
+        </div>
+
+        <div class="status hover-target">
+            <span class="status-dot"></span>
+            Available for work
+        </div>
+    </nav>
+
+    <!-- FEATURE: Main Hero Section -->
+    <header class="hero">
+        <div class="hero-glass-card" id="glassCard">
+            <!-- Left: Typography Content -->
+            <div class="hero-content">
+                <div class="tag">AVAILABLE FOR FREELANCE</div>
+                
+                <h1 class="headline">
+                    DIGITAL PRODUCTS<br>
+                    <span>& USER EXPERIENCES</span>
+                </h1>
+                
+                <p class="subtitle">
+                    Designing minimal and impactful digital interfaces with a focus on typography, motion, and user-centered craft.
+                </p>
+
+                <div class="identity-block">
+                    <div class="avatar-placeholder"></div> <!-- Placeholder for profile pic -->
+                    <div class="identity-text">
+                        <strong>Linyun Yu</strong>
+                        <span>UX / UI Designer, Based in Shanghai</span>
+                    </div>
+                </div>
+
+                <div class="cta-group">
+                    <a href="#" class="btn btn-primary hover-target">View Work &rarr;</a>
+                    <a href="#" class="btn btn-secondary hover-target">Get in Touch</a>
+                </div>
+            </div>
+
+            <!-- Right: Abstract Composition -->
+            <div class="visual-side">
+                <div class="composition">
+                    <div class="comp-layer shape-gradient"></div>
+                    <div class="comp-layer shape-glass hover-target"></div>
+                    <div class="decor-circle"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- FEATURE: Footer Information -->
+    <footer>
+        <div class="scroll-hint">
+            <div class="scroll-line"></div>
+            <span>Scroll to explore</span>
+        </div>
+        <div class="clock" id="clock">
+            00:00:00 CST
+        </div>
+    </footer>
+
+    <script>
+        // FEATURE: Real-time Shanghai Clock (CST)
+        function updateClock() {
+            const now = new Date();
+            // Shanghai is UTC+8
+            const options = { 
+                timeZone: 'Asia/Shanghai', 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            };
+            const timeString = now.toLocaleTimeString('en-US', options);
+            document.getElementById('clock').textContent = timeString + " CST";
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // FEATURE: Custom Cursor Interaction
+        const cursor = document.getElementById('cursor');
+        const hoverTargets = document.querySelectorAll('.hover-target');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        hoverTargets.forEach(target => {
+            target.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            target.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // FEATURE: 3D Parallax Tilt Effect on Glass Card
+        const card = document.getElementById('glassCard');
+        const visuals = document.querySelectorAll('.comp-layer');
+
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+            
+            // Subtle rotation on card
+            card.style.transform = `perspective(1000px) rotateY(${xAxis * 0.2}deg) rotateX(${yAxis * 0.2}deg)`;
+
+            // Deep parallax on composition layers
+            visuals.forEach((layer, index) => {
+                const speed = (index + 1) * 0.8;
+                layer.style.transform = `translateX(${xAxis * speed}px) translateY(${yAxis * speed}px)`;
+            });
+        });
+
+        // Reset transform on mouse leave
+        document.addEventListener('mouseleave', () => {
+             card.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`;
+             visuals.forEach(layer => layer.style.transform = `translate(0,0)`);
+        });
+
+        // FEATURE: Navbar Scroll Effect
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // FEATURE: Nav Link Hover Progress Calculation
+        // This moves the underline to the hovered element
+        const navLinks = document.querySelectorAll('.nav-link');
+        const progressLine = document.getElementById('navProgress');
+        const navCenter = document.querySelector('.nav-center');
+
+        navLinks.forEach(link => {
+            link.addEventListener('mouseenter', (e) => {
+                const parentRect = navCenter.getBoundingClientRect();
+                const rect = e.target.getBoundingClientRect();
+                
+                const width = rect.width;
+                const left = rect.left - parentRect.left;
+
+                progressLine.style.width = `${width}px`;
+                progressLine.style.left = `${left}px`;
+            });
+        });
+
+        navCenter.addEventListener('mouseleave', () => {
+            progressLine.style.width = '0%';
+        });
+
+    </script>
+</body>
+</html>

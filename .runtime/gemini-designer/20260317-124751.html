@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planetarium - Editorial Portfolio Row</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-forest: #275E48;
+            --color-bg: #EDEBE6;
+            --color-lavender: #C8B4FF;
+            --color-ink: #0D0D0D;
+            --font-display: 'Anton', sans-serif;
+            --font-body: 'Archivo', sans-serif;
+            --ease-smooth: cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-ink);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            width: 100vw;
+            min-height: 100vh;
+            cursor: none; /* Custom cursor */
+        }
+
+        /* <!-- FEATURE: Custom Cursor Styles --> */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-color: var(--color-forest);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background-color 0.3s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor.active {
+            width: 80px;
+            height: 80px;
+            background-color: var(--color-lavender);
+            mix-blend-mode: normal;
+            opacity: 0.8;
+        }
+
+        /* <!-- FEATURE: Main Layout Container --> */
+        .portfolio-row {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            perspective: 1000px; /* For potential 3D feel */
+        }
+
+        /* <!-- FEATURE: Typography Stack --> */
+        .title-stack {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            line-height: 0.85;
+            text-transform: uppercase;
+            width: 100%;
+            mix-blend-mode: multiply;
+            pointer-events: none; /* Let clicks pass through to image/bg if needed */
+        }
+
+        .word-wrapper {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .huge-text {
+            font-family: var(--font-display);
+            font-size: clamp(4rem, 16vw, 24rem);
+            color: var(--color-forest);
+            letter-spacing: -0.02em;
+            display: block;
+            will-change: transform;
+            transition: color 0.4s ease;
+            white-space: nowrap;
+        }
+
+        /* Staggered alignment for editorial feel */
+        .row-1 { transform-origin: left center; margin-left: -10vw; }
+        .row-2 { transform-origin: center center; z-index: 5; color: var(--color-ink); }
+        .row-3 { transform-origin: right center; margin-right: -5vw; }
+
+        /* <!-- FEATURE: Floating Parallax Image --> */
+        .image-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30vw;
+            height: 45vh;
+            min-width: 280px;
+            transform: translate(-50%, -50%); /* Base centering */
+            z-index: 2; /* Sits behind middle text, in front of bg */
+            overflow: hidden;
+            opacity: 0; /* Hidden initially for JS reveal */
+            animation: fadeIn 1s 0.5s forwards var(--ease-smooth);
+            pointer-events: auto;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; clip-path: inset(0 100% 0 0); }
+            to { opacity: 1; clip-path: inset(0 0 0 0); }
+        }
+
+        .parallax-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.1);
+            transition: transform 0.8s var(--ease-smooth), filter 0.5s ease;
+            will-change: transform;
+        }
+
+        /* Decorative Overlay */
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-forest);
+            opacity: 0.2;
+            mix-blend-mode: overlay;
+            transition: background-color 0.4s ease;
+        }
+
+        .image-container:hover .parallax-img {
+            filter: grayscale(0%) contrast(1);
+            transform: scale(1.05);
+        }
+        
+        .image-container:hover .image-overlay {
+            background-color: var(--color-lavender);
+            opacity: 0.3;
+        }
+
+        /* <!-- FEATURE: Project Meta/Tags --> */
+        .project-meta {
+            position: absolute;
+            bottom: 3rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 4vw;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--color-ink);
+            z-index: 20;
+        }
+
+        .meta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .meta-label {
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+
+        .pill-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            border: 1px solid var(--color-forest);
+            padding: 0.2rem 0.8rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            background: var(--color-forest);
+            color: var(--color-lavender);
+        }
+        
+        /* Floating abstract shape for extra depth */
+        .decorator {
+            position: absolute;
+            width: 20vw;
+            height: 20vw;
+            background: radial-gradient(circle, var(--color-lavender) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 20%;
+            right: 15%;
+            filter: blur(40px);
+            opacity: 0.6;
+            z-index: 1;
+            mix-blend-mode: multiply;
+        }
+
+        @media (max-width: 768px) {
+            .huge-text { font-size: 18vw; }
+            .row-1 { margin-left: 0; }
+            .row-3 { margin-right: 0; }
+            .image-container { width: 60vw; height: 35vh; opacity: 0.8; }
+            .project-meta { flex-direction: column; gap: 1rem; align-items: center; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Custom Interactive Cursor -->
+    <div class="cursor" id="customCursor"></div>
+
+    <section class="portfolio-row" id="rowContainer">
+        
+        <!-- FEATURE: Atmospheric background blob -->
+        <div class="decorator" data-speed="0.02"></div>
+
+        <!-- FEATURE: Floating Image Container -->
+        <!-- Image moves opposite to text (negative speed) -->
+        <div class="image-container" data-speed="-0.08">
+            <div class="image-overlay"></div>
+            <img 
+                src="https://images.unsplash.com/photo-1614726365723-49cfae927834?q=80&w=1974&auto=format&fit=crop" 
+                alt="Abstract Planetarium Architecture" 
+                class="parallax-img"
+            >
+        </div>
+
+        <!-- FEATURE: Main Typographic Stack -->
+        <!-- Each row has slightly different parallax speeds for depth -->
+        <div class="title-stack">
+            <div class="word-wrapper">
+                <span class="huge-text row-1" data-speed="0.04">Designing</span>
+            </div>
+            <div class="word-wrapper">
+                <!-- Using outline style or different color for contrast could work, sticking to guidelines -->
+                <span class="huge-text row-2" data-speed="0.06">Digital</span>
+            </div>
+            <div class="word-wrapper">
+                <span class="huge-text row-3" data-speed="0.08">Planetarium</span>
+            </div>
+        </div>
+
+        <!-- FEATURE: Project Details Footer -->
+        <div class="project-meta">
+            <div class="meta-group">
+                <span class="meta-label">Client</span>
+                <span>Cosmos Initiative</span>
+            </div>
+            
+            <div class="pill-tags">
+                <span class="tag">WebGL Experience</span>
+                <span class="tag">UI/UX</span>
+                <span class="tag">Creative Dev</span>
+            </div>
+
+            <div class="meta-group" style="text-align: right;">
+                <span class="meta-label">Year</span>
+                <span>2024</span>
+            </div>
+        </div>
+
+    </section>
+
+    <script>
+        // <!-- FEATURE: Interaction Logic -->
+        
+        // Custom Cursor Logic
+        const cursor = document.getElementById('customCursor');
+        const links = document.querySelectorAll('a, .tag, .image-container');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            link.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Parallax Logic
+        const container = document.getElementById('rowContainer');
+        const parallaxElements = document.querySelectorAll('[data-speed]');
+        
+        // Variables for smooth interpolation (Lerp)
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        
+        // Window center
+        let windowCenterX = window.innerWidth / 2;
+        let windowCenterY = window.innerHeight / 2;
+
+        // Update target coordinates on mouse move
+        container.addEventListener('mousemove', (e) => {
+            targetX = (e.clientX - windowCenterX);
+            targetY = (e.clientY - windowCenterY);
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            windowCenterX = window.innerWidth / 2;
+            windowCenterY = window.innerHeight / 2;
+        });
+
+        // Animation Loop for smooth movement
+        function animate() {
+            // Lerp formula: current = current + (target - current) * friction
+            // 0.1 gives a weighty feel
+            mouseX += (targetX - mouseX) * 0.05;
+            mouseY += (targetY - mouseY) * 0.05;
+
+            parallaxElements.forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-speed'));
+                
+                // Calculate translation based on mouse position and element speed
+                const x = -mouseX * speed; 
+                const y = -mouseY * speed;
+
+                el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // Start the animation loop
+        animate();
+
+        // Reveal Animation for Text
+        const textRows = document.querySelectorAll('.huge-text');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.opacity = '1';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Initial state for reveal
+        textRows.forEach((row, index) => {
+            // We use JS to set initial styles so CSS parallax doesn't conflict immediately
+            // But actually, we are controlling transform in the animate loop.
+            // Let's just animate opacity and a slight clip-path for entrance.
+            row.style.opacity = '0';
+            row.style.clipPath = 'inset(100% 0 0 0)';
+            row.style.transition = `all 1s cubic-bezier(0.25, 1, 0.5, 1) ${index * 0.1}s`;
+            
+            // Trigger load animation
+            setTimeout(() => {
+                row.style.opacity = '1';
+                row.style.clipPath = 'inset(0 0 0 0)';
+            }, 100);
+        });
+
+    </script>
+</body>
+</html>

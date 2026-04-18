@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial Portfolio Row 4</title>
+    
+    <!-- Loading Fonts to simulate requested typefaces -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Antonio:wght@100..700&family=Outfit:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Design System Colors */
+            --bg: #EDEBE6;
+            --ink: #0D0D0D;
+            --ink-rgb: 13, 13, 13;
+            --ink-muted: #7A7770;
+            --forest: #275E48;
+            --lavender: #C8B4FF;
+            --yellow: #FFD600;
+            --gray-placeholder: #DCD9D0;
+
+            /* Typeface Mapping */
+            --font-display: 'Antonio', sans-serif; /* Simulating Mango Grotesque */
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+
+            /* Easings */
+            --ease-editorial: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: var(--font-body);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* -----------------------------------------------------------
+           FEATURE: Layout Grid
+           Strict 32/68 split with responsive stacking.
+           Using CSS Grid for precision alignment.
+        ----------------------------------------------------------- */
+        .row-4-container {
+            width: 100%;
+            max-width: 1400px;
+            display: grid;
+            grid-template-columns: 32% 68%;
+            gap: 2rem;
+            position: relative;
+            /* Interaction trigger zone */
+            cursor: default;
+        }
+
+        /* -----------------------------------------------------------
+           FEATURE: Left Column Typography
+           Contains project indexing, sophisticated title treatment,
+           and editorial description.
+        ----------------------------------------------------------- */
+        .col-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 1rem;
+            z-index: 10; /* Ensure text sits above image overlap if needed */
+        }
+
+        /* Header Meta: Number and Tags */
+        .meta-header {
+            display: flex;
+            align-items: baseline;
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+            font-family: var(--font-mono);
+        }
+
+        .project-num {
+            font-size: 0.85rem;
+            color: var(--ink-muted);
+            position: relative;
+        }
+        
+        .project-num::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--ink);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s var(--ease-editorial);
+        }
+
+        .tags-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid transparent;
+            color: var(--ink);
+            transition: all 0.4s var(--ease-editorial);
+            border-radius: 0; /* Sharp corners */
+        }
+
+        .tag.highlight {
+            background: var(--lavender);
+        }
+
+        /* Main Title Area */
+        .title-block {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .chinese-subtitle {
+            font-family: var(--font-body);
+            font-weight: 500;
+            color: var(--forest);
+            font-size: 1.1rem;
+            margin-bottom: -0.5rem;
+            display: block;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s var(--ease-editorial);
+        }
+
+        .main-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 5vw, 6rem);
+            line-height: 0.85;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        /* Word 1: Solid, Standard */
+        .word-solid {
+            color: var(--ink);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Word 2: Outline to Fill Interaction */
+        .word-hybrid {
+            /* Create outline effect */
+            color: transparent;
+            -webkit-text-stroke: 1.5px var(--ink);
+            position: relative;
+            margin-left: 2rem; /* Indentation for editorial look */
+            
+            /* Prepare gradient for fill animation */
+            background-image: linear-gradient(to top, var(--forest) 50%, transparent 50%);
+            background-size: 100% 200%;
+            background-position: 0% 0%; /* Start at top (transparent) */
+            -webkit-background-clip: text;
+            background-clip: text;
+            
+            transition: background-position 0.6s var(--ease-editorial), 
+                        transform 0.6s var(--ease-editorial),
+                        letter-spacing 0.6s var(--ease-editorial);
+        }
+
+        /* Description Block */
+        .desc-block {
+            max-width: 40ch;
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--forest);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .desc-text {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--ink-muted);
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+            transition: color 0.4s ease;
+        }
+
+        .cta-link {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--ink);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cta-arrow {
+            width: 30px;
+            height: 1px;
+            background: var(--ink);
+            position: relative;
+            transition: width 0.4s var(--ease-editorial);
+        }
+        .cta-arrow::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -3px;
+            border-top: 4px solid transparent;
+            border-bottom: 4px solid transparent;
+            border-left: 5px solid var(--ink);
+        }
+
+        /* -----------------------------------------------------------
+           FEATURE: Right Column Image & "Tech" Data
+           Wide panoramic image with technical overlays to create
+           visual tension.
+        ----------------------------------------------------------- */
+        .col-right {
+           position: relative;
+           height: 100%;
+           display: flex;
+           flex-direction: column;
+           justify-content: flex-start;
+           padding-top: 1.5rem; /* Optical alignment with title */
+        }
+
+        .image-outer-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 5 / 2.2; /* Cinematic wide */
+            background: var(--gray-placeholder);
+            overflow: hidden;
+            /* No Border Radius */
+        }
+
+        .image-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Placeholder graphic */
+        .placeholder-art {
+            width: 100%;
+            height: 100%;
+            background-color: #DCD9D0;
+            background-image: 
+                linear-gradient(45deg, #d4d1c8 25%, transparent 25%, transparent 75%, #d4d1c8 75%, #d4d1c8), 
+                linear-gradient(45deg, #d4d1c8 25%, transparent 25%, transparent 75%, #d4d1c8 75%, #d4d1c8);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink-muted);
+            font-family: var(--font-mono);
+            letter-spacing: 0.1em;
+            font-weight: 700;
+            transition: transform 1.2s var(--ease-editorial), filter 0.5s ease;
+        }
+        
+        .placeholder-text {
+            background: var(--bg);
+            padding: 5px 10px;
+            border: 1px solid var(--ink-muted);
+            z-index: 2;
+        }
+
+        /* Technical Overlay Elements */
+        .overlay-grid {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Crosshairs */
+        .crosshair {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-color: var(--ink);
+            transition: all 0.5s var(--ease-editorial);
+            opacity: 0.3;
+        }
+        
+        .ch-tl { top: 1rem; left: 1rem; border-top: 1px solid; border-left: 1px solid; }
+        .ch-tr { top: 1rem; right: 1rem; border-top: 1px solid; border-right: 1px solid; }
+        .ch-bl { bottom: 1rem; left: 1rem; border-bottom: 1px solid; border-left: 1px solid; }
+        .ch-br { bottom: 1rem; right: 1rem; border-bottom: 1px solid; border-right: 1px solid; }
+
+        /* The Data Strip - Appears on hover */
+        .data-strip {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2rem;
+            background: var(--yellow);
+            transform: translateY(100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--ink);
+            visibility: visible;
+            transition: transform 0.5s var(--ease-editorial);
+            z-index: 6;
+        }
+
+        .data-strip span { opacity: 0; transition: opacity 0.3s 0.2s; }
+
+        /* -----------------------------------------------------------
+           FEATURE: Interaction States (Hover)
+           Orchestrated CSS-only timeline on container hover.
+        ----------------------------------------------------------- */
+        
+        /* 1. Title Interaction */
+        .row-4-container:hover .word-hybrid {
+            background-position: 0% 100%; /* Fills up with green */
+            transform: translateX(10px); /* Slight shift */
+            -webkit-text-stroke: 1px var(--forest);
+            letter-spacing: 0.02em;
+        }
+
+        .row-4-container:hover .chinese-subtitle {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 2. Image Interaction */
+        .row-4-container:hover .placeholder-art {
+            transform: scale(1.05); /* Zoom in */
+            filter: contrast(1.1);
+        }
+
+        /* 3. Crosshair Tension (They compress inwards while image expands) */
+        .row-4-container:hover .ch-tl { top: 2rem; left: 2rem; opacity: 1; border-color: var(--forest); }
+        .row-4-container:hover .ch-tr { top: 2rem; right: 2rem; opacity: 1; border-color: var(--forest); }
+        .row-4-container:hover .ch-bl { bottom: 2rem; left: 2rem; opacity: 1; border-color: var(--forest); }
+        .row-4-container:hover .ch-br { bottom: 2rem; right: 2rem; opacity: 1; border-color: var(--forest); }
+
+        /* 4. Data Strip Reveal */
+        .row-4-container:hover .data-strip {
+            transform: translateY(0);
+        }
+        .row-4-container:hover .data-strip span {
+            opacity: 1;
+        }
+
+        /* 5. Left Column Subtleties */
+        .row-4-container:hover .project-num::after {
+            transform: scaleX(1); /* Underline appears */
+        }
+        .row-4-container:hover .tag {
+            border-color: var(--ink-muted);
+        }
+        .row-4-container:hover .desc-text {
+            color: var(--ink); /* Darken text */
+        }
+        .row-4-container:hover .cta-arrow {
+            width: 50px; /* Grow arrow */
+            background: var(--forest);
+        }
+        .row-4-container:hover .cta-arrow::after {
+            border-left-color: var(--forest);
+        }
+
+
+        /* -----------------------------------------------------------
+           FEATURE: Responsive logic
+           Stack columns, adjust typography for smaller screens.
+        ----------------------------------------------------------- */
+        @media (max-width: 860px) {
+            .row-4-container {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .image-outer-wrapper {
+                aspect-ratio: 16/9;
+            }
+
+            .main-title {
+                font-size: 4rem;
+            }
+            
+            .word-hybrid {
+                margin-left: 0;
+            }
+            
+            .desc-block {
+                max-width: 100%;
+                border-left: 4px solid var(--forest); /* Thicker for mobile prominence */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 
+      ROW 4 COMPONENT
+      A sophisticated, architectural layout focusing on visual tension
+      between the bold typography and the "viewfinder" image style.
+    -->
+    <section class="row-4-container">
+        
+        <!-- LEFT COLUMN: Editorial Content -->
+        <div class="col-left">
+            <!-- FEATURE: Meta Header with Tag styling -->
+            <div class="meta-header">
+                <span class="project-num">NO. 04</span>
+                <div class="tags-wrapper">
+                    <span class="tag highlight">Space</span>
+                    <span class="tag">Cultural</span>
+                </div>
+            </div>
+
+            <!-- FEATURE: Title Block with Chinese Integration & Stroke/Fill Effect -->
+            <div class="title-block">
+                <div class="main-title">
+                    <span class="word-solid">Shanghai</span>
+                    <span class="word-hybrid">Planetarium</span>
+                </div>
+                <!-- Chinese subtitle animates in on hover -->
+                <span class="chinese-subtitle">上海天文馆</span>
+            </div>
+
+            <!-- FEATURE: Description with Architectural Border -->
+            <div class="desc-block">
+                <p class="desc-text">
+                    Located in the Lingang district, the structure reflects the geometry of the cosmos. Our design strategy focused on orbital motion, integrating the oculus, inverted dome, and sphere into a unified visual identity system.
+                </p>
+                <a href="#" class="cta-link">
+                    View Case Study <div class="cta-arrow"></div>
+                </a>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Visuals -->
+        <div class="col-right">
+            <!-- FEATURE: Panoramic Image with Technical Overlays -->
+            <div class="image-outer-wrapper">
+                <div class="image-inner">
+                    <!-- Placeholder Graphic -->
+                    <div class="placeholder-art">
+                        <span class="placeholder-text">PROJECT IMAGE 5:2</span>
+                    </div>
+
+                    <!-- CSS-only Crosshair Animation -->
+                    <div class="overlay-grid">
+                        <div class="crosshair ch-tl"></div>
+                        <div class="crosshair ch-tr"></div>
+                        <div class="crosshair ch-bl"></div>
+                        <div class="crosshair ch-br"></div>
+                    </div>
+
+                    <!-- Slide-up Data Strip -->
+                    <div class="data-strip">
+                        <span>LAT 30.90° N</span>
+                        <span>FOV 120MM</span>
+                        <span>EXP +0.5</span>
+                        <span>ISO 400</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- FEATURE: JS for simple click interaction (Prototype only) -->
+    <script>
+        document.querySelector('.cta-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('Case Study Requested');
+        });
+    </script>
+</body>
+</html>

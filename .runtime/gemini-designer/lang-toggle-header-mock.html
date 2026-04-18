@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Mock — Lang Toggle</title>
+    <link href="https://db.onlinewebfonts.com/c/0d7c90bf2d5c8dcc4fa27a5ba6cbad81?family=Mango+Grotesque" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ink: #0D0D0D;
+            --forest: #275E48;
+            --lavender: #C8B4FF;
+            --bg: #FFFFFF;
+            --font-display: 'Mango Grotesque', 'Impact', 'Arial Narrow', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            font-family: var(--font-body);
+            min-height: 100vh;
+        }
+
+        .label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #999;
+            padding: 40px 48px 16px;
+        }
+
+        /* ============ NAV BAR MOCK ============ */
+        nav {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            padding: 24px 48px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #D0CCC4;
+        }
+
+        .brand {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: var(--ink);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0;
+        }
+        .nav-link {
+            font-family: var(--font-body);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--ink);
+            padding: 10px 22px;
+            white-space: nowrap;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            justify-self: end;
+        }
+
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #7A7770;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background: #22C55E;
+            border-radius: 50%;
+        }
+
+        /* ============ LANG TOGGLE — Brutalist Mono (Modified) ============ */
+        .lang-toggle {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            display: inline-flex;
+            border: 1.5px solid var(--ink);
+            background: none;
+            overflow: hidden;
+        }
+        .lang-opt {
+            cursor: pointer;
+            padding: 6px 14px;
+            transition: background 0.25s, color 0.25s;
+            user-select: none;
+            letter-spacing: 0.5px;
+            line-height: 1;
+        }
+        .lang-opt.active {
+            background: var(--forest);
+            color: #fff;
+            font-weight: 700;
+        }
+        .lang-opt.inactive {
+            background: var(--bg);
+            color: var(--ink);
+        }
+        .lang-opt.inactive:hover {
+            background: #f0eeea;
+        }
+
+        /* ============ HERO PLACEHOLDER ============ */
+        .hero-placeholder {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .hero-placeholder .intro {
+            font-family: var(--font-body);
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 4px;
+        }
+        .hero-placeholder .display {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(48px, 10vw, 120px);
+            text-transform: uppercase;
+            line-height: 0.85;
+            text-align: center;
+        }
+
+        /* ============ MOBILE ============ */
+        @media (max-width: 640px) {
+            nav {
+                padding: 18px 36px;
+                grid-template-columns: auto 1fr auto;
+            }
+            .nav-links { display: none; }
+            .nav-status { display: none; }
+            .brand { font-size: 0.9rem; }
+            .lang-opt { padding: 5px 12px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="label">Desktop Nav — Brutalist Mono Toggle (Green Fill, No Shadow)</div>
+
+<nav>
+    <a href="#" class="brand">Linyun Yu</a>
+    <div class="nav-links">
+        <a href="#" class="nav-link">Welcome</a>
+        <a href="#" class="nav-link">Work</a>
+        <a href="#" class="nav-link">About</a>
+        <a href="#" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-right">
+        <div class="nav-status">
+            <div class="status-dot"></div>
+            <span>Available for work</span>
+        </div>
+        <div class="lang-toggle">
+            <span class="lang-opt active" onclick="switchLang(this)">EN</span>
+            <span class="lang-opt inactive" onclick="switchLang(this)">中</span>
+        </div>
+    </div>
+</nav>
+
+<div class="hero-placeholder">
+    <div class="intro">Hi, I'm LIN</div>
+    <div class="display">Designing<br>Digital<br>Products</div>
+</div>
+
+<script>
+function switchLang(el) {
+    document.querySelectorAll('.lang-opt').forEach(opt => {
+        opt.classList.remove('active');
+        opt.classList.add('inactive');
+    });
+    el.classList.remove('inactive');
+    el.classList.add('active');
+}
+</script>
+</body>
+</html>

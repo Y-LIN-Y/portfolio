@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YU LINYUN - Digital Designer</title>
+    
+    <!-- FONTS -->
+    <link href="https://fonts.cdnfonts.com/css/mango-grotesque" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Palette */
+            --c-black: #0f0f12;
+            --c-white: #ffffff;
+            --c-indigo: #6366F1; /* Primary Accent */
+            --c-gray-light: rgba(15, 15, 18, 0.4);
+            --c-gray-lighter: rgba(15, 15, 18, 0.2);
+            --c-green: #00D348;
+            
+            /* Fonts */
+            --f-display: 'Mango Grotesque', sans-serif;
+            --f-body: 'Space Grotesk', sans-serif;
+            --f-tech: 'JetBrains Mono', monospace;
+            
+            /* Layout */
+            --nav-height: 80px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f0f0f4;
+            /* Complex Gradient Background from Specs */
+            background-image:
+                linear-gradient(165deg, transparent 8%, rgba(255,255,255,0.08) 22%, rgba(255,255,255,0.32) 30%, rgba(255,255,255,0.48) 35%, rgba(255,255,255,0.35) 42%, rgba(255,255,255,0.12) 52%, transparent 64%),
+                linear-gradient(220deg, transparent 30%, rgba(255,255,255,0.1) 42%, rgba(255,255,255,0.28) 48%, rgba(255,255,255,0.15) 55%, rgba(255,255,255,0.04) 64%, transparent 74%),
+                linear-gradient(70deg, transparent 15%, rgba(255,255,255,0.06) 28%, rgba(255,255,255,0.15) 38%, rgba(255,255,255,0.08) 50%, transparent 62%),
+                linear-gradient(280deg, transparent 50%, rgba(215,220,235,0.1) 65%, rgba(215,220,235,0.16) 72%, rgba(215,220,235,0.08) 82%, transparent 92%),
+                linear-gradient(20deg, rgba(225,218,210,0.08) 0%, rgba(225,218,210,0.04) 15%, transparent 30%),
+                linear-gradient(140deg, transparent 35%, rgba(0,0,0,0.02) 46%, rgba(0,0,0,0.05) 55%, rgba(0,0,0,0.028) 64%, rgba(0,0,0,0.008) 74%, transparent 84%),
+                linear-gradient(5deg, rgba(0,0,0,0.035) 0%, rgba(0,0,0,0.018) 8%, rgba(0,0,0,0.005) 16%, transparent 26%),
+                radial-gradient(ellipse 85% 75% at 50% 45%, transparent 35%, rgba(0,0,0,0.025) 75%, rgba(0,0,0,0.05) 100%),
+                linear-gradient(175deg, #f0f0f4 0%, #ebeaee 30%, #e5e4ea 60%, #eae8eb 100%);
+            background-attachment: fixed;
+            color: var(--c-black);
+            font-family: var(--f-body);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* SVG Noise Texture Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 211, 72, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(0, 211, 72, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 211, 72, 0); }
+        }
+
+        /* --- NAVIGATION --- */
+        /* FEATURE: Glassmorphism Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: var(--nav-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 40px;
+            z-index: 100;
+            animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .brand {
+            font-family: var(--f-display);
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 40px;
+            padding: 0 44px;
+            height: 48px;
+            align-items: center;
+            border-radius: 0;
+            overflow: hidden;
+
+            /* Apple liquid glass — transparent body + strong blur */
+            backdrop-filter: blur(40px) saturate(1.6) brightness(1.02);
+            -webkit-backdrop-filter: blur(40px) saturate(1.6) brightness(1.02);
+
+            /* Glass body: subtle top-to-bottom gradient for thickness illusion */
+            background: linear-gradient(
+                180deg,
+                rgba(255,255,255,0.28) 0%,
+                rgba(255,255,255,0.13) 40%,
+                rgba(255,255,255,0.08) 100%
+            );
+
+            /* Clear outline border — the defining feature of liquid glass */
+            border: 1.5px solid rgba(255, 255, 255, 0.45);
+            border-top-color: rgba(255, 255, 255, 0.7);
+            border-bottom-color: rgba(255, 255, 255, 0.2);
+
+            /* Layered shadows for depth */
+            box-shadow:
+                /* Inner top specular highlight */
+                0 1px 0 0 rgba(255, 255, 255, 0.55) inset,
+                /* Inner subtle bottom shadow (glass thickness) */
+                0 -1px 2px 0 rgba(0, 0, 0, 0.04) inset,
+                /* Outer glow — glass catching ambient light */
+                0 0 0 0.5px rgba(255, 255, 255, 0.3),
+                /* Soft drop shadow */
+                0 2px 8px 0 rgba(0, 0, 0, 0.06),
+                /* Diffuse shadow for floating depth */
+                0 8px 24px -8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Top-edge specular highlight bar */
+        .nav-center::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                rgba(255,255,255,0.1) 0%,
+                rgba(255,255,255,0.6) 20%,
+                rgba(255,255,255,0.85) 50%,
+                rgba(255,255,255,0.6) 80%,
+                rgba(255,255,255,0.1) 100%
+            );
+            z-index: 2;
+        }
+
+        /* Bottom inner edge — faint warm reflection */
+        .nav-center::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            right: 5%;
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.15) 30%,
+                rgba(255, 255, 255, 0.2) 50%,
+                rgba(255, 255, 255, 0.15) 70%,
+                transparent
+            );
+            z-index: 2;
+        }
+
+        .nav-center a {
+            text-decoration: none;
+            color: rgba(15, 15, 18, 0.7);
+            font-family: var(--f-body);
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-center a:hover {
+            color: var(--c-indigo);
+        }
+
+        .nav-center a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: var(--c-indigo);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-center a:hover::after {
+            width: 100%;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--f-tech);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--c-green);
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(0, 211, 72, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        /* --- HERO SECTION --- */
+        /*FEATURE: Editorial Layout Layering */
+        main {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-left: 8vw;
+            z-index: 10;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            width: 50%;
+            transform: translateY(-5%); /* Slightly top-weighted */
+        }
+
+        /* Editorial Vertical Line Decoration */
+        .hero-content::before {
+            content: '';
+            position: absolute;
+            left: -30px;
+            top: 10px;
+            bottom: 10px;
+            width: 1px;
+            background: linear-gradient(to bottom, var(--c-black), transparent);
+            opacity: 0.2;
+        }
+
+        .line-wrapper {
+            overflow: hidden;
+            margin-bottom: -15px; /* Tighten mango font leading */
+        }
+
+        h1 {
+            font-family: var(--f-display);
+            font-size: 140px;
+            line-height: 0.85;
+            text-transform: uppercase;
+            cursor: default;
+        }
+
+        .line-1 {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--c-black);
+            opacity: 0;
+            animation: fadeUp 1s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .line-2 {
+            display: flex;
+            gap: 0.2em;
+            opacity: 0;
+            animation: fadeUp 1s 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .line-2 .iam {
+            color: var(--c-black);
+        }
+
+        .line-2 .lin {
+            color: var(--c-indigo);
+        }
+
+        .subhead {
+            margin-top: 40px;
+            font-family: var(--f-body);
+            font-weight: 300;
+            font-size: 26px;
+            color: rgba(0,0,0,0.5);
+            max-width: 480px;
+            line-height: 1.3;
+            opacity: 0;
+            animation: fadeUp 1s 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* Editorial decorative small text */
+        .meta-tag {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            font-family: var(--f-tech);
+            font-size: 10px;
+            color: var(--c-indigo);
+            opacity: 0;
+            animation: fadeUp 1s 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* --- CANVAS --- */
+        /* FEATURE: Canvas 2D Perspective Grid */
+        #canvas-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Behind text interaction zone, but carefully layered */
+            pointer-events: all; /* Allow mouse interaction */
+            overflow: hidden;
+        }
+        
+        canvas {
+            display: block;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            z-index: 50;
+            font-family: var(--f-tech);
+            font-size: 11px;
+            color: rgba(15,15,18,0.5);
+            background: linear-gradient(to top, rgba(240,240,244,0.8), transparent);
+            animation: fadeUp 1s 1.0s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+        }
+        
+        footer .location::before {
+            content: '[ '; opacity: 0.5;
+        }
+        footer .location::after {
+            content: ' ]'; opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            h1 { font-size: 80px; }
+            .subhead { font-size: 18px; }
+            .nav-center { display: none; }
+            main { padding-left: 20px; }
+            .hero-content { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TEXTURE OVERLAY -->
+    <div class="noise-overlay"></div>
+
+    <!-- NAVIGATION -->
+    <!-- FEATURE: Top Navigation with Glassmorphism -->
+    <header>
+        <div class="brand">Yu Linyun</div>
+        
+        <nav class="nav-center">
+            <a href="#works">Works</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        
+        <div class="status">
+            <span>Available for hire</span>
+            <div class="status-dot"></div>
+        </div>
+    </header>
+
+    <!-- INTERACTIVE CANVAS BG -->
+    <!-- FEATURE: 2D Deformed Perspective Grid -->
+    <div id="canvas-wrapper">
+        <canvas id="gridCanvas"></canvas>
+    </div>
+
+    <!-- MAIN HERO CONTENT -->
+    <main>
+        <div class="hero-content">
+            <!-- Decorative Editorial Element -->
+            <div class="meta-tag">NO. 001 — EDITORIAL / 2024</div>
+
+            <div class="line-wrapper">
+                <h1 class="line-1">HI</h1>
+            </div>
+            <div class="line-wrapper">
+                <h1 class="line-2">
+                    <span class="iam">I AM</span>
+                    <span class="lin">LIN</span>
+                </h1>
+            </div>
+            
+            <p class="subhead">
+                I am a designer who creates digital products and user experiences with focus on clarity and system thinking.
+            </p>
+        </div>
+    </main>
+
+    <!-- FOOTER INFO -->
+    <footer>
+        <div class="roles">Product Design / Interface Architecture / Systems Thinking</div>
+        <div class="location">Seoul, KR</div>
+    </footer>
+
+    <script>
+        /* Grid: hero-ab Section A style — subtle breathing + mouse repulsion + indigo highlights */
+        (function() {
+            const canvas = document.getElementById('gridCanvas');
+            const ctx = canvas.getContext('2d');
+
+            const COLS = 16;
+            const ROWS = 18;
+            const MOUSE_RADIUS = 130;
+            const DISTORT_STRENGTH = 32;
+
+            let mouse = { x: -999, y: -999 };
+            let smoothMouse = { x: -999, y: -999 };
+            let nodes = [];
+            let w, h;
+
+            function resize() {
+                const dpr = window.devicePixelRatio || 1;
+                w = window.innerWidth;
+                h = window.innerHeight;
+                canvas.width = w * dpr;
+                canvas.height = h * dpr;
+                canvas.style.width = w + 'px';
+                canvas.style.height = h + 'px';
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                buildNodes();
+            }
+
+            function buildNodes() {
+                nodes = [];
+                /* Grid covers right ~55% of screen, full height + bleed */
+                const startX = w * 0.40;
+                const endX = w * 1.05;
+                const startY = -h * 0.05;
+                const endY = h * 1.05;
+                const cellW = (endX - startX) / (COLS - 1);
+                const cellH = (endY - startY) / (ROWS - 1);
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        const ox = startX + c * cellW;
+                        const oy = startY + r * cellH;
+                        nodes.push({ ox, oy, x: ox, y: oy });
+                    }
+                }
+            }
+
+            window.addEventListener('mousemove', (e) => {
+                mouse.x = e.clientX;
+                mouse.y = e.clientY;
+            });
+            window.addEventListener('mouseleave', () => {
+                mouse.x = -999;
+                mouse.y = -999;
+            });
+
+            function draw() {
+                smoothMouse.x += (mouse.x - smoothMouse.x) * 0.08;
+                smoothMouse.y += (mouse.y - smoothMouse.y) * 0.08;
+
+                ctx.clearRect(0, 0, w, h);
+                const time = Date.now() * 0.001;
+                const hasMouse = mouse.x > -500;
+
+                /* Update nodes */
+                for (let i = 0; i < nodes.length; i++) {
+                    const n = nodes[i];
+                    const nx = n.ox / w;
+                    const ny = n.oy / h;
+
+                    /* Ambient breathing waves — gentle, multi-layer */
+                    const wave1 = Math.sin(nx * 4.5 + time * 0.7) * Math.cos(ny * 3.8 + time * 0.5) * 6;
+                    const wave2 = Math.sin(nx * 2.2 - time * 0.4 + ny * 3.0) * 4;
+                    const wave3 = Math.cos(ny * 5.0 + time * 0.9 + nx * 1.5) * 3;
+                    const waveX = wave1 + wave2 * 0.6;
+                    const waveY = wave3 + wave1 * 0.4;
+
+                    let tx = n.ox + waveX;
+                    let ty = n.oy + waveY;
+
+                    /* Mouse repulsion */
+                    if (hasMouse) {
+                        const dx = smoothMouse.x - n.ox;
+                        const dy = smoothMouse.y - n.oy;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < MOUSE_RADIUS) {
+                            const force = Math.pow(1 - dist / MOUSE_RADIUS, 1.5);
+                            const angle = Math.atan2(dy, dx);
+                            tx -= Math.cos(angle) * force * DISTORT_STRENGTH;
+                            ty -= Math.sin(angle) * force * DISTORT_STRENGTH;
+                        }
+                    }
+
+                    n.x += (tx - n.x) * 0.08;
+                    n.y += (ty - n.y) * 0.08;
+                }
+
+                /* Draw horizontal lines */
+                for (let r = 0; r < ROWS; r++) {
+                    const rowAlpha = 0.06 + Math.sin(r / ROWS * Math.PI) * 0.06;
+                    ctx.strokeStyle = `rgba(15, 15, 18, ${rowAlpha})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    for (let c = 0; c < COLS; c++) {
+                        const n = nodes[r * COLS + c];
+                        if (c === 0) ctx.moveTo(n.x, n.y);
+                        else ctx.lineTo(n.x, n.y);
+                    }
+                    ctx.stroke();
+                }
+
+                /* Draw vertical lines */
+                for (let c = 0; c < COLS; c++) {
+                    const colAlpha = 0.06 + Math.sin(c / COLS * Math.PI) * 0.06;
+                    ctx.strokeStyle = `rgba(15, 15, 18, ${colAlpha})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    for (let r = 0; r < ROWS; r++) {
+                        const n = nodes[r * COLS + c];
+                        if (r === 0) ctx.moveTo(n.x, n.y);
+                        else ctx.lineTo(n.x, n.y);
+                    }
+                    ctx.stroke();
+                }
+
+                /* Intersection dots — ambient pulse + mouse indigo highlights */
+                for (let i = 0; i < nodes.length; i++) {
+                    const n = nodes[i];
+                    const pulse = 0.5 + Math.sin(Date.now() * 0.002 + i * 0.3) * 0.5;
+                    const ambientSize = 0.8 + pulse * 0.4;
+                    ctx.fillStyle = `rgba(15, 15, 18, ${0.06 + pulse * 0.04})`;
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, ambientSize, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (hasMouse) {
+                        const dx = smoothMouse.x - n.x;
+                        const dy = smoothMouse.y - n.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < MOUSE_RADIUS * 1.2) {
+                            const alpha = (1 - dist / (MOUSE_RADIUS * 1.2)) * 0.65;
+                            ctx.fillStyle = `rgba(99, 102, 241, ${alpha})`;
+                            const size = 1.5 + (1 - dist / (MOUSE_RADIUS * 1.2)) * 2.5;
+                            ctx.beginPath();
+                            ctx.arc(n.x, n.y, size, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                }
+
+                requestAnimationFrame(draw);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+            draw();
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial Portfolio • Option B</title>
+    <style>
+        /* 
+         * DESIGN SYSTEM & TYPOGRAPHY 
+         */
+        :root {
+            --forest: #275E48;
+            --bg: #EDEBE6;
+            --yellow: #FFD600;
+            --lavender: #C8B4FF;
+            --ink: #0D0D0D;
+            --surface: #E0DDD6;
+            --border-color: #0D0D0D;
+            
+            --font-display: 'Anton', impact, sans-serif;
+            --font-body: 'Manrope', helvetica, sans-serif;
+            
+            --pad-section: 12vh 5vw;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;600&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        /* UTILITIES & SHARED COMPONENTS */
+        .section-separator {
+            width: 100%;
+            height: 2px;
+            background: var(--ink);
+            margin: 0;
+            transform-origin: left;
+        }
+
+        .tag-container {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .tag {
+            padding: 0.5rem 1rem;
+            background: var(--ink);
+            color: white;
+            border-radius: 0; /* Strict adherence to square corners */
+        }
+
+        .tag.forest { background: var(--forest); }
+        .tag.lavender { background: var(--lavender); color: var(--ink); }
+        .tag.yellow { background: var(--yellow); color: var(--ink); }
+
+        .row-index {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            opacity: 0.4;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* 
+         * ROW 1: SKY SPORTS (Tilt Interaction) 
+         */
+        #row-1 {
+            padding: var(--pad-section);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .r1-content h2 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 6rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .r1-content p {
+            max-width: 400px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+
+        .r1-image-wrapper {
+            perspective: 1500px; /* Essential for 3D tilt */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .tilt-card {
+            width: 80%;
+            transition: transform 0.1s ease-out; /* Snapback handled in JS */
+            transform-style: preserve-3d;
+            box-shadow: 20px 20px 0px rgba(13,13,13,0.1);
+        }
+
+        /* 
+         * ROW 2: PLANETARIUM (Parallax Text + Image Left)
+         * Design Decision: Image on Left (30%), Text Right (65%)
+         * Justification: Creates zig-zag rhythm from Row 1. 
+         * Image is grayscale to not fight the text colors, illuminates on hover.
+         */
+        #row-2 {
+            padding: var(--pad-section);
+            display: grid;
+            grid-template-columns: 35% 65%; /* Editorial proportions */
+            gap: 5%;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            border-top: 2px solid var(--ink);
+        }
+
+        .r2-image-wrapper {
+            height: 60vh;
+            border-radius: 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 1; /* Behind text if they overlap */
+        }
+
+        .r2-img {
+            width: 100%;
+            height: 100%;
+            filter: grayscale(100%) contrast(1.1);
+            transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1), filter 0.5s ease;
+            transform: scale(1.05); /* Slight zoom for parallax room */
+        }
+
+        /* Hover Interaction: Reveal color and subtle scale */
+        #row-2:hover .r2-img {
+            filter: grayscale(0%);
+            transform: scale(1);
+        }
+
+        .r2-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .parallax-text-block {
+            display: flex;
+            flex-direction: column;
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 7vw, 7.5rem);
+            line-height: 0.85;
+            text-transform: uppercase;
+            cursor: default;
+        }
+
+        .p-word {
+            display: block;
+            white-space: nowrap;
+            will-change: transform;
+            transition: transform 0.1s linear; /* JS drives this */
+        }
+
+        /* Specific styles per line */
+        .color-black { color: var(--ink); }
+        
+        .color-outline { 
+            color: transparent; 
+            -webkit-text-stroke: 2px var(--ink); 
+            opacity: 0.6;
+        }
+
+        .color-forest { 
+            color: var(--forest); 
+        }
+
+        /* 
+         * ROW 3: VIRTUAL EXHIBITION (Arrow Interaction)
+         * Design Decision: Removed colored background. Using Borders for consistency.
+         * Justification: Unifies the grid. Editorial feel achieved via structure, not blocks of color.
+         */
+        #row-3 {
+            padding: var(--pad-section);
+            display: grid;
+            grid-template-columns: 45% 1fr;
+            gap: 4rem;
+            align-items: center;
+            border-top: 2px solid var(--ink);
+            border-bottom: 2px solid var(--ink); /* Close the grid */
+            position: relative;
+        }
+
+        .r3-image-clip {
+            /* Editorial treatment: Unique polygon clip */
+            clip-path: polygon(10% 0, 100% 0, 100% 85%, 90% 100%, 0 100%, 0 15%);
+            height: 55vh;
+            position: relative;
+        }
+
+        .r3-image-clip img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s ease;
+        }
+        
+        #row-3:hover .r3-image-clip img {
+            transform: scale(1.05);
+        }
+
+        .r3-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .r3-text h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 2rem;
+            max-width: 12ch;
+        }
+
+        /* 
+         * CUSTOM ARROW BUTTON
+         */
+        .cta-btn {
+            width: 90px;
+            height: 90px;
+            border: 2px solid var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            background: transparent;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn svg {
+            width: 32px;
+            height: 32px;
+            color: var(--ink);
+            transition: transform 0.4s ease, color 0.4s ease;
+        }
+
+        /* Fill effect */
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--forest);
+            transform: scaleY(0);
+            transform-origin: bottom;
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+
+        .cta-btn:hover {
+            border-color: var(--forest);
+        }
+        
+        .cta-btn:hover::before {
+            transform: scaleY(1);
+        }
+
+        .cta-btn:hover svg {
+            color: white;
+            transform: rotate(-45deg); /* Arrow Rotation */
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            #row-1, #row-2, #row-3 {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 4rem 1.5rem;
+            }
+            .r1-image-wrapper { order: -1; }
+            .r2-image-wrapper { height: 40vh; order: -1; }
+            .r3-image-clip { height: 40vh; order: -1; }
+            .parallax-text-block { font-size: 3.5rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Header/Nav mockup for context -->
+    <nav style="padding: 2rem 5vw; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--ink);">
+        <h1 style="font-family: var(--font-display); font-size: 2rem; text-transform: uppercase;">Folio<span style="color:var(--forest)">.</span></h1>
+        <div style="font-family: var(--font-body); font-weight: 600; font-size: 0.9rem;">2023 EDITION</div>
+    </nav>
+
+    <!-- 
+      ROW 1: SKY SPORTS
+      Feature: 3D Tilt Effect on hover. Image on Right.
+    -->
+    <section id="row-1">
+        <div class="r1-content">
+            <span class="row-index">01</span>
+            <h2>Sky<br>Sports<br>Premier</h2>
+            <p>A comprehensive rebrand for the UK’s leading sports broadcaster, focusing on dynamic motion systems and creating a visceral connection with the audience.</p>
+            <div class="tag-container">
+                <span class="tag">Branding</span>
+                <span class="tag yellow">Motion</span>
+            </div>
+        </div>
+        <div class="r1-image-wrapper">
+            <div class="tilt-card" id="tilt-card">
+                <img src="https://images.unsplash.com/photo-1616167818783-6ce62dc7303d?q=80&w=1200&auto=format&fit=crop" alt="Sports Rebrand Visual">
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+      ROW 2: PLANETARIUM
+      Feature: Parallax Text + Stylized Image Reveal.
+      Layout: Image Left (35%), Text Right.
+      Interaction: Mousemove drives text translation X and image pan effects.
+    -->
+    <section id="row-2">
+        <div class="r2-image-wrapper">
+            <img class="r2-img" src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1200&auto=format&fit=crop" alt="Planetarium Abstract">
+        </div>
+
+        <div class="r2-content">
+            <span class="row-index">02</span>
+            
+            <div class="parallax-text-block">
+                <!-- DESIGNING (Fast Shift) -->
+                <span class="p-word color-black" data-speed="0.08">Designing</span>
+                
+                <!-- DIGITAL (Medium Shift + Outline) -->
+                <span class="p-word color-outline" data-speed="-0.06" style="margin-left: 1.5rem;">Digital</span>
+                
+                <!-- PLANETARIUM (Slow Shift + Forest Color) -->
+                <span class="p-word color-forest" data-speed="0.04">Planetarium</span>
+            </div>
+
+            <div class="tag-container" style="margin-top: 3rem;">
+                <span class="tag lavender">Installation</span>
+                <span class="tag">Shanghai</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+      ROW 3: VIRTUAL EXHIBITION
+      Feature: Button Interaction + Polygon Clip Path.
+      Design Change: Removed background color. Used Borders creates consistency with Rows 1 & 2.
+    -->
+    <section id="row-3">
+        <div class="r3-image-clip">
+            <img src="https://images.unsplash.com/photo-1596720822607-b3c9f2b8471e?q=80&w=1200&auto=format&fit=crop" alt="Virtual Exhibition">
+        </div>
+
+        <div class="r3-content">
+            <div>
+                <span class="row-index">03</span>
+                <div class="r3-text">
+                    <h2>Virtual<br>Exhibition<br>Space</h2>
+                </div>
+                <p style="max-width: 320px; font-size: 1.1rem; opacity: 0.8; line-height: 1.6;">
+                    Curating digital artifacts in a boundless 3D environment. Browsing history reimagined as architectural space.
+                </p>
+                <div class="tag-container">
+                    <span class="tag">WebGL</span>
+                    <span class="tag forest">Interaction</span>
+                </div>
+            </div>
+
+            <!-- Button: Fills Green, Arrow rotates -45deg -->
+            <button class="cta-btn" aria-label="View Project">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                </svg>
+            </button>
+        </div>
+    </section>
+
+    <script>
+        /**
+         * ROW 1: 3D TILT EFFECT
+         */
+        const cardArea = document.querySelector('.r1-image-wrapper');
+        const card = document.getElementById('tilt-card');
+
+        cardArea.addEventListener('mousemove', (e) => {
+            const rect = cardArea.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Calculate center
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            // Rotation Values (Max 15deg)
+            const rotateX = ((y - centerY) / centerY) * -10; 
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        });
+
+        cardArea.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+        });
+
+        /**
+         * ROW 2: PARALLAX TEXT & IMAGE
+         */
+        const row2 = document.getElementById('row-2');
+        const parallaxWords = document.querySelectorAll('.p-word');
+        const r2Img = document.querySelector('.r2-img');
+
+        row2.addEventListener('mousemove', (e) => {
+            // Get center of section
+            const rect = row2.getBoundingClientRect();
+            // Mouse position relative to center of row (-1 to 1)
+            const mouseX = (e.clientX - rect.left - rect.width / 2) / (rect.width / 2);
+            
+            // Animate Text Lines
+            parallaxWords.forEach(word => {
+                const speed = parseFloat(word.getAttribute('data-speed'));
+                const xMove = mouseX * speed * 1000; // Multiplier defines range
+                word.style.transform = `translateX(${xMove}px)`;
+            });
+
+            // Animate Image (Subtle opposition to text movement)
+            // Note: We use the existing transforms on the image (scale), so we append translateX
+            const imgMove = mouseX * -20; // Move max 20px opposite direction
+            r2Img.style.transform = `scale(1.05) translateX(${imgMove}px)`; 
+        });
+
+        // Reset on leave for cleanliness
+        row2.addEventListener('mouseleave', () => {
+            parallaxWords.forEach(word => {
+                word.style.transform = `translateX(0px)`;
+            });
+            r2Img.style.transform = `scale(1) translateX(0px)`;
+        });
+
+    </script>
+</body>
+</html>

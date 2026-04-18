@@ -1,0 +1,2055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Sky Sports AI-Personalised Sports App</title>
+
+    <link href='https://db.onlinewebfonts.com/c/0d7c90bf2d5c8dcc4fa27a5ba6cbad81?family=Mango+Grotesque' rel='stylesheet'>
+    <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        (function() {
+            var lang = 'CN';
+            try {
+                lang = localStorage.getItem('portfolioLang') || lang;
+            } catch (error) {}
+            lang = lang === 'CN' ? 'CN' : 'EN';
+            document.documentElement.setAttribute('data-initial-lang', lang);
+            document.documentElement.lang = lang === 'CN' ? 'zh-CN' : 'en';
+            document.write('<style>html[data-initial-lang="EN"] .lang-cn{display:none !important;}html[data-initial-lang="CN"] .lang-en{display:none !important;}</style>');
+        })();
+    </script>
+
+    <style>
+        :root {
+            --bg: #EDEBE6;
+            --bg-warm: #E5E2DC;
+            --bg-dark: #1A1A1E;
+            --ink: #0D0D0D;
+            --ink-muted: #7A7770;
+            --surface: #E0DDD6;
+            --border: #D0CCC4;
+            --yellow: #FFD600;
+            --lavender: #C8B4FF;
+            --green: #275E48;
+            --forest: #275E48;
+            --c-indigo: #6366F1;
+            --easing: cubic-bezier(0.19, 1, 0.22, 1);
+
+            --font-display: 'Mango Grotesque', 'Barlow Condensed', 'Arial Narrow', sans-serif;
+            --font-cn-display: 'Noto Serif SC', 'Songti SC', serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+
+            --spacing-container: 4vw;
+            --spacing-section: 120px;
+            --measure-story-cn: 740px;
+            --measure-story-en: 940px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: #fff;
+            color: var(--ink);
+            font-family: var(--font-body);
+            font-size: 17px;
+            line-height: 1.75;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        ::selection {
+            background: var(--ink);
+            color: var(--bg);
+        }
+
+        body[data-lang="EN"] .lang-cn { display: none !important; }
+        body[data-lang="CN"] .lang-en { display: none !important; }
+        body[data-lang="EN"] .lang-en { text-wrap: pretty; }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E");
+        }
+
+        .u-mono {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .u-display {
+            font-family: var(--font-display);
+            line-height: 0.88;
+            text-transform: uppercase;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-container);
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: 70px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 0 48px;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.92);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+        nav.scrolled { border-color: var(--border); }
+
+        .nav-back {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.3s ease;
+        }
+        .nav-back:hover { opacity: 0.6; }
+
+        .nav-center { text-align: center; }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+
+        .nav-status {
+            display: flex; align-items: center; gap: 8px;
+            font-family: var(--font-body);
+            font-size: 12px; font-weight: 500;
+            color: var(--ink-muted);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .status-dot {
+            width: 6px; height: 6px;
+            background: var(--green);
+            border-radius: 50%; flex-shrink: 0;
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .lang-toggle {
+            position: relative;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            display: inline-flex;
+            align-items: stretch;
+            cursor: pointer;
+        }
+        .lang-toggle::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 1.5px;
+            background: rgba(13, 13, 13, 0.12);
+        }
+        .lang-slider {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 50%; height: 1.5px;
+            background: var(--ink);
+            z-index: 1;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .lang-toggle[data-lang="CN"] .lang-slider {
+            transform: translateX(100%);
+        }
+        .lang-opt {
+            position: relative;
+            cursor: pointer;
+            padding: 4px 8px 6px;
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+            user-select: none;
+        }
+        .lang-opt.active { color: var(--ink); font-weight: 700; }
+        .lang-opt.inactive { color: rgba(13, 13, 13, 0.3); }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            width: 36px; height: 36px;
+            background: none; border: none;
+            padding: 0;
+            align-items: center; justify-content: center;
+        }
+        .hamburger-icon { width: 22px; height: 22px; color: var(--ink); }
+        .hamburger-close { display: none; }
+        .hamburger.is-open .hamburger-open { display: none; }
+        .hamburger.is-open .hamburger-close { display: block; }
+
+        .mobile-menu {
+            display: none;
+            position: fixed; inset: 0;
+            background: var(--ink);
+            z-index: 99;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s var(--easing);
+        }
+        .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
+        .mobile-menu-link {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: clamp(2rem, 8vw, 3.5rem);
+            text-transform: uppercase;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 1px;
+            line-height: 1.1;
+            display: block;
+            width: 100%;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s var(--easing), transform 0.4s var(--easing), color 0.2s;
+        }
+        .mobile-menu.is-open .mobile-menu-link { opacity: 1; transform: translateY(0); }
+        .mobile-menu.is-open .mobile-menu-link:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-menu.is-open .mobile-menu-link:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-menu-link:active { color: var(--lavender); }
+        .mobile-menu-footer {
+            position: absolute;
+            bottom: 40px; left: 50%;
+            transform: translateX(-50%);
+        }
+        .mobile-menu-footer .nav-status { display: flex; color: rgba(255,255,255,0.4); }
+        .mobile-menu-footer .status-dot { background: var(--green); }
+
+        /* --- HERO --- */
+        .hero {
+            padding-top: 120px;
+            padding-bottom: 56px;
+        }
+
+        .hero-tags {
+            margin-bottom: 24px;
+            color: var(--ink-muted);
+            font-size: 12px;
+        }
+
+        .hero-title h1 {
+            font-size: clamp(5.6rem, 8vw, 8.6rem);
+            line-height: 0.84;
+            letter-spacing: -0.01em;
+            margin-bottom: 18px;
+        }
+
+        .cn-title {
+            font-family: var(--font-cn-display);
+            font-size: clamp(2rem, 3vw, 2.5rem);
+            font-weight: 400;
+            margin-bottom: 0.2em;
+            display: block;
+        }
+
+        .hero-title .subtitle {
+            font-family: var(--font-mono);
+            color: var(--ink-muted);
+            margin-top: 24px;
+            font-size: 14px;
+        }
+
+        .hero-summary {
+            max-width: 620px;
+            margin-top: 24px;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--ink-muted);
+        }
+
+        .hero-summary.lang-cn {
+            font-size: 1rem;
+        }
+
+        .hero-visual {
+            width: 100%;
+            margin-top: 42px;
+            min-height: 0;
+            aspect-ratio: 16 / 9;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.14);
+        }
+
+        .hero-visual--image {
+            background: #0d1c37;
+        }
+
+        .hero-visual--image img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .story-screen-caption {
+            margin-top: 14px;
+            font-size: 14px;
+            color: var(--ink-muted);
+        }
+
+        /* --- OVERVIEW --- */
+        .section-overview {
+            padding-top: 56px;
+            padding-bottom: var(--spacing-section);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: 300px minmax(0, 1fr);
+            gap: 60px;
+        }
+
+        .overview-meta {
+            padding-top: 20px;
+            padding-right: 16px;
+        }
+
+        .meta-group { margin-bottom: 40px; }
+        .meta-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            margin-bottom: 8px;
+            display: block;
+        }
+        .meta-group:nth-child(1) .meta-label::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--yellow);
+            border-radius: 1px;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .meta-group:nth-child(2) .meta-label::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--green);
+            border-radius: 1px;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .meta-group:nth-child(3) .meta-label::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--lavender);
+            border-radius: 1px;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        .meta-value {
+            font-size: 18px;
+            font-weight: 500;
+            overflow-wrap: anywhere;
+        }
+
+        .narrative p {
+            font-size: 22px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        .narrative p.lang-cn {
+            font-family: var(--font-body);
+            font-size: 20px;
+            line-height: 1.8;
+        }
+
+        /* --- SECTION LABEL --- */
+        .section-label {
+            margin-bottom: 64px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .section-label::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 48px;
+            height: 2px;
+            background: var(--yellow);
+        }
+
+        .section-narrative .section-label::after {
+            background: var(--green);
+        }
+
+        /* --- RESEARCH --- */
+        .section-research {
+            padding: var(--spacing-section) 0;
+            background: #fff;
+            color: var(--ink);
+        }
+
+        .research-layout {
+            display: block;
+        }
+
+        .research-top {
+            display: block;
+        }
+
+        .research-copy {
+            padding-top: 2px;
+        }
+
+        .research-body {
+            max-width: var(--measure-story-en);
+            margin-bottom: 40px;
+        }
+        .research-body p {
+            color: var(--ink-muted);
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+        .research-body p.lang-cn {
+            max-width: var(--measure-story-cn);
+        }
+
+        .research-aside {
+            float: right;
+            width: 280px;
+            padding-top: 0;
+            margin: 0 0 24px 48px;
+        }
+
+        .research-aside-image {
+            display: block;
+            width: 100%;
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 4px;
+            border: 1px solid rgba(13, 13, 13, 0.08);
+            box-shadow: 0 14px 26px rgba(13, 13, 13, 0.08);
+        }
+
+        .research-figure {
+            position: relative;
+            margin-top: 72px;
+            padding-left: 88px;
+        }
+
+        .research-figure::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 48px;
+            width: min(32vw, 360px);
+            height: calc(100% - 108px);
+            border-radius: 4px;
+            background: var(--forest);
+        }
+
+        .research-figure-frame {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+        }
+
+        .research-figure .story-screen-caption {
+            text-align: center;
+        }
+
+        .research-board-rendered {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+        }
+
+        .research-board-display {
+            --board-card-width: 340px;
+            --board-card-overlap: 60px;
+            --board-overlay-offset: 90px;
+            position: relative;
+        }
+
+        .research-board-display > .research-insights-card {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--board-card-width);
+            z-index: 2;
+        }
+
+        .research-board-display .research-figure {
+            position: relative;
+            z-index: 1;
+            margin-left: calc(var(--board-card-width) - var(--board-card-overlap));
+        }
+
+        .research-board-visual {
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
+        }
+
+        .research-board-mask {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(rgba(13, 13, 13, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(13, 13, 13, 0.04) 1px, transparent 1px),
+                rgba(251, 250, 246, 0.78);
+            background-size: 102px 102px, 102px 102px, auto;
+            pointer-events: none;
+        }
+
+        .research-board-bg {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 2px;
+        }
+
+        .research-board-overlay {
+            position: absolute;
+            top: 0;
+            left: var(--board-overlay-offset);
+            width: calc(100% - var(--board-overlay-offset));
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .research-board-source {
+            display: none;
+        }
+
+        .research-placeholder-board {
+            position: relative;
+            width: 100%;
+            margin: 0;
+            padding: 20px 16px 20px 120px;
+            overflow: hidden;
+            border-radius: 2px;
+            background: url('source/picture/skysports/synthesis board.jpg') center / cover no-repeat;
+        }
+        .research-placeholder-board::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.7;
+            background:
+                linear-gradient(rgba(13, 13, 13, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(13, 13, 13, 0.04) 1px, transparent 1px),
+                #fbfaf6;
+            background-size: 46px 46px, 46px 46px, auto;
+            pointer-events: none;
+        }
+
+        .research-board-header {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 2px;
+            margin-bottom: 8px;
+        }
+
+        .research-board-header span {
+            display: block;
+            padding-top: 0;
+            border-top: none;
+            font-family: "Caveat", cursive;
+            font-size: 18px;
+            line-height: 1.1;
+            color: rgba(13, 13, 13, 0.86);
+        }
+
+        .research-board-columns {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 2px;
+        }
+
+        .research-board-col {
+            display: grid;
+            grid-template-columns: repeat(3, 46px);
+            grid-auto-rows: 46px;
+            gap: 3px;
+            align-content: flex-start;
+            min-height: 340px;
+            padding-top: 6px;
+        }
+
+        .research-note {
+            position: relative;
+            width: 46px;
+            aspect-ratio: 1 / 1;
+            min-height: 0;
+            padding: 0;
+            background: rgb(255, 214, 0);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 1px 2px 6px rgba(13, 13, 13, 0.12);
+            color: rgba(13, 13, 13, 0.45);
+            font-size: 3px;
+            line-height: 1.2;
+            padding: 3px;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .research-note--lavender {
+            background: rgb(248, 227, 177);
+        }
+
+        .research-note--green {
+            background: rgb(190, 207, 200);
+        }
+
+        .research-note--quote {
+            background: rgb(255, 205, 0);
+        }
+
+        .research-board-layout {
+            position: relative;
+            margin-top: 48px;
+            padding-left: 0;
+            clear: both;
+        }
+
+        .research-board-layout .research-figure {
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-right: 0;
+            padding-left: 0;
+        }
+
+        .research-board-layout .research-figure::before {
+            display: none;
+        }
+
+        .research-insights-card {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            width: 392px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 28px 24px;
+            border-radius: 6px;
+            background: #275e48;
+            overflow: hidden;
+        }
+
+        .research-insights-card-title {
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.72);
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .research-note--green-insight {
+            padding: 6px 0;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 12px;
+            line-height: 1.4;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .research-note--green-insight strong {
+            color: #fff;
+        }
+
+        .research-note--green-insight:last-child {
+            border-bottom: none;
+        }
+
+        .research-note--insight {
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 10px 18px rgba(13, 13, 13, 0.07);
+        }
+
+        .research-note--insight::after {
+            content: "";
+            position: absolute;
+            inset: -5px;
+            border: 2px solid rgba(39, 94, 72, 0.9);
+            border-radius: 999px;
+            transform: rotate(-4deg);
+            pointer-events: none;
+        }
+
+        .research-note--push-down {
+            margin-top: -8px;
+        }
+
+        .research-note--push-right {
+            margin-left: -6px;
+        }
+
+        .research-note--overlap {
+            margin-top: -12px;
+        }
+
+
+        .image-placeholder {
+            position: relative;
+            min-height: 280px;
+            border-radius: 4px;
+            padding: 28px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-start;
+            color: var(--ink);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(200, 180, 255, 0.08) 0%, rgba(237, 235, 230, 0.84) 55%, rgba(255, 214, 0, 0.08) 100%);
+            border: 1px solid rgba(39, 94, 72, 0.08);
+            box-shadow: 0 8px 18px rgba(13, 13, 13, 0.03);
+        }
+
+        .image-placeholder::after {
+            content: "";
+            position: absolute;
+            width: 34%;
+            height: 44%;
+            right: -6%;
+            top: -4%;
+            background: radial-gradient(circle, rgba(200, 180, 255, 0.18) 0%, rgba(200, 180, 255, 0) 72%);
+        }
+
+        .image-placeholder > span {
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            max-width: 320px;
+            padding: 12px 14px;
+            line-height: 1.7;
+            color: var(--ink-muted);
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(13, 13, 13, 0.08);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .image-placeholder--dual {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            padding: 0;
+            border: none;
+            background: none;
+        }
+
+        .image-placeholder--dual .placeholder-item {
+            background: #f0ede7;
+            border: 1px dashed var(--border);
+            border-radius: 4px;
+            padding: 60px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink-muted);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .image-caption {
+            font-size: 14px;
+            color: var(--ink-muted);
+            margin-top: 14px;
+        }
+
+        .research-insight {
+            max-width: var(--measure-story-en);
+            margin-top: 40px;
+        }
+        .research-insight p {
+            color: var(--ink-muted);
+            line-height: 1.8;
+        }
+        .research-insight p.lang-cn {
+            max-width: var(--measure-story-cn);
+        }
+
+        /* --- DESIGN THINKING NARRATIVE --- */
+        .section-narrative {
+            padding: var(--spacing-section) 0;
+        }
+
+        .section-narrative--accent {
+            background: var(--bg-warm);
+        }
+
+        .story-block {
+            padding: 20px 0 96px;
+        }
+
+        .story-block:last-child {
+            padding-bottom: 0;
+        }
+
+        .story-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+            gap: 56px;
+            align-items: start;
+        }
+
+        .story-block--media-left .story-layout {
+            grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+        }
+
+        .story-block--tv .story-layout {
+            grid-template-columns: minmax(420px, 560px) minmax(0, 1fr);
+        }
+
+        .story-block--intro .story-layout {
+            grid-template-columns: 240px minmax(0, 1fr);
+            gap: 56px;
+        }
+
+        .story-content {
+            min-width: 0;
+        }
+
+        .story-header {
+            margin-bottom: 28px;
+        }
+
+        .story-num {
+            font-size: clamp(4rem, 8vw, 6rem);
+            color: #275E48;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .story-title {
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .story-title.lang-cn {
+            font-family: var(--font-body);
+        }
+
+        .story-body {
+            max-width: var(--measure-story-en);
+        }
+
+        .story-body p {
+            color: var(--ink-muted);
+            line-height: 1.8;
+            margin-bottom: 16px;
+        }
+
+        .story-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .story-body p.lang-cn {
+            max-width: var(--measure-story-cn);
+        }
+
+        .story-block--intro .story-header {
+            margin-bottom: 0;
+        }
+
+        .story-block--intro .story-body {
+            max-width: min(100%, 760px);
+            padding-left: 28px;
+            border-left: 2px solid rgba(39, 94, 72, 0.2);
+        }
+
+        .story-media {
+            min-height: 300px;
+        }
+
+        .story-media--tall {
+            min-height: 380px;
+            margin-top: 18px;
+        }
+
+        .story-media--compact {
+            min-height: 260px;
+            margin-top: 18px;
+        }
+
+        .story-media--wide {
+            min-height: 300px;
+            margin-top: 18px;
+        }
+
+        .story-media-pair {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+            margin-top: 18px;
+        }
+
+        .story-media-single {
+            margin-top: 18px;
+            width: 100%;
+        }
+
+        .story-media-card {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 260px;
+        }
+
+        .story-media-card img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 0;
+        }
+
+        .story-media-single .story-media-card {
+            min-height: 0;
+        }
+
+        .story-media-single .story-media-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 0;
+        }
+
+        .story-media-pair--gamification {
+            margin-top: 18px;
+            align-items: start;
+        }
+
+        .story-media-pair--gamification .story-media-card {
+            min-height: 0;
+            aspect-ratio: 786 / 1704;
+            border-radius: 20px;
+            overflow: visible;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .story-media-pair--gamification .story-media-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            border-radius: 20px;
+        }
+
+        .story-screens-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+            align-items: flex-start;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-bottom: 8px;
+            scrollbar-width: thin;
+        }
+
+        .story-screens-row--social-flow {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            overflow: visible;
+            padding-bottom: 0;
+            align-items: start;
+        }
+
+        .story-screens-row--social-flow .story-screen {
+            height: clamp(220px, 24vw, 360px);
+        }
+
+        .story-screens-row--social-flow .story-screen img {
+            width: 100%;
+            max-width: none;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .story-screen {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex: 0 0 auto;
+            height: clamp(240px, 26vw, 390px);
+        }
+
+        .story-screen img {
+            display: block;
+            width: auto;
+            max-width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: top center;
+            border-radius: 0;
+        }
+
+        .story-screen--wide {
+            flex-basis: auto;
+        }
+
+        .story-block--media-left .story-media::after {
+            left: auto;
+            right: -6%;
+        }
+
+        /* --- TAKEAWAYS --- */
+        .section-takeaways {
+            padding: 120px 0;
+            background: var(--ink);
+            color: white;
+        }
+        .takeaway-content {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .takeaway-tag {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 32px;
+            display: block;
+        }
+        .takeaway-text {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        .takeaway-text.lang-cn {
+            font-size: 1.1rem;
+            line-height: 1.9;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--ink);
+            color: #fff;
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #555;
+            flex-wrap: wrap; gap: 16px;
+        }
+        .footer-socials { display: flex; gap: 24px; }
+        .footer-socials a {
+            color: #888;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 12px; font-weight: 500;
+            letter-spacing: 1px;
+            transition: color 0.2s;
+        }
+        .footer-socials a:hover { color: #fff; }
+
+        /* --- SCROLL REVEAL --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.4s var(--easing), transform 1.4s var(--easing);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .reveal-clip {
+            opacity: 0;
+            clip-path: inset(0 100% 0 0);
+            transition: opacity 1.2s var(--easing), clip-path 1.2s var(--easing);
+        }
+        .reveal-clip.active { opacity: 1; clip-path: inset(0 0 0 0); }
+
+        .hero .reveal-clip {
+            opacity: 1;
+            clip-path: inset(0 0 0 0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-42px);
+            transition: opacity 1.3s var(--easing), transform 1.3s var(--easing);
+        }
+        .reveal-left.active { opacity: 1; transform: translateX(0); }
+
+        .reveal-stagger > * {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 1s var(--easing), transform 1s var(--easing);
+        }
+        .reveal-stagger.active > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.08s; }
+        .reveal-stagger.active > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.18s; }
+        .reveal-stagger.active > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.28s; }
+        .reveal-stagger.active > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.38s; }
+        .reveal-stagger.active > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.48s; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1180px) {
+            .overview-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .overview-meta {
+                padding-right: 0;
+                max-width: 420px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .section-overview.container {
+                padding-left: var(--spacing-container);
+                padding-right: var(--spacing-container);
+            }
+            .narrative p { font-size: 19px; }
+            .research-top,
+            .story-layout {
+                gap: 48px;
+            }
+            .research-figure {
+                padding-left: 56px;
+            }
+            .research-figure::before {
+                width: min(28vw, 260px);
+            }
+            .story-screens-row--social-flow {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .story-screens-row--social-flow .story-screen {
+                height: clamp(220px, 32vw, 340px);
+            }
+        }
+
+        @media (max-width: 860px) {
+            :root { --spacing-section: 80px; }
+            .research-top,
+            .story-layout,
+            .story-block--intro .story-layout {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .hero-visual { aspect-ratio: 16 / 10; }
+            .overview-grid { grid-template-columns: 1fr; gap: 32px; }
+            .narrative p { font-size: 18px; }
+            .research-top {
+                display: block;
+            }
+            .research-aside {
+                width: 180px;
+                padding-top: 0;
+                margin: 0 0 16px 20px;
+            }
+            .research-aside-image {
+                width: 100%;
+                max-width: none;
+            }
+            .research-figure {
+                margin-top: 40px;
+                padding-left: 0;
+            }
+            .research-figure::before {
+                top: 24px;
+                left: 0;
+                width: 100%;
+                height: 160px;
+            }
+            .research-placeholder-board {
+                padding: 16px 16px 16px 24px;
+            }
+            .research-board-layout {
+                padding-left: 0;
+            }
+            .research-board-display {
+                display: flex;
+                flex-direction: column;
+                --board-overlay-offset: 24px;
+            }
+            .research-board-display > .research-insights-card {
+                position: relative;
+                top: auto;
+                left: auto;
+                transform: none;
+                width: 100%;
+                order: 2;
+                margin-top: 20px;
+                margin-bottom: 0;
+                margin-right: 0;
+            }
+            .research-board-display .research-figure {
+                order: 1;
+                margin-left: 0;
+            }
+            .research-board-overlay {
+                width: calc(100% - 24px);
+            }
+            .research-board-header,
+            .research-board-columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .story-block--media-left .story-media--compact {
+                width: 100%;
+                margin: 0;
+            }
+            .story-media-pair {
+                margin-top: 0;
+            }
+            .research-figure-frame {
+                padding: 12px;
+            }
+            .story-block {
+                padding-bottom: 88px;
+            }
+            .story-media,
+            .story-media--tall,
+            .story-media--compact,
+            .story-media--wide {
+                min-height: 280px;
+                margin-top: 0;
+            }
+            .story-media-pair {
+                grid-template-columns: 1fr;
+            }
+            .story-block--intro .story-body {
+                padding-left: 0;
+                border-left: none;
+            }
+            .story-screens-row--social-flow {
+                grid-template-columns: 1fr;
+            }
+            .story-screens-row--social-flow .story-screen {
+                height: auto;
+            }
+            .story-screens-row--social-flow .story-screen img {
+                width: 100%;
+                height: auto;
+            }
+            .image-placeholder--dual { grid-template-columns: 1fr; }
+
+            /* Fix: these selectors have higher specificity (0,2,0) than .story-layout (0,1,0),
+               so they must be explicitly overridden here */
+            .story-block--media-left .story-layout,
+            .story-block--tv .story-layout {
+                grid-template-columns: 1fr;
+            }
+
+            /* Section 02: 2×2 grid, all 4 screens same height, proportional scaling */
+            .story-screens-row--social-flow {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .story-screens-row--social-flow .story-screen {
+                height: 260px;
+                overflow: hidden;
+                justify-content: center;
+                align-items: flex-start;
+            }
+            /* Override the mobile height:auto rule so images scale by height, not width */
+            .story-screens-row--social-flow .story-screen img {
+                width: auto;
+                height: 100%;
+                max-width: 100%;
+                object-fit: contain;
+            }
+
+            /* Section 03: 2 images side-by-side, same size as section 04, moved after text */
+            .story-block--media-left .story-media-pair {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                order: 2;
+            }
+            .story-block--media-left .story-content {
+                order: 1;
+            }
+            .story-block--media-left .story-media-pair .story-media-card {
+                aspect-ratio: 786 / 1704;
+                height: auto;
+                min-height: 0;
+                overflow: hidden;
+            }
+            .story-block--media-left .story-media-pair .story-media-card img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: top center;
+            }
+
+            /* Keep gamification phone screens side-by-side on mobile (portrait aspect ratio) */
+            .story-media-pair--gamification {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            :root { --spacing-container: 20px; --spacing-section: 64px; }
+            nav {
+                padding: 16px 24px 16px 20px;
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto auto;
+                column-gap: 12px;
+            }
+            .nav-center { display: none; }
+            .nav-status { display: none; }
+            .nav-right {
+                grid-column: 2;
+                justify-self: end;
+            }
+            .hamburger {
+                display: flex;
+                grid-column: 3;
+                justify-self: end;
+            }
+            .mobile-menu { display: flex; }
+
+            nav.menu-open {
+                background: transparent;
+                border-color: transparent;
+            }
+            nav.menu-open .nav-back { color: #fff; }
+            nav.menu-open .lang-toggle::after { background: rgba(255,255,255,0.15); }
+            nav.menu-open .lang-slider { background: #fff; }
+            nav.menu-open .lang-opt.active { color: #fff; }
+            nav.menu-open .lang-opt.inactive { color: rgba(255,255,255,0.35); }
+
+            .hero-title h1 { font-size: 16vw; }
+            .cn-title { font-size: 1.8rem; }
+            .takeaway-text { font-size: 1rem; }
+            .research-board-header,
+            .research-board-columns { grid-template-columns: 1fr; }
+            .research-note {
+                width: 56px;
+            }
+            .research-board-col {
+                grid-template-columns: repeat(3, 56px);
+                grid-auto-rows: 56px;
+                min-height: auto;
+            }
+            .research-note--push-down,
+            .research-note--push-right {
+                margin-left: 0;
+                margin-top: 0;
+            }
+            .research-note--overlap { margin-top: 0; }
+            .story-screens-row { gap: 12px; }
+            .story-screen {
+                height: clamp(185px, 40vw, 260px);
+            }
+            footer { padding: 20px 24px; }
+        }
+
+        /* --- NEXT PROJECTS --- */
+        .section-next {
+            background: var(--ink);
+            padding: 80px 0 64px;
+        }
+
+        .section-next-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .next-card {
+            display: flex;
+            flex-direction: column;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 4px;
+            padding: 40px 40px 36px;
+            text-decoration: none;
+            color: #fff;
+            min-height: 300px;
+            transition: background 0.35s var(--easing), border-color 0.35s var(--easing);
+        }
+
+        .next-card:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.35);
+        }
+
+        .next-card-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .next-card-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.6rem, 4vw, 4.4rem);
+            line-height: 0.88;
+            letter-spacing: -0.01em;
+            text-transform: uppercase;
+            flex: 1;
+            color: #fff;
+            transition: color 0.35s var(--easing);
+        }
+
+        .next-card:hover .next-card-title { color: var(--lavender); }
+
+        .next-card-footer {
+            margin-top: 32px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .next-card-info { flex: 1; min-width: 0; }
+
+        .next-card-sub {
+            font-size: 13px;
+            color: rgba(255,255,255,0.45);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .next-card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        .next-card-tag {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 2px;
+            color: var(--ink);
+        }
+
+        .next-card-arrow {
+            flex-shrink: 0;
+            width: 52px;
+            height: 52px;
+            border: 1.5px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.35s var(--easing), border-color 0.35s var(--easing);
+        }
+
+        .next-card-arrow svg {
+            width: 22px;
+            height: 22px;
+            stroke: #fff;
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform 0.35s var(--easing);
+        }
+
+        .next-card:hover .next-card-arrow { background: var(--forest); border-color: var(--forest); }
+        .next-card:hover .next-card-arrow svg { transform: translateX(4px); }
+
+        @media (max-width: 640px) {
+            .section-next-grid { grid-template-columns: 1fr; }
+            .next-card { padding: 28px 28px 24px; min-height: 220px; }
+        }
+    </style>
+</head>
+<body data-lang="CN">
+    <script>
+        (function() {
+            var lang = document.documentElement.getAttribute('data-initial-lang') || 'CN';
+            document.body.dataset.lang = lang;
+        })();
+    </script>
+    <div class="noise"></div>
+
+    <nav id="main-nav">
+        <div class="nav-left">
+            <a href="portfolio3-mobile-test.html" class="nav-back">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                BACK
+            </a>
+        </div>
+        <div class="nav-center">
+            <span class="u-mono lang-cn" style="font-size: 10px; color: var(--ink-muted);">UX 设计 · 硕士课程项目</span>
+            <span class="u-mono lang-en" style="font-size: 10px; color: var(--ink-muted);">UX DESIGN · MA COURSEWORK</span>
+        </div>
+        <div class="nav-right">
+            <div class="nav-status">
+                <div class="status-dot"></div>
+                <span>Available for work</span>
+            </div>
+            <div class="lang-toggle" data-lang="CN">
+                <span class="lang-slider"></span>
+                <span class="lang-opt inactive">EN</span>
+                <span class="lang-opt active">中</span>
+            </div>
+        </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <svg class="hamburger-icon hamburger-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><path d="M4 18h16"/><path d="M4 6h16"/></svg>
+            <svg class="hamburger-icon hamburger-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+    </nav>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <div class="mobile-menu-inner">
+            <a href="portfolio3-mobile-test.html" class="mobile-menu-link">Back to Portfolio</a>
+            <a href="#section-overview" class="mobile-menu-link lang-en">Overview</a>
+            <a href="#section-overview" class="mobile-menu-link lang-cn">项目概述</a>
+        </div>
+        <div class="mobile-menu-footer">
+            <div class="nav-status">
+                <div class="status-dot"></div>
+                <span>Available for work</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <header class="hero container">
+        <div class="hero-tags u-mono reveal">
+            <span class="lang-cn">AI 个性化 · 社交观赛体验</span>
+            <span class="lang-en">AI PERSONALISATION · SOCIAL VIEWING</span>
+        </div>
+
+        <div class="hero-shell">
+            <div class="hero-title">
+                <div class="hero-copy reveal-left">
+                    <span class="cn-title lang-cn">Sky Sports · AI个性化体育应用</span>
+                    <span class="cn-title lang-en" style="font-family: var(--font-body); font-size: clamp(1.2rem, 1.8vw, 1.45rem); font-weight: 400; color: var(--ink-muted);">Sky Sports</span>
+                    <h1 class="u-display">AI-Personalised<br>Sports App</h1>
+                    <div class="subtitle lang-cn">面向 Gen Z 足球观众的 AI 个性化社交体验</div>
+                    <div class="subtitle lang-en">AI-DRIVEN SOCIAL EXPERIENCE FOR GEN Z FOOTBALL FANS</div>
+                    <p class="hero-summary lang-cn">Sky Sports希望吸引更多35岁以下的年轻用户，但现有产品的内容消费方式对这个群体吸引力有限。这个项目探索AI个性化如何让体育观看体验更贴近年轻用户的实际生活方式。</p>
+                    <p class="hero-summary lang-en">Sky Sports wanted to reach more viewers under 35, but existing content patterns weren't resonating with this group. This project explored how AI personalisation could make football viewing fit more naturally into young fans' lives.</p>
+                </div>
+            </div>
+
+            <div class="hero-visual hero-visual--image reveal-clip">
+                <img src="source/picture/skysports/Background.jpg" alt="Sky Sports app concept screens">
+            </div>
+        </div>
+        <p class="story-screen-caption reveal lang-cn" style="text-align: center; margin-top: 20px;">Sky Sports 概念界面总览</p>
+        <p class="story-screen-caption reveal lang-en" style="text-align: center; margin-top: 20px;">Sky Sports concept screens overview</p>
+    </header>
+
+    <!-- Overview -->
+    <section class="section-overview container" id="section-overview">
+        <div class="overview-grid">
+            <div class="overview-meta reveal">
+                <div class="meta-group">
+                    <span class="meta-label lang-cn">角色</span>
+                    <span class="meta-label lang-en">ROLE</span>
+                    <div class="meta-value lang-cn">UX 设计师</div>
+                    <div class="meta-value lang-en">UX Designer</div>
+                </div>
+                <div class="meta-group">
+                    <span class="meta-label lang-cn">职责</span>
+                    <span class="meta-label lang-en">SCOPE</span>
+                    <div class="meta-value lang-cn">研究、概念设计、UI 设计</div>
+                    <div class="meta-value lang-en">Research, concepting, and UI design</div>
+                </div>
+                <div class="meta-group">
+                    <span class="meta-label lang-cn">年份</span>
+                    <span class="meta-label lang-en">YEAR</span>
+                    <div class="meta-value">2025</div>
+                </div>
+            </div>
+
+            <div class="overview-narrative reveal">
+                <div class="narrative">
+                    <p class="lang-cn">与 Sky Sports 合作的硕士课程项目，面向 Gen Z 足球观众，围绕 AI 驱动的个性化体验这一 brief 展开。</p>
+                    <p class="lang-en">A coursework project in collaboration with Sky Sports, designing an AI-driven personalised experience for Gen Z football fans around the brief: Utilising AI for hyper-personalised experiences.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research -->
+    <section class="section-research">
+        <div class="container">
+            <div class="research-layout">
+                <div class="research-top">
+                    <div class="research-copy">
+                        <div class="section-label reveal">
+                            <span class="u-mono lang-cn">Research / 研究过程</span>
+                            <span class="u-mono lang-en">Research</span>
+                        </div>
+
+                        <div class="research-aside">
+                            <img class="research-aside-image reveal" src="source/picture/skysports/service safari.jpg" alt="Service safari pub observation photo">
+                            <p class="story-screen-caption lang-cn">Service safari 酒吧现场照</p>
+                            <p class="story-screen-caption lang-en">Image 1: Service safari - pub observation photo</p>
+                        </div>
+
+                        <div class="research-body reveal">
+                            <p class="lang-cn">团队对14名18-25岁大学生进行半结构化访谈，覆盖英国、印度、中国、墨西哥等不同文化背景，同时前往酒吧进行 service safari，实地观察真实看球场景中的用户行为。访谈结束后通过 affinity mapping 对所有观察归类，提炼出7条核心洞察。</p>
+                            <p class="lang-en">The team conducted semi-structured interviews with 14 university students aged 18-25, spanning participants from the UK, India, China, and Mexico, alongside a service safari at a local pub to observe real watching behaviour in context. Findings were synthesised through affinity mapping into 7 key insights.</p>
+                        </div>
+
+                        <div class="research-insight reveal">
+                            <p class="lang-cn">最关键的发现是：年轻用户看球的驱动力来自社交氛围，而不是对足球内容本身的热情。订阅费用过高是另一个主要障碍，大多数受访者没有独立订阅，依赖家人或朋友的账号。这两个发现主导了设计方向，从更好的内容推荐转向把线下看球的社交体验搬进 app。</p>
+                            <p class="lang-en">The most significant finding was that younger fans are driven by social context rather than football content itself. Cost was the other major barrier, with most participants sharing someone else's subscription. These two findings shifted the design direction away from content recommendation and toward bringing the social experience of watching live football into the app.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="research-board-layout reveal">
+                    <div class="research-board-display">
+                        <div class="research-insights-card">
+                            <div class="research-insights-card-title lang-cn">关键洞察</div>
+                            <div class="research-insights-card-title lang-en">Key Insights</div>
+                            <div class="research-note--green-insight">1 · Despite strong brand awareness, Sky Sports is under used by Gen Z, mainly due to <strong>cost</strong>.</div>
+                            <div class="research-note--green-insight">2 · Users trust <strong>small, familiar communication</strong> environments for sharing content or opinions.</div>
+                            <div class="research-note--green-insight">3 · Hope for a more <strong>harmonious environment</strong> for different fans knowledge level to avoid conflict.</div>
+                            <div class="research-note--green-insight">4 · The core needs of users for AI are centered on <strong>'efficiency' improvement</strong> and <strong>'fun' enhancement</strong>.</div>
+                            <div class="research-note--green-insight">5 · Users like listening to commentators who give information <strong>in the style they prefer</strong> during the game.</div>
+                            <div class="research-note--green-insight">6 · Users are concerned about the <strong>credibility</strong> of AI content, fearing they will be misled and manipulated.</div>
+                            <div class="research-note--green-insight">7 · Users prefer to watch football <strong>with others</strong> as it enhances their live viewing experience.</div>
+                        </div>
+
+                        <figure class="research-figure">
+                            <div class="research-figure-frame research-board-visual">
+                                <img class="research-board-bg" src="source/picture/skysports/synthesis board.jpg" alt="Insight synthesis board background">
+                                <div class="research-board-mask" aria-hidden="true"></div>
+                                <img class="research-board-overlay" src="source/picture/skysports/insight-board-overlay.svg" alt="Insight synthesis board">
+                            </div>
+                            <p class="story-screen-caption lang-cn">洞察综合板</p>
+                            <p class="story-screen-caption lang-en">Insight synthesis board</p>
+                        </figure>
+                    </div>
+
+                    <div class="research-board-source" aria-hidden="true">
+                        <div class="research-insights-card">
+                            <div class="research-insights-card-title lang-cn">关键洞察</div>
+                            <div class="research-insights-card-title lang-en">Key Insights</div>
+                            <div class="research-note--green-insight">1 · Despite strong brand awareness, Sky Sports is under used by Gen Z, mainly due to <strong>cost</strong>.</div>
+                            <div class="research-note--green-insight">2 · Users trust <strong>small, familiar communication</strong> environments for sharing content or opinions.</div>
+                            <div class="research-note--green-insight">3 · Hope for a more <strong>harmonious environment</strong> for different fans knowledge level to avoid conflict.</div>
+                            <div class="research-note--green-insight">4 · The core needs of users for AI are centered on <strong>'efficiency' improvement</strong> and <strong>'fun' enhancement</strong>.</div>
+                            <div class="research-note--green-insight">5 · Users like listening to commentators who give information <strong>in the style they prefer</strong> during the game.</div>
+                            <div class="research-note--green-insight">6 · Users are concerned about the <strong>credibility</strong> of AI content, fearing they will be misled and manipulated.</div>
+                            <div class="research-note--green-insight">7 · Users prefer to watch football <strong>with others</strong> as it enhances their live viewing experience.</div>
+                        </div>
+
+                        <figure class="research-figure">
+                            <div class="research-figure-frame">
+                                <div class="research-placeholder-board" aria-label="Insight synthesis board placeholder">
+                                <div class="research-board-header">
+                                    <span>What was heard?</span>
+                                    <span>What it Means</span>
+                                    <span>Why it matters</span>
+                                    <span>Findings</span>
+                                </div>
+                                <div class="research-board-columns">
+                                    <div class="research-board-col">
+                                        <div class="research-note research-note--quote">Doesn't have access to TV license / sports channels. Uses free online streaming sites like "Total Sportek"</div>
+                                        <div class="research-note research-note--quote">Uses Instagram for short-form visual recaps, such as match highlights and specific moments (e.g. reels)</div>
+                                        <div class="research-note research-note--quote research-note--push-right">Can't access Mexican Sky Go without VPN. Watches on Facebook or TikTok lives. Sometimes uses websites that stream it</div>
+                                        <div class="research-note research-note--quote research-note--push-down">Uses multiple platforms to gather information about football, each with a different focus and without duplication</div>
+                                        <div class="research-note research-note--quote">"I usually watch on iPad or laptop for the bigger screen. If I'm outside, I use my phone."</div>
+                                        <div class="research-note research-note--quote research-note--push-right">Devices used: primarily laptop or mobile phone. When watching with friends: connect to TV via HDMI or casting</div>
+                                        <div class="research-note research-note--quote">"I don't send live comments; I mostly just rate players or comment in the discussion section."</div>
+                                        <div class="research-note research-note--quote research-note--push-down">Interactive method: No pop-ups or public comments. Chatting privately with friends (e.g. WeChat discussions)</div>
+                                        <div class="research-note research-note--quote research-note--push-right">Expensive fees compared to domestic platforms. Already purchased membership on domestic platforms</div>
+                                        <div class="research-note research-note--quote">"If official sites had good offers, especially for main months like May, maybe people might buy a subscription"</div>
+                                        <div class="research-note research-note--quote research-note--push-down">Sky Sports is viewed as the most reliable and comprehensive football platform</div>
+                                        <div class="research-note research-note--quote">Lots of pop-ups, even with Brave browser. Spoilers on Instagram from people talking about events before he sees them</div>
+                                        <div class="research-note research-note--quote research-note--overlap">"Bullet comments cover the pitch, sometimes I can't even see the ball." "Ads during live matches really ruin the experience."</div>
+                                        <div class="research-note research-note--quote research-note--push-right">For football: Fantasy Premier League app. Has used for 4-5 years; involves making a team, joining a friends' group</div>
+                                        <div class="research-note research-note--quote">Uses BBC Sport primarily to check match results, standings, and football news rather than to spend extended time</div>
+                                        <div class="research-note research-note--quote research-note--push-down">Pays close attention to player positioning, team formations, and whether players are performing as expected</div>
+                                        <div class="research-note research-note--quote">Interested in match statistics, such as possession and shots on goal, especially during halftime</div>
+                                        <div class="research-note research-note--quote research-note--push-right research-note--overlap">"Oh, absolutely. It's always fun to watch with more people, especially when people are supporting the team you want to see lose"</div>
+                                        <div class="research-note research-note--quote">Watching with others makes cheering and reacting feel more natural and enjoyable</div>
+                                        <div class="research-note research-note--quote research-note--push-down">Will watch games with friends at the pub or other social settings when there is collective excitement</div>
+                                        <div class="research-note research-note--quote">"But if those two are commentating, I might watch a match just because of them. Their knowledge is deep"</div>
+                                    </div>
+
+                                    <div class="research-board-col">
+                                        <div class="research-note research-note--lavender">Users prioritise "free + accessible" over official channels</div>
+                                        <div class="research-note research-note--lavender">Users are able to differentiate between the advantages of different platforms with a clear purpose</div>
+                                        <div class="research-note research-note--lavender research-note--push-down">Users will choose their device based on where they are watching and how important the game is</div>
+                                        <div class="research-note research-note--lavender research-note--push-right">Most interactive behaviours take place in WeChat or social groups, rather than public platforms</div>
+                                        <div class="research-note research-note--lavender">Sky Sports is widely recognised as a high-quality platform, but usage is not high</div>
+                                        <div class="research-note research-note--lavender research-note--push-down">Cost / price is the biggest deterrent, especially for students and existing subscribers</div>
+                                        <div class="research-note research-note--lavender">Users favour "borrowed experiences", such as in a pub or at a friend's house</div>
+                                        <div class="research-note research-note--lavender research-note--push-right">The quality of commentary has a direct impact on the choice of platform</div>
+                                        <div class="research-note research-note--lavender research-note--push-down">In match statistics, scores, match tactics, and player performances matter</div>
+                                        <div class="research-note research-note--lavender">Both men and women like short videos with highlights, but women are less inclined to read too much text</div>
+                                        <div class="research-note research-note--lavender research-note--push-right">High needs for "fun interaction" and interesting interaction during the game</div>
+                                        <div class="research-note research-note--lavender">Hope for a more harmonious environment for different fans knowledge level to avoid conflict</div>
+                                        <div class="research-note research-note--lavender research-note--overlap">There is a clear divide in attitudes towards AI privacy: some feel powerless, others have strong unease</div>
+                                        <div class="research-note research-note--lavender research-note--push-right">Users are generally skeptical about the credibility of AI content, fearing manipulation</div>
+                                        <div class="research-note research-note--lavender">Users prefer to watch football with others as it enhances their live viewing experience</div>
+                                        <div class="research-note research-note--lavender research-note--push-down">Users get influenced by friends to watch matches beyond their favourite teams</div>
+                                        <div class="research-note research-note--lavender">For users, "personalization" is the right to control and express</div>
+                                    </div>
+
+                                    <div class="research-board-col">
+                                        <div class="research-note research-note--lavender">Clear navigation should be provided according to content type to help users improve information access</div>
+                                        <div class="research-note research-note--lavender">Users prefer a pure viewing experience to maintain immersion</div>
+                                        <div class="research-note research-note--lavender research-note--push-right">Users trust small, familiar communication environments</div>
+                                        <div class="research-note research-note--lavender research-note--push-down">Sky Sports despite high brand awareness is actually under-utilised by Gen Z, limited mainly by price</div>
+                                        <div class="research-note research-note--lavender">Gen Z favours flexible, low-threshold content consumption methods</div>
+                                        <div class="research-note research-note--lavender research-note--push-right">Different users have a clear preference for commentator style options</div>
+                                        <div class="research-note research-note--lavender research-note--push-down">Users will switch back and forth between different apps, resulting in lower efficiency</div>
+                                        <div class="research-note research-note--lavender">Spectators will frequently view match information when it is not on the game screen</div>
+                                        <div class="research-note research-note--lavender research-note--push-right">Reduce the "knowledge anxiety" for new fans and lower the participation threshold</div>
+                                        <div class="research-note research-note--lavender">Personalised content needs to satisfy their "team affiliation" as fans</div>
+                                        <div class="research-note research-note--lavender research-note--push-down">Trust is a prerequisite for AI to be used consistently; once trust is lost, users may avoid the platform</div>
+                                        <div class="research-note research-note--lavender">Watching together with friends becomes a source of tradition and increases emotional investment</div>
+                                    </div>
+
+                                    <div class="research-board-col">
+                                        <div class="research-note research-note--green">Provide users with a unified platform to access multiple forms of media to improve information access efficiency</div>
+                                        <div class="research-note research-note--green">Need to have a consistent interface across devices</div>
+                                        <div class="research-note research-note--green research-note--push-right">Allowing users to engage in more personalised communities based on preferences and friend circles</div>
+                                        <div class="research-note research-note--green research-note--push-down">Providing users with flexible subscription plans can increase their content consumption on the app</div>
+                                        <div class="research-note research-note--green">Providing the platform as a way for them to engage in social settings can provide added value and loyalty</div>
+                                        <div class="research-note research-note--green research-note--push-right">Reducing the number of ad pop-ups will create a better viewing experience</div>
+                                        <div class="research-note research-note--green">Users prefer varied commentary style. Providing commentary preferences and style options can enhance viewing</div>
+                                        <div class="research-note research-note--green research-note--push-down">Display personalised information that users find most important in the live match screen</div>
+                                        <div class="research-note research-note--green research-note--push-right">During breaks in the game, add options for engagement such as score prediction</div>
+                                        <div class="research-note research-note--green">Ensure that short videos, highlights, and long and short text content blocks are clearly represented</div>
+                                        <div class="research-note research-note--green research-note--push-down">Creating exciting and engaging social experiences can elevate fans' live viewing experience</div>
+                                        <div class="research-note research-note--green">Offering personalised suggestions for watching live matches at pubs based on user preferences</div>
+                                        <div class="research-note research-note--green research-note--overlap">Designing a layered privacy control system and transparent data management mechanism</div>
+                                        <div class="research-note research-note--green research-note--push-right">Enhance user engagement and trust by designing AI-driven feedback that feels more human</div>
+                                        <div class="research-note research-note--green">Constructing a data classification and authorisation management system that gives users control</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Design Thinking -->
+    <section class="section-narrative">
+        <div class="container">
+            <div class="section-label reveal">
+                <span class="u-mono lang-cn">Design Thinking / 设计思路</span>
+                <span class="u-mono lang-en">Design Thinking</span>
+            </div>
+
+            <!-- 01 -->
+            <div class="story-block story-block--intro">
+                <div class="story-layout">
+                    <div class="story-header reveal">
+                        <span class="story-num u-display">01</span>
+                        <h3 class="story-title lang-cn">免费社交功能作为用户入口</h3>
+                        <h3 class="story-title lang-en">Free social features as the entry point</h3>
+                    </div>
+                    <div class="story-content">
+                        <div class="story-body reveal">
+                            <p class="lang-cn">订阅费用是年轻用户使用 Sky Sports 的主要障碍。设计上把 Social 功能设为免费，用户不需要订阅就能发起约球、参与互动。去酒吧看球本身解决了内容访问的问题，app 则负责组织和增强这个社交体验，同时也为品牌与年轻用户之间建立持续的接触点。</p>
+                            <p class="lang-en">Subscription cost was the main barrier identified in research. The Social features were designed to be free, removing the need for a personal subscription to participate. Watching at a pub handles content access, while the app organises and enhances the social experience around it, creating an ongoing touchpoint between the brand and younger audiences.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 02 -->
+            <div class="story-block story-block--intro">
+                <div class="story-layout">
+                    <div class="story-header reveal">
+                        <span class="story-num u-display">02</span>
+                        <h3 class="story-title lang-cn">Social 模块：把约球变成 app 内闭环</h3>
+                        <h3 class="story-title lang-en">Social module: closing the loop on planning a watch party</h3>
+                    </div>
+                    <div class="story-content">
+                        <div class="story-body reveal">
+                            <p class="lang-cn">Social 模块分为 Community 和 Invites 两个 tab。Invites 支持用户在 app 内发起约球，选择酒吧、时间和群组，朋友收到邀请后可以接受并预订座位，整个流程在 app 内完成。</p>
+                            <p class="lang-cn">这个功能的设计难点在于状态管理。同一张邀请卡在不同用户视角（发起人和受邀人）和不同时间节点（发出、接受、比赛前一小时、入场扫码时）需要展示不同的信息和操作。设计上用单一卡片组件承载所有状态，通过按钮文案和细节信息的变化来区分，让用户在整个流程中不需要重新适应界面。</p>
+                            <p class="lang-en">The Social module has two tabs, Community and Invites. Invites lets users plan a pub viewing session within the app, choosing a venue, time, and friend group. Friends receive the invite, can accept it, and book seats without leaving the app.</p>
+                            <p class="lang-en" style="margin-top: 16px;">The core design challenge was state management. The same invite card needed to show different information and actions depending on the viewer (sender or recipient) and the moment (sent, accepted, one hour before kickoff, at the venue). The solution was a single card component that adapts through changes in button labels and supporting details, keeping the experience consistent across every state without requiring users to reorient themselves.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-screens-row story-screens-row--social-flow reveal">
+                    <div class="story-screen">
+                        <img src="source/picture/skysports/app/Watch-1.png" alt="Watch tab - create invite">
+                    </div>
+                    <div class="story-screen">
+                        <img src="source/picture/skysports/app/Watch.png" alt="Watch tab - channels and social">
+                    </div>
+                    <div class="story-screen">
+                        <img src="source/picture/skysports/app/Social-invites(Judy side).png" alt="Social invites - Judy side">
+                    </div>
+                    <div class="story-screen">
+                        <img src="source/picture/skysports/app/Social-invites(Judy‘s friends).png" alt="Social invite - Judy's friends">
+                    </div>
+                </div>
+            </div>
+
+            <!-- 03 -->
+            <div class="story-block story-block--media-left">
+                <div class="story-layout">
+                    <div class="story-media-pair reveal">
+                        <div class="story-media-card">
+                            <img src="source/picture/skysports/app/Social-invites.png" alt="Social invites list">
+                        </div>
+                        <div class="story-media-card">
+                            <img src="source/picture/skysports/app/Social-invites-1.png" alt="Social invite - QR code scanning">
+                        </div>
+                    </div>
+                    <div class="story-content">
+                        <div class="story-header reveal">
+                            <span class="story-num u-display">03</span>
+                            <h3 class="story-title lang-cn">QR 码：把到场变成进入体验的触发点</h3>
+                            <h3 class="story-title lang-en">QR code: making arrival the entry point</h3>
+                        </div>
+                        <div class="story-body reveal">
+                            <p class="lang-cn">比赛开始前一小时，邀请卡内的按钮从 Join Now 变为引导扫描酒吧桌上的 QR 码，扫码后直接进入当场比赛的 Social Live 页面。这个设计把线下到场的行为转化成进入 app 社交体验的入口，而不是要求用户自己找到对应内容。</p>
+                            <p class="lang-en">One hour before kickoff, the invite card CTA shifts to prompt scanning a QR code at the pub table, which opens directly to the Social Live page for that match. Rather than asking users to navigate there themselves, physically arriving at the venue becomes the trigger for entering the in-app experience.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 04 -->
+            <div class="story-block story-block--media-right">
+                <div class="story-layout">
+                    <div class="story-content">
+                        <div class="story-header reveal">
+                            <span class="story-num u-display">04</span>
+                            <h3 class="story-title lang-cn">Gamification：把看球时的自然行为转化为互动</h3>
+                            <h3 class="story-title lang-en">Gamification: turning natural behaviour into in-app interaction</h3>
+                        </div>
+                        <div class="story-body reveal">
+                            <p class="lang-cn">比赛进行中，用户可以摇动手机为支持的球队助威，积累积分可兑换酒吧折扣或球队周边。设计逻辑是把看球时已经自然发生的行为（呐喊、欢呼）转化成 app 可以感知和回应的互动，而不是要求用户做一个全新的动作。</p>
+                            <p class="lang-en">During the match, users can shake their phones to cheer for their team, earning points redeemable for pub discounts or merchandise. The design logic was to register and reward behaviours that already happen naturally at a pub, shouting and reacting, rather than introducing an entirely new action.</p>
+                        </div>
+                    </div>
+                    <div class="story-media-pair story-media-pair--gamification reveal">
+                        <div class="story-media-card">
+                            <img src="source/picture/skysports/app/Social-select team.png" alt="Gamification team selection screen">
+                        </div>
+                        <div class="story-media-card">
+                            <img src="source/picture/skysports/app/Social-cheer.gif?v=20260404-0446" alt="Gamification cheer interaction">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 05 -->
+            <div class="story-block story-block--media-left story-block--tv">
+                <div class="story-layout">
+                    <div class="story-media-single reveal">
+                        <div class="story-media-card">
+                            <img src="source/picture/skysports/app/shake interaction-tv.jpg" alt="Pub large screen Cheer Battle scene">
+                        </div>
+                    </div>
+                    <div class="story-content">
+                        <div class="story-header reveal">
+                            <span class="story-num u-display">05</span>
+                            <h3 class="story-title lang-cn">手机与大屏的联动设想</h3>
+                            <h3 class="story-title lang-en">A concept for phone-to-screen interaction</h3>
+                        </div>
+                        <div class="story-body reveal">
+                            <p class="lang-cn">作为概念延伸，酒吧大屏可以同步显示实时的助威进度，两支球队的支持者数量以对战形式呈现。这个设想的出发点是让个人手机上的互动行为在公共屏幕上有可见的反馈，把分散的个体参与变成一个共同的现场体验。</p>
+                            <p class="lang-en">As a conceptual extension, the pub's large screen could display a live cheer battle, showing real-time support levels for each team. The thinking was to make individual interactions on personal devices visible in the shared physical space, turning separate participation into a collective in-venue moment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Next Projects -->
+    <section class="section-next">
+        <div class="container">
+            <div class="section-next-grid">
+
+                <!-- Left: Previous → Shanghai -->
+                <a class="next-card reveal" href="project-shanghai-museum.html">
+                    <span class="next-card-label lang-en">Previous Project</span>
+                    <span class="next-card-label lang-cn">上一个项目</span>
+                    <h2 class="next-card-title">Shanghai<br>Astronomy<br>Museum</h2>
+                    <div class="next-card-footer">
+                        <div class="next-card-info">
+                            <p class="next-card-sub lang-cn">上海天文馆场馆管理中心</p>
+                            <p class="next-card-sub lang-en">Venue Dashboard · Data Viz</p>
+                            <div class="next-card-tags">
+                                <span class="next-card-tag" style="background:var(--yellow);">Data Visualization</span>
+                            </div>
+                        </div>
+                        <div class="next-card-arrow">
+                            <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Right: Also → Memorial (loop) -->
+                <a class="next-card reveal" href="project-memorial-content-management-v2.html">
+                    <span class="next-card-label lang-en">Also</span>
+                    <span class="next-card-label lang-cn">更多</span>
+                    <h2 class="next-card-title">Display<br>Content<br>Management</h2>
+                    <div class="next-card-footer">
+                        <div class="next-card-info">
+                            <p class="next-card-sub lang-cn">大屏内容投放管理系统</p>
+                            <p class="next-card-sub lang-en">Memorial Museum · Large Screen</p>
+                            <div class="next-card-tags">
+                                <span class="next-card-tag" style="background:var(--lavender);">UI/UX Design</span>
+                                <span class="next-card-tag" style="background:var(--ink);color:#fff;">Large Screen</span>
+                            </div>
+                        </div>
+                        <div class="next-card-arrow">
+                            <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <span>&copy; 2026 Linyun Yu</span>
+        <div class="footer-socials">
+            <a href="mailto:yulinyune@gmail.com">Email</a>
+            <a href="#">LinkedIn</a>
+            <a href="#">Resume</a>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Language toggle
+            const langToggle = document.querySelector('.lang-toggle');
+            const languageStorageKey = 'portfolioLang';
+            const setLanguage = (lang) => {
+                if (!langToggle) return;
+                langToggle.dataset.lang = lang;
+                document.body.dataset.lang = lang;
+                document.documentElement.lang = lang === 'CN' ? 'zh-CN' : 'en';
+                langToggle.querySelectorAll('.lang-opt').forEach(opt => {
+                    const isActive = (opt.textContent.trim() === '中' && lang === 'CN') || (opt.textContent.trim() === 'EN' && lang === 'EN');
+                    opt.classList.toggle('active', isActive);
+                    opt.classList.toggle('inactive', !isActive);
+                });
+                try {
+                    localStorage.setItem(languageStorageKey, lang);
+                } catch (error) {}
+            };
+            if (langToggle) {
+                let initialLang = langToggle.dataset.lang || document.body.dataset.lang || 'CN';
+                try {
+                    initialLang = localStorage.getItem(languageStorageKey) || initialLang;
+                } catch (error) {}
+                setLanguage(initialLang);
+                langToggle.querySelectorAll('.lang-opt').forEach(opt => {
+                    opt.addEventListener('click', () => {
+                        setLanguage(opt.textContent.trim() === '中' ? 'CN' : 'EN');
+                    });
+                });
+            }
+
+            // Scroll reveal
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal, .reveal-clip, .reveal-left, .reveal-stagger').forEach(el => observer.observe(el));
+
+            setTimeout(() => {
+                document.querySelectorAll('.hero .reveal, .hero .reveal-left, .hero .reveal-clip').forEach(el => {
+                    el.classList.add('active');
+                });
+            }, 200);
+
+            // Nav scroll state
+            const nav = document.getElementById('main-nav');
+            window.addEventListener('scroll', () => {
+                nav.classList.toggle('scrolled', window.scrollY > 10);
+            });
+
+            // Mobile hamburger menu
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (hamburger && mobileMenu) {
+                hamburger.addEventListener('click', () => {
+                    const isOpen = mobileMenu.classList.toggle('is-open');
+                    hamburger.classList.toggle('is-open');
+                    nav.classList.toggle('menu-open');
+                    document.body.style.overflow = isOpen ? 'hidden' : '';
+                });
+                mobileMenu.querySelectorAll('.mobile-menu-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('is-open');
+                        hamburger.classList.remove('is-open');
+                        nav.classList.remove('menu-open');
+                        document.body.style.overflow = '';
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

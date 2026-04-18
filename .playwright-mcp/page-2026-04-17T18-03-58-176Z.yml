@@ -1,0 +1,151 @@
+- generic [active] [ref=e1]:
+  - generic:
+    - generic: HOVER
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic: "029"
+      - generic [ref=e4]:
+        - generic [ref=e5]: Linyun Yu
+        - generic [ref=e6]: UX / UI Designer — Portfolio 2026
+    - generic [ref=e7]:
+      - generic [ref=e8]: "029"
+      - generic [ref=e10]: Loading
+  - navigation [ref=e13]:
+    - link "Linyun Yu" [ref=e14]:
+      - /url: "#hero"
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - link "Welcome" [ref=e17]:
+          - /url: "#hero"
+        - link "Work" [ref=e18]:
+          - /url: "#wid-b"
+        - link "About" [ref=e19]:
+          - /url: "#about"
+        - link "Contact" [ref=e20]:
+          - /url: "#contact"
+      - generic:
+        - generic: Welcome
+        - generic: Work
+        - generic: About
+        - generic: Contact
+    - generic [ref=e21]:
+      - generic [ref=e24]: Available for work
+      - generic [ref=e25]:
+        - generic [ref=e27]: EN
+        - generic [ref=e28]: 中
+  - generic [ref=e29]:
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]: Hi, I'm
+          - text: LIN
+        - generic [ref=e35]:
+          - generic [ref=e37]: DESIGNING
+          - generic [ref=e39]: DIGITAL
+          - generic [ref=e41]: PRODUCTS
+      - generic:
+        - generic:
+          - img
+        - generic:
+          - generic:
+            - generic: DESIGNING
+          - generic:
+            - generic: USER
+          - generic:
+            - generic: EXPERIENCES
+    - generic:
+      - generic:
+        - generic:
+          - generic: © 2026
+          - generic: /
+          - generic: PORTFOLIO
+    - generic:
+      - generic:
+        - generic: HOVER TO REVEAL
+    - generic [ref=e44]: Scroll to Explore
+  - generic [ref=e47]:
+    - link "Open Memorial Museum display content management system case study" [ref=e48]:
+      - /url: project-memorial-content-management-v2.html
+      - article [ref=e49]:
+        - img "Display Content Management System" [ref=e51]
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - heading "Display" [level=2] [ref=e55]
+            - heading "Content" [level=2] [ref=e57]
+            - heading "Management" [level=2] [ref=e59]
+          - paragraph [ref=e60]: Museum staff needed to manage large-screen content across multiple exhibition halls without technical support. The system integrates device management, content scheduling, and VR loading into a single tool.
+          - generic [ref=e61]:
+            - generic [ref=e62]: UI/UX Design
+            - generic [ref=e63]: Large Screen
+    - link "Open Shanghai Astronomy Museum dashboard case study" [ref=e64]:
+      - /url: project-shanghai-museum.html
+      - article [ref=e65]:
+        - generic "Shanghai Astronomy Museum dashboard" [ref=e67]
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]: Data Visualization
+            - generic [ref=e71]: "2023"
+          - heading "Shanghai Astronomy Museum Dashboard" [level=2] [ref=e72]
+          - generic [ref=e73]:
+            - paragraph [ref=e74]: Bringing 7 separate operational data systems into one spatially-anchored interface where problems could be spotted at a glance.
+            - img [ref=e76]
+    - link "Open Sky Sports AI personalised experience case study" [ref=e78]:
+      - /url: project-skysports.html
+      - article [ref=e79]:
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - generic [ref=e83]: UX Design
+              - generic [ref=e84]: Coursework
+            - heading "Sky Sports AI Personalised" [level=2] [ref=e85]:
+              - generic [ref=e86]: Sky Sports
+              - generic [ref=e87]: AI
+              - generic [ref=e88]: Personalised
+          - img "Sky Sports AI Personalised App" [ref=e91]
+        - paragraph [ref=e92]: Sky Sports wanted to reach more viewers under 35. This project explored how AI personalisation could make football viewing fit more naturally into young fans' lives.
+  - generic [ref=e93]:
+    - generic [ref=e94]:
+      - generic [ref=e95]: About
+      - heading "DESIGNING BEYOND THE SCREEN" [level=2] [ref=e96]:
+        - generic [ref=e97]:
+          - text: DESIGNING
+          - generic [ref=e98]: BEYOND
+          - text: THE SCREEN
+    - generic [ref=e99]:
+      - paragraph [ref=e100]: I work on large-screen interfaces and digital-physical experiences, with a background in product design. My work includes a broadcast management system for a cultural memorial and a venue dashboard for the Shanghai Astronomy Museum.
+      - paragraph [ref=e101]: I focus on clarity and structure, aiming to make systems easy to navigate and intuitive to use, with visual design supporting how they are understood and used.
+      - generic [ref=e102]:
+        - generic [ref=e103]: Toolkit
+        - generic [ref=e104]:
+          - generic [ref=e105]: Figma
+          - generic [ref=e106]: Adobe PS / AI
+          - generic [ref=e107]: Rhino 3D
+          - generic [ref=e108]: Spline
+          - generic [ref=e109]: Keynote
+      - paragraph [ref=e110]: Earlier work
+      - link "Undergraduate & pre-MA portfolio (PDF)" [ref=e111]:
+        - /url: "#"
+  - generic [ref=e112]:
+    - generic [ref=e113]: Get in touch
+    - heading "DESIGN THAT MEANS SOMETHING." [level=2] [ref=e114]:
+      - generic [ref=e115]: DESIGN THAT MEANS SOMETHING.
+    - paragraph [ref=e116]: UI/UX designer with two years building products in culture and tech. Open to new opportunities.
+    - link "Get In Touch →" [ref=e118]:
+      - /url: mailto:yulinyune@gmail.com
+      - generic [ref=e119]: Get In Touch
+      - generic [ref=e120]: →
+    - generic [ref=e121]:
+      - link "yulinyune@gmail.com" [ref=e123]:
+        - /url: mailto:yulinyune@gmail.com
+      - generic [ref=e125]:
+        - link "Resume" [ref=e126]:
+          - /url: "#"
+        - link "LinkedIn" [ref=e127]:
+          - /url: "#"
+  - contentinfo [ref=e128]:
+    - generic [ref=e129]:
+      - link "Resume" [ref=e130]:
+        - /url: "#"
+      - link "LinkedIn" [ref=e131]:
+        - /url: "#"
+    - generic [ref=e132]: © 2026 Linyun Yu

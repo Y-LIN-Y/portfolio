@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editorial Portfolio - Row 1 Redesign</title>
+    <style>
+        /* --- DESIGN SYSTEM TOKENS --- */
+        :root {
+            --forest: #275E48;
+            --bg: #EDEBE6;
+            --yellow: #FFD600;
+            --lavender: #C8B4FF;
+            --ink: #0D0D0D;
+            --ink-muted: #7A7770;
+            
+            --font-display: 'Anton', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        /* --- GLOBAL RESET --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- FONTS IMPORT --- */
+        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Outfit:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap');
+
+        /* --- GRID LAYOUT --- */
+        .portfolio-row-1 {
+            width: 100%;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            padding: 4vw 6vw;
+            gap: 4vw;
+            position: relative;
+        }
+
+        /* --- LEFT COLUMN: TYPOGRAPHY --- */
+        .content-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 2;
+        }
+
+        /* TAG STYLING */
+        .tag {
+            background-color: var(--yellow);
+            color: var(--ink);
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            padding: 0.6rem 1.2rem;
+            margin-bottom: 2rem;
+            /* Square corners, no skew/rotate per requirements */
+            border-radius: 0;
+            border: none;
+            letter-spacing: -0.02em;
+        }
+
+        /* MIXED TYPOGRAPHY TITLE */
+        .project-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            cursor: default;
+            margin-bottom: 2rem;
+            perspective: 1000px; /* For potential parallax depth */
+        }
+
+        .word {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: inline-block;
+            transform-origin: left center;
+            will-change: transform, color, -webkit-text-stroke;
+        }
+
+        /* Word 1: IMAGINING (Outline -> Color Stroke) */
+        .word-outline {
+            color: transparent;
+            -webkit-text-stroke: 2px var(--ink);
+        }
+        .project-title:hover .word-outline {
+            -webkit-text-stroke-color: var(--forest);
+        }
+
+        /* Word 2: SPORTS (Solid Black) */
+        .word-solid {
+            color: var(--ink);
+        }
+
+        /* Word 3: VIEWING (Forest Green -> Lavender) */
+        .word-color {
+            color: var(--forest);
+        }
+        .project-title:hover .word-color {
+            color: var(--lavender);
+        }
+
+        /* DESCRIPTION */
+        .project-desc {
+            font-family: var(--font-body);
+            color: var(--ink-muted);
+            font-size: 1.05rem;
+            line-height: 1.5;
+            max-width: 38ch;
+            margin-top: 1rem;
+        }
+
+        /* META DATA (Visual decoration) */
+        .meta-line {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--ink);
+            opacity: 0.6;
+        }
+
+        /* --- RIGHT COLUMN: IMAGE --- */
+        .image-col {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 2000px; /* Essential for 3D tilt */
+        }
+
+        .img-wrapper {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 4/5;
+            /* Gray placeholder bg */
+            background-color: #DCD9D0; 
+            
+            /* Initial Tilt */
+            transform: rotate(2deg);
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease;
+            
+            /* Check pattern overlay to make placeholder look styled */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.5rem;
+            box-shadow: 0 0 0 transparent;
+            cursor: none; /* Custom interaction feel */
+        }
+
+        /* IMAGE HOVER STATES */
+        .img-wrapper:hover {
+            /* Interaction Handled by JS, but base reset here */
+            box-shadow: 1.5rem 1.5rem 0 var(--forest);
+            z-index: 10;
+        }
+
+        /* Placeholder Content */
+        .ph-ui-top {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 1rem;
+        }
+        .ph-dot { width: 12px; height: 12px; background: rgba(0,0,0,0.2); border-radius: 50%; }
+        .ph-center {
+            text-align: center;
+            font-family: var(--font-mono);
+            color: rgba(0,0,0,0.3);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            transform: rotate(-2deg); /* Counter-rotate text for design flair */
+        }
+        .ph-ui-bot {
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: rgba(0,0,0,0.4);
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 1rem;
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        .cursor-follow {
+            position: fixed;
+            width: 80px;
+            height: 80px;
+            background: var(--lavender);
+            border-radius: 50%;
+            pointer-events: none;
+            mix-blend-mode: difference;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.2s ease;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: black;
+            font-weight: bold;
+        }
+
+        @media (max-width: 900px) {
+            .portfolio-row-1 {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                padding-top: 6rem;
+            }
+            .project-title {
+                font-size: 14vw;
+            }
+            .img-wrapper {
+                transform: rotate(0);
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Custom Cursor Element -->
+    <div class="cursor-follow" id="cursor">VIEW</div>
+
+    <section class="portfolio-row-1">
+        
+        <!-- FEATURE: Left Column - Typographic Composition -->
+        <!-- Logic: Uses mix of fill modes (outline, solid) and colors. Parallax effect applies to individual word spans via JS. -->
+        <div class="content-col" id="text-container">
+            <div class="tag">Sky Sports</div>
+            
+            <h2 class="project-title">
+                <span class="word word-outline" data-speed="2">IMAGINING</span>
+                <span class="word word-solid" data-speed="1">SPORTS</span>
+                <span class="word word-color" data-speed="3">VIEWING</span>
+            </h2>
+
+            <p class="project-desc">
+                A digital transformation project reimagining how fans consume live sports data. We created a modular viewing experience that adapts to user preferences in real-time.
+            </p>
+
+            <div class="meta-line">
+                <span>UX/UI</span>
+                <span>STRATEGY</span>
+                <span>2023</span>
+            </div>
+        </div>
+
+        <!-- FEATURE: Right Column - Interactive Image Placeholder -->
+        <!-- Logic: Gray background, starts tilted 2deg via CSS. Hover triggers JS 3D tilt and CSS straightening + shadow offset. -->
+        <div class="image-col">
+            <div class="img-wrapper" id="project-card">
+                <!-- Decorative Placeholder UI -->
+                <div class="ph-ui-top">
+                    <div class="ph-dot"></div>
+                    <div class="ph-dot"></div>
+                </div>
+                <div class="ph-center">PROJECT IMAGE</div>
+                <div class="ph-ui-bot">
+                    <span>1920</span>
+                    <span>1080</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <script>
+        // FEATURE: 3D Tilt Effect for Image
+        // Calculates mouse position relative to center of card and rotates X/Y axes
+        const card = document.getElementById('project-card');
+        const imageCol = document.querySelector('.image-col');
+        const cursor = document.getElementById('cursor');
+
+        imageCol.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // Limit tilt range
+            const rotateX = ((y - centerY) / centerY) * -10; // Max 10deg
+            const rotateY = ((x - centerX) / centerX) * 10;
+
+            // Apply transform: Note we override the default 2deg rotation here to make it "straighten" but tilt interactively
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            
+            // Cursor interaction
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) scale(1)`;
+        });
+
+        // Reset on mouse leave
+        imageCol.addEventListener('mouseleave', () => {
+            // Return to CSS default state (2deg rotation, no tilt)
+            card.style.transform = ''; 
+            cursor.style.transform = 'translate(-50%, -50%) scale(0)';
+        });
+
+        // FEATURE: Parallax Text Effect
+        // Moves text elements slightly based on global mouse position to create depth
+        const textContainer = document.querySelector('.portfolio-row-1');
+        const words = document.querySelectorAll('.word');
+
+        textContainer.addEventListener('mousemove', (e) => {
+            const screenCenterX = window.innerWidth / 2;
+            const screenCenterY = window.innerHeight / 2;
+            const x = (e.clientX - screenCenterX) / window.innerWidth;
+            const y = (e.clientY - screenCenterY) / window.innerHeight;
+
+            words.forEach(word => {
+                const speed = word.getAttribute('data-speed');
+                const xMove = x * 20 * speed; // Multiplier defines intensity
+                const yMove = y * 10 * speed;
+                
+                word.style.transform = `translate(${xMove}px, ${yMove}px)`;
+            });
+        });
+
+        // Reset text when leaving section
+        textContainer.addEventListener('mouseleave', () => {
+            words.forEach(word => {
+                word.style.transform = `translate(0px, 0px)`;
+            });
+        });
+
+        // Global cursor tracking (hidden by default until hover image)
+        document.addEventListener('mousemove', (e) => {
+           if(cursor.style.transform.includes('scale(0)')) {
+               // Keeps invisible cursor moving so it pops up at right spot
+               cursor.style.left = e.clientX + 'px'; // using top/left for hidden state to avoid transform conflict inside loop
+               cursor.style.top = e.clientY + 'px';
+           }
+        });
+
+    </script>
+</body>
+</html>

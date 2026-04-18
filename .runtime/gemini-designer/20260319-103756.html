@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linyun Yu — Portfolio</title>
+    
+    <!-- FONTS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+        @import url('https://db.onlinewebfonts.com/c/0d7c90bf2d5c8dcc4fa27a5ba6cbad81?family=Mango+Grotesque');
+    </style>
+
+    <style>
+        /* FEATURE: CSS Variables & Reset */
+        :root {
+            /* Palette: Deep Obsidian Base with Burnt Sienna/Terracotta Accent */
+            --bg-color: #0c0c0d;
+            --bg-light-spot: #1a1a1c;
+            --text-main: #e6e6e6;
+            --text-muted: #8c8c8c;
+            --accent: #D65A31; /* Burnt Sienna */
+            --accent-dim: rgba(214, 90, 49, 0.15);
+            --border: rgba(255, 255, 255, 0.08);
+            --glass: rgba(255, 255, 255, 0.03);
+            
+            /* Typography */
+            --font-display: 'Mango Grotesque', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+            
+            /* Spacing */
+            --gutter: clamp(1.5rem, 4vw, 3rem);
+            --nav-height: 80px;
+
+            /* Animation */
+            --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            /* FEATURE: Dynamic height for mobile fix */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* FEATURE: Atmospheric Background */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            background: var(--bg-color);
+        }
+
+        /* Directional Lighting */
+        .ambient-light {
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 80vw;
+            height: 80vh;
+            background: radial-gradient(circle at center, var(--bg-light-spot), transparent 60%);
+            opacity: 0.6;
+        }
+
+        /* Texture / Grain - Paper feel */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.07;
+            pointer-events: none;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* FEATURE: Main Layout Grid */
+        main {
+            position: relative;
+            z-index: 1;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0 var(--gutter);
+            height: 100vh;
+            max-width: 1920px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ----- NAVIGATION ----- */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 var(--gutter);
+            z-index: 100;
+            mix-blend-mode: difference; /* Ensures visibility over light spots */
+            transform: translateY(0);
+            transition: transform 0.4s var(--ease-out-quart);
+            color: #fff; /* Force white for difference mode */
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            letter-spacing: 0.02em;
+            font-weight: 400; /* Mango appears thicker naturally */
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        /* Glass Pill */
+        .nav-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            padding: 0 4px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            overflow: hidden; /* For progress bar */
+            mix-blend-mode: normal; /* Turn off diff mode for pill */
+            color: var(--text-main);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-center { display: none; }
+        }
+
+        .nav-link {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-decoration: none;
+            color: var(--text-muted);
+            padding: 0 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-link:hover {
+            color: var(--text-main);
+        }
+
+        .nav-link.active {
+            color: var(--text-main);
+        }
+
+        /* Progress Bar inside pill */
+        .nav-progress {
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            height: 2px;
+            width: 25%; /* Active state sim */
+            background-color: var(--accent);
+            z-index: 1;
+            transition: left 0.4s ease;
+        }
+
+        /* Right Status */
+        .nav-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            top: -4px; left: -4px;
+            width: 16px; height: 16px;
+            border: 1px solid var(--accent);
+            border-radius: 50%;
+            opacity: 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.5); opacity: 0.8; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* ----- HERO CONTENT ----- */
+        .hero-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Vertically center the main block */
+            gap: 2rem;
+            margin-top: var(--nav-height);
+            margin-bottom: 80px; /* Space for footer */
+            position: relative;
+        }
+
+        /* 1. Tag */
+        .tag-wrapper {
+            display: inline-flex;
+            align-items: center;
+            padding-left: 1rem;
+            border-left: 1px solid var(--accent);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUpFade 0.8s var(--ease-out-quart) forwards 0.2s;
+        }
+
+        .tag-text {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* 2. Headline */
+        .headline-wrapper {
+            margin: 1rem 0 2rem 0;
+            position: relative;
+        }
+
+        .headline {
+            font-family: var(--font-display);
+            font-weight: 900;
+            text-transform: uppercase;
+            line-height: 0.85;
+            font-size: clamp(4rem, 11vw, 12rem);
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+            opacity: 0;
+            transform: translateY(40px);
+            animation: slideUpFade 1s var(--ease-out-quart) forwards 0.4s;
+        }
+
+        .headline span.line {
+            display: block;
+        }
+
+        .headline .ampersand {
+            color: var(--accent);
+            font-family: inherit; 
+            font-weight: 400; /* Lighter weight for the symbol for refined look */
+            vertical-align: middle;
+            font-size: 0.9em;
+        }
+
+        /* 3. Subtitle */
+        .subtitle {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            line-height: 1.5;
+            color: var(--text-muted);
+            max-width: 520px;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUpFade 0.8s var(--ease-out-quart) forwards 0.6s;
+        }
+
+        /* Decor "01" */
+        .decor-marker {
+            position: absolute;
+            right: 0;
+            top: 20%;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--border);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            letter-spacing: 0.2em;
+            opacity: 0;
+            animation: fadeIn 2s ease forwards 1s;
+        }
+
+        /* 4. Bottom Bar (Action Area) */
+        .bottom-bar {
+            margin-top: auto; /* Push to bottom of flex container */
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUpFade 0.8s var(--ease-out-quart) forwards 0.8s;
+            margin-bottom: 2rem;
+        }
+
+        .identity-block h3 {
+            font-family: var(--font-body);
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: var(--text-main);
+        }
+        
+        .identity-block p {
+            font-family: var(--font-body);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* FEATURE: Button Styles */
+        .btn {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--text-main);
+            color: var(--bg-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.2);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* 5. Footer (Absolute Bottom) */
+        .footer-strip {
+            position: absolute;
+            bottom: var(--gutter);
+            left: var(--gutter);
+            right: var(--gutter);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 1.2s;
+        }
+
+        .scroll-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .scroll-arrow {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(5px);}
+            60% {transform: translateY(3px);}
+        }
+
+        /* Animation Keyframes */
+        @keyframes slideUpFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 900px) {
+            .bottom-bar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .actions {
+                width: 100%;
+            }
+            .btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .headline {
+                line-height: 0.9;
+            }
+            :root {
+                --gutter: 1.25rem;
+            }
+            .footer-strip {
+                display: none; /* Hide on very small screens to save space */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- FEATURE: Ambient Background Layers -->
+    <div class="ambient-bg">
+        <div class="ambient-light"></div>
+    </div>
+    <div class="noise-overlay"></div>
+
+    <!-- FEATURE: Navigation Bar -->
+    <nav class="nav-bar" id="navbar">
+        <div class="nav-logo">LINYUN YU</div>
+        
+        <div class="nav-center">
+            <a href="#" class="nav-link active">Welcome</a>
+            <a href="#" class="nav-link">Work</a>
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Contact</a>
+            <div class="nav-progress"></div>
+        </div>
+
+        <div class="nav-status">
+            <div class="status-dot"></div>
+            <span>Available for work</span>
+        </div>
+    </nav>
+
+    <!-- FEATURE: Main Hero Section -->
+    <main>
+        <div class="hero-container">
+            
+            <!-- 1. Freelance Tag -->
+            <div class="tag-wrapper">
+                <span class="tag-text">Available for Freelance</span>
+            </div>
+
+            <!-- 2. Massive Headline -->
+            <div class="headline-wrapper">
+                <h1 class="headline">
+                    <span class="line">DIGITAL PRODUCTS</span>
+                    <span class="line"><span class="ampersand">&</span> USER EXPERIENCES</span>
+                </h1>
+            </div>
+
+            <!-- 3. Subtitle -->
+            <p class="subtitle">
+                Designing minimal and impactful digital interfaces with a focus on typography, motion, and user-centered craft.
+            </p>
+
+            <!-- Decor -->
+            <div class="decor-marker">REF: 01 — HERO</div>
+
+            <!-- 4. Bottom Info & Actions -->
+            <div class="bottom-bar">
+                <div class="identity-block">
+                    <h3>Linyun Yu</h3>
+                    <p>UX / UI Designer, Based in Shanghai</p>
+                </div>
+                
+                <div class="actions">
+                    <a href="#" class="btn btn-outline">View Work →</a>
+                    <a href="#" class="btn btn-primary">Get in Touch</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 5. Footer Strip (Clock) -->
+        <footer class="footer-strip">
+            <div class="scroll-indicator">
+                <span class="scroll-arrow">↓</span>
+                <span>Scroll to explore</span>
+            </div>
+            <div class="clock" id="live-clock">
+                00:00:00 CST
+            </div>
+        </footer>
+    </main>
+
+    <!-- FEATURE: Interactive Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Live Clock Functionality (Shanghai Time)
+            const clockEl = document.getElementById('live-clock');
+            
+            function updateClock() {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', {
+                    timeZone: 'Asia/Shanghai',
+                    hour12: false,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                clockEl.textContent = `${timeString} CST`;
+            }
+            
+            setInterval(updateClock, 1000);
+            updateClock();
+
+            // 2. Nav Hover Logic (Move Progress Line)
+            const navLinks = document.querySelectorAll('.nav-link');
+            const progressLine = document.querySelector('.nav-progress');
+            const navCenter = document.querySelector('.nav-center');
+
+            function moveLine(target) {
+                const pillRect = navCenter.getBoundingClientRect();
+                const linkRect = target.getBoundingClientRect();
+                
+                // Calculate position relative to the container
+                const leftPos = linkRect.left - pillRect.left;
+                
+                progressLine.style.width = `${linkRect.width}px`;
+                progressLine.style.transform = `translateX(${leftPos}px)`;
+                progressLine.style.left = '0'; // Reset styling strategy
+            }
+
+            // Initialize on 'Welcome'
+            moveLine(navLinks[0]);
+
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', (e) => {
+                    moveLine(e.target);
+                    // Remove active class from others visual helper (optional)
+                    navLinks.forEach(l => l.style.color = 'var(--text-muted)');
+                    e.target.style.color = 'var(--text-main)';
+                });
+            });
+
+            navCenter.addEventListener('mouseleave', () => {
+                // Return to active link
+                const activeLink = document.querySelector('.nav-link.active');
+                moveLine(activeLink);
+                navLinks.forEach(l => l.style.color = ''); // reset inline styles
+            });
+
+            // 3. Scroll Effect for Nav
+            const navbar = document.getElementById('navbar');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.style.background = 'rgba(12, 12, 13, 0.8)';
+                    navbar.style.backdropFilter = 'blur(10px)';
+                    navbar.style.borderBottom = '1px solid var(--glass)';
+                    navbar.style.mixBlendMode = 'normal';
+                } else {
+                    navbar.style.background = 'transparent';
+                    navbar.style.backdropFilter = 'none';
+                    navbar.style.borderBottom = 'none';
+                    navbar.style.mixBlendMode = 'difference';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

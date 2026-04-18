@@ -1,0 +1,346 @@
+<!-- 
+  FEATURE: UX/UI Portfolio Hero Section 
+  Design Concept: "Editorial Brutalism"
+  - Uses geometric asymmetry and extreme scale contrast.
+  - Base layer: Minimalist black on white.
+  - Overlay layer: Inverted high-contrast white on black (revealed via CSS hover for demo).
+  - Typeface: Uses 'Six Caps' as a Google Fonts accessible alternative to 'Mango Grotesque' to match the condensed aesthetic.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Linyun Yu - Portfolio Hero</title>
+<style>
+/* -----------------------------------------------------------
+   1. SETUP & FONTS
+   ----------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500&family=Six+Caps&family=Space+Mono:ital,wght@0,400;1,400&display=swap');
+
+:root {
+    --color-bg: #FFFFFF;
+    --color-text: #0D0D0D;
+    --color-accent: #0D0D0D;
+    
+    /* Typography */
+    --font-display: 'Six Caps', sans-serif; /* Visual proxy for Mango Grotesque */
+    --font-body: 'Outfit', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    cursor: crosshair; /* Adds a bit of designer feel */
+}
+
+/* -----------------------------------------------------------
+   2. LAYOUT GRID & DECORATION
+   ----------------------------------------------------------- */
+.layout-grid {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    padding: 2rem;
+}
+
+/* Corner Elements */
+.corner-label {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    z-index: 50;
+    mix-blend-mode: difference; /* Ensures visibility depending on bg */
+    color: #fff; /* Inverted logic due to difference mode */
+}
+
+.top-left { top: 2rem; left: 2rem; }
+.top-right { 
+    top: 2rem; 
+    right: 2rem; 
+    border: 1px solid currentColor;
+    padding: 2px 6px;
+    font-weight: bold;
+}
+
+/* Vertical Side Text */
+.side-text-wrap {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    mix-blend-mode: difference;
+    color: #fff;
+}
+
+.side-text {
+    writing-mode: vertical-rl;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* Scroll Indication */
+.scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 50;
+    mix-blend-mode: difference;
+    color: #fff;
+}
+
+.scroll-line {
+    width: 1px;
+    height: 40px;
+    background: currentColor;
+}
+
+/* -----------------------------------------------------------
+   3. HERO TYPOGRAPHY WRAPPER
+   ----------------------------------------------------------- */
+/* This is the mandatory structure wrapper */
+.hero-typo-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* 
+   Shared Styles for Base and Overlay 
+   This ensures perfect pixel alignment between the two states.
+*/
+.hero-typo {
+    width: 100%;
+    max-width: 1600px; /* Constraints for ultra-wide screens */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 4vw; /* Global offset */
+}
+
+.hero-typo-base {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    z-index: 10;
+}
+
+/* The Overlay: This is the "Magic" layer. 
+   In real JS, this tracks cursor. Here, CSS handles styles. */
+.hero-typo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    /* The Reveal Styling */
+    background-color: #0D0D0D; 
+    color: #F2F2F2;
+    z-index: 20;
+    
+    /* Layout duplication */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 4vw; /* Must match base exactly */
+    
+    /* Design Demo State: Hidden by default, revealed on hover 
+       (Since no JS is allowed, this simulates the effect) */
+    clip-path: circle(0% at 50% 50%);
+    transition: clip-path 0.8s var(--ease-out-expo);
+}
+
+/* DEMO ONLY: Hover anywhere to see the effect */
+.hero-typo-wrap:hover .hero-typo-overlay {
+    clip-path: circle(25% at 50% 50%);
+}
+
+/* -----------------------------------------------------------
+   4. TYPOGRAPHY LINES (EDITORIAL LAYOUT)
+   ----------------------------------------------------------- */
+.typo-line {
+    line-height: 0.85; /* Tight vertical rhythm */
+    display: flex;
+    will-change: transform;
+}
+
+.word {
+    display: inline-block;
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    transform-origin: left center;
+}
+
+/* LINE 1: "DESIGNING"
+   Role: The Prefix.
+   Style: Medium size, tracked out, aligned left. acts as a label.
+*/
+.l1 {
+    font-size: clamp(2rem, 4vw, 4rem);
+    margin-bottom: 2vh;
+    padding-left: 0.5vw;
+}
+
+.l1 .word {
+    font-family: var(--font-body); /* Contrast font */
+    font-weight: 500;
+    letter-spacing: -0.02em;
+}
+
+/* LINE 2: "DIGITAL" / "USER"
+   Role: The Hero.
+   Style: Massive, bold, bleeding edge.
+*/
+.l2 {
+    font-size: clamp(6rem, 24vw, 24rem); /* Massive scaling */
+    letter-spacing: -0.03em;
+    mix-blend-mode: normal;
+}
+
+.hero-typo-overlay .l2 .word {
+    /* Subtle color prompt for the revealed state */
+    color: #fff; 
+}
+
+
+/* LINE 3: "PRODUCTS" / "EXPERIENCES"
+   Role: The Resolution.
+   Style: Large but subordinate to L2. Heavily indented to create diagonal flow.
+*/
+.l3 {
+    font-size: clamp(4rem, 14vw, 14rem);
+    margin-top: -1vw; /* Visual overlap/tightness */
+    padding-left: 35vw; /* The "Staircase" kick */
+}
+
+/* -----------------------------------------------------------
+   5. INTRO LINE ("Hi, I am Lin")
+   ----------------------------------------------------------- */
+.intro-line {
+    position: absolute;
+    top: 25%;
+    left: 8vw;
+    z-index: 30;
+    mix-blend-mode: difference;
+    color: #fff;
+    
+    font-family: var(--font-body);
+    font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    
+    /* Decorative line next to intro */
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.intro-line::before {
+    content: '';
+    display: block;
+    width: 2rem;
+    height: 1px;
+    background-color: currentColor;
+}
+
+/* -----------------------------------------------------------
+   RESPONSIVE ADJUSTMENTS
+   ----------------------------------------------------------- */
+@media (max-width: 768px) {
+    .l2 { font-size: 28vw; line-height: 0.8; }
+    .l3 { font-size: 16vw; padding-left: 10vw; margin-top: 1rem; }
+    .intro-line { top: 12%; left: 2rem; }
+    .side-text-wrap { display: none; } /* Hide decorative vertical on mobile */
+    .hero-typo { padding-left: 0; align-items: center; } /* Center everything on mobile */
+    .typo-line { justify-content: center; width: 100%; }
+    .l1 { align-self: center; padding-left: 0; }
+    .l3 { padding-left: 0; }
+}
+
+</style>
+</head>
+<body>
+
+    <!-- FEATURE: Static UI Elements (Corners, Nav, etc) -->
+    <div class="layout-grid" aria-hidden="true">
+        <div class="corner-label top-left">Linyun Yu &copy; 2024</div>
+        <div class="corner-label top-right">AD</div>
+        
+        <div class="side-text-wrap">
+            <div class="side-text">Good Design Is Honest</div>
+        </div>
+
+        <div class="scroll-indicator">
+            <span>SCROLL</span>
+            <div class="scroll-line"></div>
+        </div>
+    </div>
+
+    <!-- FEATURE: Contextual Intro Line (Outside Main Interaction) -->
+    <div class="intro-line">
+        hi, i am lin
+    </div>
+
+    <!-- FEATURE: Main Interaction Wrapper (Required Structure) -->
+    <!-- The .hero-typo-overlay is hidden by mask/clip-path and revealed by JS (simulated here via hover) -->
+    <div class='hero-typo-wrap' id='hero-typo'>
+        
+        <!-- STATE 1: Default Light Mode -->
+        <div class='hero-typo hero-typo-base'>
+            <div class='typo-line l1'><span class='word'>DESIGNING</span></div>
+            <div class='typo-line l2'><span class='word'>DIGITAL</span></div>
+            <div class='typo-line l3'><span class='word'>PRODUCTS</span></div>
+        </div>
+
+        <!-- STATE 2: Hover/Reveal Dark Mode -->
+        <div class='hero-typo hero-typo-overlay' aria-hidden='true'>
+            <div class='typo-line l1'><span class='word'>DESIGNING</span></div>
+            <div class='typo-line l2'><span class='word'>USER</span></div>
+            <div class='typo-line l3'><span class='word'>EXPERIENCES</span></div>
+        </div>
+
+    </div>
+
+    <script>
+        /* 
+         * NOTE: User requested NO JavaScript logic for the interaction.
+         * The hover effect demonstrated here is achieved via pure CSS `clip-path` 
+         * on the wrapper :hover state to simulate the "Reveal" logic visually 
+         * for this design prototype.
+         * 
+         * In the production build, your existing scratch-card JS will target 
+         * `.hero-typo-overlay` and manipulate the clip-path coordinates.
+         */
+    </script>
+</body>
+</html>

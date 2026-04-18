@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Hover Hint</title>
+    <style>
+        /* IMPORT FONTS */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500&display=swap');
+
+        /* RESET & BASE */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background-color: #FFFFFF;
+            color: #0D0D0D;
+            font-family: 'Outfit', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: default;
+        }
+
+        /* 
+           CONTEXT: HERO CONTAINER 
+           This represents the space described in the brief.
+        */
+        .hero-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* 
+           CONTEXT: STAIRCASE TYPOGRAPHY 
+           Styled close to "Mango Grotesque" description using a condensed fallback.
+           This is just the trigger area for the hint dismissal.
+        */
+        .display-text {
+            font-family: 'Oswald', 'Impact', sans-serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            display: flex;
+            flex-direction: column;
+            /* Allow pointer events for the hover detection */
+            pointer-events: auto; 
+            cursor: crosshair; /* Stylistic choice */
+            z-index: 10;
+        }
+
+        .display-text span {
+            display: inline-block;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+        }
+
+        /* Staircase Steps */
+        .display-text span:nth-child(1) { align-self: flex-start; margin-left: 10%; }
+        .display-text span:nth-child(2) { align-self: center; }
+        .display-text span:nth-child(3) { align-self: flex-end; margin-right: 10%; }
+
+        /* Hover effect on text context (just to simulate the environment) */
+        .display-text:hover span {
+            color: #6366F1; /* Indigo indication */
+            opacity: 0.9;
+        }
+
+        /* 
+           ---------------------------------------------------------
+           FEATURE: THE ANNOTATION (HOVER HINT) DESIGN
+           ---------------------------------------------------------
+        */
+        .system-annotation {
+            position: absolute;
+            /* Positioning: Below the text block, slightly off-center (left) */
+            bottom: 15%; 
+            left: 18%;
+            
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            line-height: 1;
+            letter-spacing: 0.05em;
+            color: #0D0D0D;
+            
+            /* Initial State */
+            pointer-events: none; /* Let clicks pass through */
+            opacity: 0.6;
+            transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+                        transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            
+            /* Ensure it sits below text visually but doesn't overlap */
+            z-index: 5;
+            mix-blend-mode: multiply;
+        }
+
+        /* State: Hidden (Applied via JS) */
+        .system-annotation.is-hidden {
+            opacity: 0;
+            transform: translateY(8px); /* Subtle drop when dismissing */
+        }
+
+        /* Visual Element: The Blinking Cursor / Indicator */
+        .annotation-cursor {
+            width: 6px;
+            height: 6px;
+            background-color: #6366F1; /* Indigo Accent */
+            border-radius: 1px;
+            animation: blink-soft 2s infinite ease-in-out;
+        }
+
+        /* Visual Element: The Metadata Text */
+        .annotation-text {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Adds a purely decorative line closer to a technical diagram style */
+        .annotation-text::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 1px;
+            background-color: #0D0D0D;
+            opacity: 0.3;
+            margin-right: 12px;
+        }
+
+        /* The actual hint copy */
+        .text-content {
+            opacity: 0.8;
+            font-weight: 400;
+        }
+
+        /* Subtle numbering to make it feel like system data */
+        .index-marker {
+            opacity: 0.4;
+            margin-right: 8px;
+            font-size: 9px;
+        }
+
+        /* Animation Keyframes */
+        @keyframes blink-soft {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="hero-container">
+        
+        <!-- FEATURE: Main Display Text (The Trigger) -->
+        <h1 class="display-text" id="heroText">
+            <span>DESIGNING</span>
+            <span>DIGITAL</span>
+            <span>PRODUCTS</span>
+        </h1>
+
+        <!-- FEATURE: Hover Hint Element -->
+        <!-- Design Rationale:
+             1. Location: Bottom-left coordinate relative to the visual weight of the text.
+             2. Style: Technical annotation. Uses a thin line and a pulsing indigo square.
+             3. Hierarchy: "Whisper" level. Low opacity, small mono font. 
+        -->
+        <div class="system-annotation" id="hoverHint">
+            <div class="annotation-text">
+                <span class="index-marker">01</span>
+                <span class="text-content">ROLL OVER TO REVEAL</span>
+            </div>
+            <div class="annotation-cursor"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // FEATURE: Interaction Logic
+        // Requirements: Dismiss hint when user interacts with the main text
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroText = document.getElementById('heroText');
+            const hint = document.getElementById('hoverHint');
+            let hasInteracted = false;
+
+            // Function to handle the dismissal
+            const dismissHint = () => {
+                if (!hasInteracted) {
+                    hint.classList.add('is-hidden');
+                    hasInteracted = true;
+                    
+                    // Optional: Remove listener if you only want it to hide once permanently
+                    // heroText.removeEventListener('mouseenter', dismissHint);
+                }
+            };
+
+            // Restore hint if mouse leaves area for a long time? 
+            // The prompt implies simple dismissal, but let's make it smart.
+            // If they leave the text, bring it back gently after a delay so they don't lose context.
+            const restoreHint = () => {
+                if (hasInteracted) {
+                    setTimeout(() => {
+                        // Only bring back if we are not currently hovering
+                        if (!heroText.matches(':hover')) {
+                            hint.classList.remove('is-hidden');
+                            hasInteracted = false;
+                        }
+                    }, 2500); // 2.5s delay before reminding them
+                }
+            };
+
+            // Event Listeners
+            heroText.addEventListener('mouseenter', dismissHint);
+            heroText.addEventListener('mouseleave', restoreHint);
+            
+            // Also dismiss if they touch on mobile
+            heroText.addEventListener('touchstart', dismissHint, {passive: true});
+        });
+    </script>
+</body>
+</html>

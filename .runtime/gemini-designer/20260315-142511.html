@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linyun Yu — UX/UI Portfolio</title>
+    
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://db.onlinewebfonts.com/c/0d7c90bf2d5c8dcc4fa27a5ba6cbad81?family=Mango+Grotesque" rel="stylesheet" type="text/css"/>
+
+    <style>
+        /* --- 1. CORE VARIABLES & RESET --- */
+        :root {
+            --bg: #EDEBE6;
+            --ink: #0D0D0D;
+            --white: #FFFFFF;
+            --yellow: #FFD600;
+            --lavender: #C8B4FF;
+            --green: #22C55E;
+            
+            --f-display: 'Mango Grotesque', sans-serif;
+            --f-body: 'Outfit', sans-serif;
+            --f-mono: 'Space Mono', monospace;
+            
+            --s-gutter: clamp(1rem, 4vw, 3rem);
+            --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            cursor: none; /* Custom cursor used */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: var(--f-body);
+            font-size: 18px; /* FIX 4: Readable text sizes */
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--f-display);
+            text-transform: uppercase;
+            font-weight: 500;
+            line-height: 0.9;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        /* --- 2. CUSTOM CURSOR --- */
+        #cursor, #cursor-follower {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+        }
+
+        #cursor {
+            width: 10px;
+            height: 10px;
+            background: var(--white);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        #cursor.hovered {
+            width: 50px;
+            height: 50px;
+            background: var(--yellow);
+            mix-blend-mode: normal;
+        }
+
+        /* --- 3. LOADER --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--ink);
+            color: var(--bg);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: var(--s-gutter);
+            transition: transform 0.8s var(--ease-out);
+        }
+        
+        #loader.loaded {
+            transform: translateY(-100%);
+        }
+
+        .loader-meta {
+            font-family: var(--f-mono);
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 1rem;
+        }
+
+        .loader-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--f-display);
+            font-size: 20vw;
+            color: #222;
+        }
+
+        .loader-count {
+            font-family: var(--f-display);
+            font-size: clamp(5rem, 15vw, 12rem);
+            align-self: flex-end;
+            line-height: 1;
+        }
+
+        /* --- 4. NAVIGATION (SCROLL PROGRESS) --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 100;
+            mix-blend-mode: normal;
+        }
+
+        .nav-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 var(--s-gutter);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            background: var(--bg);
+        }
+
+        /* The base layer (Ink text) */
+        .nav-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--s-gutter);
+            font-family: var(--f-mono);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* The progress layer (White text on black bg) */
+        .nav-progress-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%; /* JS changes this */
+            background: var(--ink);
+            overflow: hidden;
+            transition: width 0.1s linear;
+        }
+
+        .nav-layer-white {
+            color: var(--white);
+            width: 100vw; /* Ensure text matches position of base */
+        }
+
+        .brand span { font-weight: 700; color: inherit; }
+
+        /* --- 5. HERO SECTION --- */
+        .hero {
+            padding: 160px var(--s-gutter) 100px;
+            min-height: 90vh;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* FIX 1 & 4: Refined Typography Scale */
+        .hero-h1 {
+            font-size: clamp(3rem, 7vw, 6.5rem);
+            line-height: 0.85;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .hero-h1 span {
+            display: block;
+            opacity: 0; /* JS reveal */
+            transform: translateY(20px);
+        }
+
+        .hero-accent {
+            font-family: var(--f-mono);
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 30px;
+            display: block;
+            max-width: 400px;
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Asymmetric design element */
+        .hero-img-wrap {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 4/5;
+            background: #ddd;
+            overflow: hidden;
+        }
+
+        .hero-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.1); /* JS parallax */
+        }
+
+        .hero-deco-number {
+            position: absolute;
+            right: -20px;
+            top: -60px;
+            font-family: var(--f-display);
+            font-size: 10rem;
+            color: var(--yellow);
+            z-index: -1;
+            opacity: 0.8;
+            transform: rotate(10deg);
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--lavender);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-family: var(--f-mono);
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            transform: rotate(-2deg);
+            border: 1px solid var(--ink);
+        }
+
+        /* --- 6. MARQUEE --- */
+        .marquee-wrap {
+            background: var(--ink);
+            color: var(--white);
+            padding: 20px 0;
+            transform: rotate(-2deg) scale(1.05);
+            margin: 40px 0 80px;
+            overflow: hidden;
+            display: flex;
+            position: relative;
+            z-index: 3;
+        }
+
+        .marquee-inner {
+            display: flex;
+            gap: 40px;
+            animation: scroll 20s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: var(--f-display);
+            font-size: 4rem;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .marquee-item::after {
+            content: "✦";
+            font-size: 2rem;
+            color: var(--yellow);
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- 7. WORK LIST SECTION (Interactive) --- */
+        .section-header {
+            padding: 0 var(--s-gutter);
+            margin-bottom: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        h2.section-title {
+            font-size: clamp(2rem, 4vw, 4rem);
+        }
+
+        .work-list {
+            position: relative;
+            padding: 0 var(--s-gutter);
+            margin-bottom: 150px;
+        }
+
+        .work-item {
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: padding 0.3s;
+            position: relative;
+        }
+
+        .work-item:last-child { border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .work-item:hover { padding: 30px 20px; background: rgba(0,0,0,0.02); }
+
+        .work-name {
+            font-family: var(--f-display);
+            font-size: 3rem;
+            transition: color 0.3s;
+        }
+        
+        .work-meta {
+            font-family: var(--f-mono);
+            text-align: right;
+        }
+
+        /* Floating Preview Image */
+        .work-preview {
+            position: absolute;
+            width: 300px;
+            height: 200px;
+            background: #000;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 10;
+            overflow: hidden;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.1);
+        }
+
+        /* --- 8. BOLD COLOR FEATURE SECTION --- */
+        .featured-project {
+            background-color: var(--yellow); /* FIX 2: Bold Color */
+            width: 100%;
+            padding: var(--s-gutter);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 150px;
+            align-items: center;
+        }
+
+        .feat-img {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            overflow: hidden;
+        }
+        
+        .feat-img img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+        }
+        
+        .feat-img:hover img { transform: scale(1.05); }
+
+        .feat-content h3 {
+            font-size: clamp(3rem, 6vw, 5rem);
+            margin-bottom: 20px;
+        }
+
+        .feat-desc {
+            max-width: 400px;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .btn-black {
+            display: inline-block;
+            background: var(--ink);
+            color: var(--white);
+            padding: 18px 32px;
+            font-family: var(--f-mono);
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: 700;
+            transition: transform 0.2s;
+        }
+        
+        .btn-black:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.2);
+        }
+
+        /* --- 9. BENTO GRID SECTION --- */
+        .bento-wrap {
+            padding: 0 var(--s-gutter);
+            margin-bottom: 150px;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(2, 400px);
+            gap: 20px;
+        }
+
+        .bento-card {
+            background: var(--white);
+            padding: 30px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            transition: transform 0.4s;
+        }
+
+        /* Bento variations */
+        .b-large { grid-column: span 2; background: var(--lavender); }
+        .b-tall { grid-row: span 2; background: #000; color: #fff; }
+        
+        .bento-card img {
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: transform 0.5s;
+        }
+
+        .bento-card:hover img { transform: scale(1.1); }
+
+        .card-overlay {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+        
+        .card-title {
+            font-size: 2.5rem;
+            line-height: 0.9;
+        }
+
+        /* --- 10. ABOUT --- */
+        .about-section {
+            padding: 0 var(--s-gutter);
+            margin-bottom: 150px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .about-title {
+            font-size: 5rem;
+            color: #ddd; /* Subtle background styling */
+            -webkit-text-stroke: 1px var(--ink);
+            color: transparent;
+        }
+
+        .about-text p {
+            margin-bottom: 2rem;
+            font-size: 1.25rem; /* FIX 4 */
+        }
+
+        .skill-tags span {
+            display: inline-block;
+            border: 1px solid var(--ink);
+            padding: 5px 15px;
+            margin: 0 10px 10px 0;
+            font-family: var(--f-mono);
+            font-size: 13px;
+        }
+
+        /* --- 11. CONTACT SECTION (FIX 5: Rich layout) --- */
+        .contact-section {
+            background-color: var(--lavender);
+            color: var(--ink);
+            padding: 100px var(--s-gutter) 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-deco {
+            position: absolute;
+            top: -20px;
+            right: 10%;
+            width: 150px;
+            height: 150px;
+            background: var(--yellow);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        .cta-big {
+            font-size: clamp(3rem, 12vw, 11rem);
+            line-height: 0.8;
+            margin-bottom: 20px;
+            max-width: 90%;
+            display: block;
+        }
+        
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 60px;
+            border-top: 2px solid var(--ink);
+            padding-top: 40px;
+        }
+
+        .contact-info h4 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .email-link {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+            font-family: var(--f-body);
+            border-bottom: 2px solid var(--ink);
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .social-pills {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            background: var(--ink);
+            color: var(--white);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-family: var(--f-mono);
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .pill:hover { background: var(--yellow); color: var(--ink); }
+
+        footer {
+            background: var(--ink);
+            color: #555;
+            padding: 20px var(--s-gutter);
+            font-family: var(--f-mono);
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* UTILS */
+        .reveal-text { opacity: 0; transform: translateY(30px); transition: all 1s var(--ease-out); }
+        .reveal-text.in-view { opacity: 1; transform: translateY(0); }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero, .featured-project, .about-section, .contact-grid { grid-template-columns: 1fr; }
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .b-large, .b-tall { grid-column: span 1; grid-row: span 1; min-height: 300px; }
+            .hero-img-wrap { display: none; } /* Simplify on mobile */
+            .contact-deco { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CUSTOM CURSOR -->
+    <div id="cursor"></div>
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="loader-meta">
+            <span>© 2023 LINYUN YU</span>
+            <span>SHANGHAI [CN]</span>
+        </div>
+        <div class="loader-center">00</div> <!-- Atmospheric bg number -->
+        <div class="loader-count">000</div>
+    </div>
+
+    <!-- NAVIGATION WITH SCROLL PROGRESS -->
+    <header>
+        <div class="nav-content">
+            <!-- Layer 1: Base (Ink) -->
+            <div class="nav-layer">
+                <div class="brand">LINYUN <span>YU</span></div>
+                <div class="nav-links">
+                    <span>Work</span>
+                    <span style="margin: 0 20px">About</span>
+                    <span>Contact</span>
+                </div>
+            </div>
+            
+            <!-- Layer 2: Overlay (White text on Ink bg) -->
+            <div class="nav-progress-mask" id="progressMask">
+                <div class="nav-layer nav-layer-white">
+                    <div class="brand">LINYUN <span>YU</span></div>
+                    <div class="nav-links">
+                        <span>Work</span>
+                        <span style="margin: 0 20px">About</span>
+                        <span>Contact</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero interactable-area">
+        <div class="hero-text">
+            <div class="tag">AVAILABLE FOR FREELANCE</div>
+            <h1 class="hero-h1">
+                <span>DIGITAL</span>
+                <span style="color: var(--gray);">PRODUCTS</span>
+                <span class="indented" style="margin-left: 10vw;">& USER</span>
+                <span>EXPERIENCES</span>
+            </h1>
+            <p class="hero-accent">
+                Designing minimal and impactful digital interfaces with a focus on typography and motion.
+            </p>
+        </div>
+        
+        <div class="hero-visual">
+            <div class="hero-deco-number">01</div>
+            <div class="hero-img-wrap">
+                <!-- Abstract Design Placeholder -->
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" alt="Abstract Design" class="parallax-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS MARQUEE -->
+    <div class="marquee-wrap">
+        <div class="marquee-inner">
+            <div class="marquee-item">UI DESIGN</div>
+            <div class="marquee-item">UX RESEARCH</div>
+            <div class="marquee-item">PROTOTYPING</div>
+            <div class="marquee-item">FRONTEND DEV</div>
+            <div class="marquee-item">MOTION</div>
+            <!-- Duplicate for loop -->
+            <div class="marquee-item">UI DESIGN</div>
+            <div class="marquee-item">UX RESEARCH</div>
+            <div class="marquee-item">PROTOTYPING</div>
+            <div class="marquee-item">FRONTEND DEV</div>
+            <div class="marquee-item">MOTION</div>
+        </div>
+    </div>
+
+    <!-- WORK SECTION 1: LIST -->
+    <section class="work-list-section">
+        <div class="section-header">
+            <h2 class="section-title reveal-text">Selected<br>Works (21-23)</h2>
+            <span style="font-family: var(--f-mono); font-size: 12px;">SCROLL TO EXPLORE</span>
+        </div>
+
+        <div class="work-list">
+            <!-- Project 1 -->
+            <a href="#" class="work-item interactable" data-img="https://images.unsplash.com/photo-1545235617-9465d2a55698?w=500&auto=format&fit=crop&q=60">
+                <div class="work-name">Fintech Dashboard</div>
+                <div class="work-meta">
+                    <div>PRODUCT DESIGN</div>
+                    <div>2023</div>
+                </div>
+            </a>
+            <!-- Project 2 -->
+            <a href="#" class="work-item interactable" data-img="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=500&auto=format&fit=crop&q=60">
+                <div class="work-name">Cosmic E-Comm</div>
+                <div class="work-meta">
+                    <div>WEB DESIGN</div>
+                    <div>2022</div>
+                </div>
+            </a>
+            <!-- Project 3 -->
+            <a href="#" class="work-item interactable" data-img="https://images.unsplash.com/photo-1616469829941-c7200edec809?w=500&auto=format&fit=crop&q=60">
+                <div class="work-name">Mono Brand Id</div>
+                <div class="work-meta">
+                    <div>BRANDING</div>
+                    <div>2022</div>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Hover Image Container -->
+        <div class="work-preview" id="previewImg">
+            <img src="" alt="Preview">
+        </div>
+    </section>
+
+    <!-- WORK SECTION 2: FEATURED (BOLD COLOR) -->
+    <!-- Feature: Bold yellow background section break -->
+    <section class="featured-project">
+        <div class="feat-content reveal-text">
+            <div style="font-family:var(--f-mono); margin-bottom: 20px;">★ FEATURED CASE STUDY</div>
+            <h3>NEON<br>BANKING_APP</h3>
+            <p class="feat-desc">A complete overhaul of a traditional banking application, introducing dark mode, gamification elements, and a brutalist typographic system.</p>
+            <a href="#" class="btn-black interactable">View Case Study</a>
+        </div>
+        <div class="feat-img reveal-text">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1000&auto=format&fit=crop&q=60" alt="App Screens">
+        </div>
+    </section>
+
+    <!-- WORK SECTION 3: VISUAL BENTO GRID -->
+    <section class="bento-wrap">
+        <div class="section-header">
+            <h2 class="section-title reveal-text">Experiments<br>& Playground</h2>
+        </div>
+        
+        <div class="bento-grid">
+            <div class="bento-card b-large interactable reveal-text">
+                <div class="card-overlay">
+                    <span style="font-family: var(--f-mono);">01 — 3D</span>
+                    <h3 class="card-title">Abstract<br>Forms</h3>
+                </div>
+                <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=800&auto=format&fit=crop" alt="3d">
+            </div>
+            
+            <div class="bento-card b-tall interactable reveal-text" style="transition-delay: 0.1s;">
+                <div class="card-overlay">
+                    <span style="font-family: var(--f-mono); color: white;">02 — TYPE</span>
+                    <h3 class="card-title" style="color: white">Kinetic<br>Type</h3>
+                </div>
+                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=800&auto=format&fit=crop" alt="Type">
+            </div>
+            
+            <div class="bento-card interactable reveal-text" style="transition-delay: 0.2s;">
+                <div class="card-overlay">
+                    <span style="font-family: var(--f-mono); text-shadow: 0 1px 2px black; color: white;">03 — PHOTO</span>
+                </div>
+                 <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&auto=format&fit=crop" alt="Photo">
+            </div>
+
+            <div class="bento-card interactable reveal-text" style="background: var(--ink); color: #fff; transition-delay: 0.3s;">
+                <div class="card-overlay">
+                    <span style="font-family: var(--f-mono);">04 — CODE</span>
+                    <h3 class="card-title">Creative<br>Dev</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section interactable-area" id="about">
+        <div class="reveal-text">
+            <h2 class="about-title">WHO?</h2>
+        </div>
+        <div class="about-text reveal-text">
+            <h3 style="font-size: 2rem; margin-bottom: 2rem;">Linyun Yu is a multidisciplinary designer based in Shanghai.</h3>
+            <p>I craft digital experiences that blend structure with chaos. I believe websites shouldn't just be informative—they should be memorable. My background in traditional graphic design informs my approach to UI, focusing on grid systems, white space, and typographic hierarchy.</p>
+            
+            <div style="margin-top: 3rem;">
+                <p style="font-family: var(--f-mono); font-size: 14px; margin-bottom: 1rem;">TOOLKIT</p>
+                <div class="skill-tags">
+                    <span>FIGMA</span>
+                    <span>WEBFLOW</span>
+                    <span>HTML/CSS/JS</span>
+                    <span>SPLINE 3D</span>
+                    <span>AFTER EFFECTS</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <!-- Feature: Rich contact layout with lavender bg -->
+    <section class="contact-section" id="contact">
+        <div class="contact-deco"></div>
+        
+        <div class="reveal-text">
+            <h2 class="cta-big">LET'S BUILD<br>SOMETHING<br>RADICAL.</h2>
+        </div>
+        
+        <div class="contact-grid reveal-text">
+            <div>
+                 <p style="max-width:350px; font-size: 1.1rem; margin-bottom: 30px;">
+                    Currently open for freelance projects and collaborations. Have a project in mind? Let's chat.
+                </p>
+                <a href="mailto:hello@linyunyu.com" class="email-link interactable">hello@linyunyu.com</a>
+            </div>
+            <div class="contact-info">
+                <h4>SOCIALS</h4>
+                <div class="social-pills">
+                    <a href="#" class="pill interactable">INSTAGRAM</a>
+                    <a href="#" class="pill interactable">LINKEDIN</a>
+                    <a href="#" class="pill interactable">DRIBBBLE</a>
+                    <a href="#" class="pill interactable">TWITTER</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div>Linyun Yu © 2023</div>
+        <div>Designed & Coded with Love</div>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // --- 1. PRELOADER LOGIC ---
+            const countEl = document.querySelector('.loader-count');
+            const loader = document.getElementById('loader');
+            let count = 0;
+            
+            const interval = setInterval(() => {
+                count += Math.floor(Math.random() * 5) + 1;
+                if(count > 100) count = 100;
+                countEl.textContent = count.toString().padStart(3, '0');
+                
+                if (count === 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loader.classList.add('loaded');
+                        // Trigger hero entry
+                        const heroSpans = document.querySelectorAll('.hero-h1 span');
+                        heroSpans.forEach((span, idx) => {
+                            setTimeout(() => {
+                                span.style.opacity = '1';
+                                span.style.transform = 'translateY(0)';
+                                span.style.transition = 'all 0.8s ease';
+                            }, 500 + (idx * 200));
+                        });
+                    }, 500);
+                }
+            }, 30);
+
+            // --- 2. CUSTOM CURSOR ---
+            const cursor = document.getElementById('cursor');
+            let mouseX = 0, mouseY = 0;
+            
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursor.style.left = mouseX + 'px';
+                cursor.style.top = mouseY + 'px';
+            });
+
+            // Hover effect on interactable elements
+            const stickies = document.querySelectorAll('.interactable, a, button');
+            stickies.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+            });
+
+            // --- 3. SCROLL PROGRESS NAV ---
+            const progressMask = document.getElementById('progressMask');
+            
+            window.addEventListener('scroll', () => {
+                const totalHeight = document.body.scrollHeight - window.innerHeight;
+                const progress = (window.scrollY / totalHeight) * 100;
+                progressMask.style.width = `${progress}%`;
+                
+                // Parallax for marquee and hero image
+                const scrolled = window.scrollY;
+                const heroImg = document.querySelector('.parallax-img');
+                if(heroImg) {
+                    heroImg.style.transform = `scale(1.1) translateY(${scrolled * 0.1}px)`;
+                }
+            });
+
+            // --- 4. WORK LIST HOVER PREVIEW ---
+            const workItems = document.querySelectorAll('.work-item');
+            const preview = document.getElementById('previewImg');
+            const previewImgTags = preview.querySelector('img');
+
+            workItems.forEach(item => {
+                item.addEventListener('mousemove', (e) => {
+                    const imgUrl = item.getAttribute('data-img');
+                    previewImgTags.src = imgUrl;
+                    
+                    preview.style.opacity = '1';
+                    preview.style.transform = 'scale(1) rotate(-3deg)';
+                    
+                    // Position preview near cursor but fixed offset
+                    // We need to calculate position relative to the viewport
+                    const x = e.clientX + 20; 
+                    const y = e.clientY - 100;
+                    
+                    // Simple boundary check not included for brevity, but CSS fixed helps
+                    // Using fixed position cursor style tracking essentially
+                    preview.style.left = (e.clientX + 50) + 'px';
+                    preview.style.top = (e.clientY + window.scrollY - 100) + 'px';
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    preview.style.opacity = '0';
+                    preview.style.transform = 'scale(0.8)';
+                });
+            });
+
+            // --- 5. INTERSECTION OBSERVER FOR ANIMATIONS ---
+            const observerOptions = {
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-text').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>

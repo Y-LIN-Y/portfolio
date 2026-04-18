@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Designer Portfolio - What I Do Expansion</title>
+    
+    <style>
+        /* 
+         * DESIGN SYSTEM & TYPOGRAPHY SETUP
+         * Importing closest Google Fonts matches to simulate the requested design system
+         * so the prototype renders correctly immediately.
+         */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Outfit:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap');
+
+        :root {
+            /* Requested Palette */
+            --forest: #275E48;
+            --bg: #EDEBE6;
+            --yellow: #FFD600;
+            --lavender: #C8B4FF;
+            --ink: #0D0D0D;
+            --ink-muted: #7A7770;
+
+            /* Font mapping (simulated for prototype) */
+            /* Mango Grotesque simulated by Oswald with tight spacing/height */
+            --font-display: 'Oswald', 'Mango Grotesque', sans-serif; 
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+
+            --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+        }
+
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); }
+
+        /* Shared Utility Classes (Based on existing system mentioned) */
+        .wid-tag {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 8px;
+            border: 1px solid var(--ink);
+            border-radius: 4px; /* Slightly rounded styling */
+            display: inline-block;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        /* Animation Utilities */
+        .reveal, .reveal-d1, .reveal-d2 {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+        }
+        .reveal.active, .reveal-d1.active, .reveal-d2.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-d1 { transition-delay: 0.1s; }
+        .reveal-d2 { transition-delay: 0.2s; }
+
+        /* SECTION CONTAINER */
+        .wid-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6rem; /* Vertical Rhythm */
+        }
+
+        /* ---------------------------------------------------------
+           ROW 2: SHANGHAI PLANETARIUM
+           Concept: "Cinematic Scale". 
+           Uses full-width display typography to mimic a giant screen.
+           Layout: Stacked typographic hierarchy with a distinct lavender tech-line.
+           --------------------------------------------------------- */
+        .wid-row-2 {
+            width: 100%;
+            position: relative;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(13, 13, 13, 0.1);
+        }
+
+        .wid-row-2-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+        }
+
+        .wid-r2-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* The huge distinct title style */
+        .wid-display-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 15vw, 12rem);
+            line-height: 0.8;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 0;
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            /* To allow transform interaction */
+            perspective: 1000px;
+        }
+
+        .wid-display-title span {
+            display: block;
+            transition: transform 0.6s var(--ease-out), color 0.3s;
+            transform-origin: left center;
+        }
+        
+        /* Indent the second line for editorial feel */
+        .wid-display-title span:nth-child(2) {
+            margin-left: 1.5em; /* Deep indent */
+            color: transparent;
+            -webkit-text-stroke: 1px var(--ink); /* Outline style */
+        }
+        
+        .wid-display-title span:nth-child(3) {
+            color: var(--forest);
+        }
+
+        .wid-row-2:hover .wid-display-title span:nth-child(1) { transform: translateX(20px); }
+        .wid-row-2:hover .wid-display-title span:nth-child(2) { transform: translateX(-20px); -webkit-text-stroke: 1px var(--forest); }
+        .wid-row-2:hover .wid-display-title span:nth-child(3) { transform: translateX(10px); color: var(--lavender); }
+
+        .wid-row-2-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-top: 2rem;
+            align-items: end;
+        }
+
+        /* Decorative "Orbit" element */
+        .wid-orbit-graphic {
+            width: 60px;
+            height: 60px;
+            border: 1px dashed var(--ink-muted);
+            border-radius: 50%;
+            position: relative;
+            animation: spin 10s linear infinite;
+        }
+        .wid-orbit-graphic::after {
+            content: '';
+            position: absolute;
+            top: -4px; left: 50%;
+            width: 8px; height: 8px;
+            background: var(--lavender);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--lavender);
+        }
+
+        .wid-desc-block {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 1.2vw, 1.4rem);
+            line-height: 1.5;
+            color: var(--ink-muted);
+            max-width: 40ch;
+        }
+
+        /* ---------------------------------------------------------
+           ROW 3: VIRTUAL EXHIBITION
+           Concept: "The Navigator".
+           Uses a horizontal flex layout with directional motifs (arrows/lines).
+           Replaces code editor with a "Flight Plan" aesthetic.
+           --------------------------------------------------------- */
+        .wid-row-3 {
+            display: block;
+            position: relative;
+        }
+
+        /* The functional container */
+        .wid-nav-container {
+            display: grid;
+            grid-template-columns: 1fr 2.5fr; /* Asymmetric grid */
+            gap: 2rem;
+            align-items: center;
+            background: #E6E4DE; /* Slightly darker than bg */
+            padding: 3rem;
+            border-radius: 4px; /* Subtle separate card feel */
+            transition: background 0.4s;
+            cursor: crosshair; /* Interactive feel */
+        }
+        
+        .wid-nav-container:hover {
+            background: #E1DFD9;
+        }
+
+        /* Left Compass/Arrow Area */
+        .wid-nav-visual {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            min-height: 200px;
+            border-right: 2px dashed var(--ink-muted);
+            padding-right: 2rem;
+        }
+
+        .wid-compass-arrow {
+            width: 100%;
+            max-width: 120px;
+            stroke: var(--ink);
+            transition: transform 0.5s var(--ease-out);
+        }
+
+        .wid-nav-container:hover .wid-compass-arrow {
+            transform: rotate(45deg) scale(1.1);
+            stroke: var(--forest);
+        }
+
+        .wid-coords {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            color: var(--ink-muted);
+            margin-top: auto;
+        }
+
+        /* Right Content Area */
+        .wid-nav-content {
+            padding-left: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .wid-nav-header {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .wid-nav-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 0.9;
+            text-transform: uppercase;
+            margin: 0;
+            color: var(--ink);
+        }
+        
+        .wid-nav-highlight {
+            color: var(--yellow);
+            -webkit-text-stroke: 1px var(--ink); /* Retain legibility */
+            font-style: italic;
+        }
+
+        .wid-nav-desc {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 1.1vw, 1.25rem);
+            color: var(--ink);
+            max-width: 50ch;
+        }
+
+        /* Interactive Map Marker Button */
+        .wid-btn-map {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            background: var(--ink);
+            color: var(--bg);
+            padding: 10px 20px;
+            width: fit-content;
+            text-decoration: none;
+            border: 1px solid var(--ink);
+            transition: all 0.3s;
+        }
+        
+        .wid-btn-map:hover {
+            background: transparent;
+            color: var(--ink);
+        }
+        
+        .wid-btn-map svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .wid-row-2-content { grid-template-columns: 1fr; gap: 2rem; }
+            .wid-nav-container { grid-template-columns: 1fr; padding: 1.5rem; }
+            .wid-nav-visual { 
+                flex-direction: row; 
+                align-items: center; 
+                height: auto; 
+                min-height: auto; 
+                border-right: none; 
+                border-bottom: 2px dashed var(--ink-muted); 
+                padding-right: 0; padding-bottom: 1.5rem;
+            }
+            .wid-compass-arrow { width: 60px; }
+            .wid-nav-content { padding-left: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <section class="wid-section">
+        
+        <!-- ROW 1 Placeholder to visual context (As requested, not redesigned) -->
+        <div style="opacity: 0.5; border-bottom: 1px solid #ccc; padding-bottom: 2rem; font-family: 'Space Mono', monospace; font-size: 12px;">
+            [ ROW 1 - EXISTING GRID LAYOUT ]
+        </div>
+
+
+        <!-- FEATURE: Row 2 - Shanghai Planetarium -->
+        <!-- Design Rationale: Uses a massive typographic scale to represent the "Large Scale" nature of the project.
+             The split text with outline stroke adds editorial depth. The lavender orbit graphic breaks the rigid grid. -->
+        <div class="wid-row-2">
+            
+            <div class="wid-row-2-header reveal">
+                <div class="wid-r2-meta">
+                    <span class="wid-tag" style="border-color: var(--lavender); color: var(--ink);">Installation</span>
+                    <span class="wid-tag">2023</span>
+                </div>
+                <!-- Small typographic detail for rhythm -->
+                <div style="font-family: var(--font-mono); font-size: 10px; color: var(--ink-muted);">
+                    SH/PLANETARIUM Ver 2.0
+                </div>
+            </div>
+
+            <h2 class="wid-display-title reveal-d1">
+                <span>Designing</span>
+                <span>Digital</span>
+                <span>Planetarium</span>
+            </h2>
+
+            <div class="wid-row-2-content">
+                <div class="wid-orbit-graphic reveal-d2"></div>
+                
+                <div class="wid-desc-block reveal-d2">
+                    <p>
+                        Architecting <strong>large-scale screen experiences</strong> for one of the world's largest astronomy museums. 
+                        Moving beyond static displays to create a responsive, immersive environment that translates complex 
+                        astrophysical data into visual wonder.
+                    </p>
+                    <span class="wid-tag" style="margin-top: 1rem; background: var(--lavender); border: none;">12K Resolution</span>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- FEATURE: Row 3 - Virtual Exhibition -->
+        <!-- Design Rationale: Completely removed the code editor. Replaced with a "Navigation Dashboard" metaphor.
+             Uses an asymmetric grid with a prominent arrow SVG and dashed lines to imply movement and exploration.
+             The layout feels like a map legend or GPS interface. -->
+        <div class="wid-row-3 reveal">
+            
+            <div class="wid-nav-container">
+                
+                <!-- Left: Visual Metaphor for Navigation -->
+                <div class="wid-nav-visual">
+                    <svg class="wid-compass-arrow" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 50H90" stroke-width="8" stroke-linecap="square"/>
+                        <path d="M60 20L95 50L60 80" stroke-width="8" stroke-linecap="square"/>
+                    </svg>
+                    
+                    <div class="wid-coords">
+                        COORD: 34.22° N<br>
+                        TYPE: VIRTUAL_NAV
+                    </div>
+                </div>
+
+                <!-- Right: Content -->
+                <div class="wid-nav-content">
+                    <div class="wid-nav-header">
+                        <span class="wid-tag" style="background:var(--yellow); border-color:var(--yellow);">Interactive</span>
+                        <span class="wid-tag">Three.js</span>
+                    </div>
+
+                    <h2 class="wid-nav-title">
+                        Exploring <span class="wid-nav-highlight">Virtual</span><br>
+                        Exhibition Spaces
+                    </h2>
+
+                    <p class="wid-nav-desc">
+                        Designing an interactive platform where users navigate projects in a digital environment. 
+                        A "Sea of Information" metaphor guides the UX, allowing users to chart their own course 
+                        through the designer's archival works seamlessly.
+                    </p>
+
+                    <a href="#" class="wid-btn-map">
+                        <span>LAUNCH MAP</span>
+                        <!-- Simple compass icon -->
+                        <svg viewBox="0 0 24 24"><path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z"/></svg>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+    <!-- INTERACTION SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Setup Intersection Observer for scroll animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        // Stop observing once revealed
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const revealElements = document.querySelectorAll('.reveal, .reveal-d1, .reveal-d2');
+            revealElements.forEach(el => observer.observe(el));
+            
+            // Micro-interaction: Mouse position influence on Row 3 Arrow (Subtle Parallax)
+            const row3 = document.querySelector('.wid-nav-container');
+            const arrow = document.querySelector('.wid-compass-arrow');
+            
+            if(row3 && arrow) {
+                row3.addEventListener('mousemove', (e) => {
+                    const rect = row3.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Small movement calculation
+                    const moveX = (x - rect.width / 2) * 0.05;
+                    const moveY = (y - rect.height / 2) * 0.05;
+
+                    arrow.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
+                });
+
+                row3.addEventListener('mouseleave', () => {
+                    arrow.style.transform = `translate(0, 0) scale(1)`;
+                });
+            }
+        });
+    </script>
+</body>
+</html>
