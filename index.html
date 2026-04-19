@@ -1000,6 +1000,48 @@
         }
         .social-pill:hover { background: var(--yellow); color: var(--ink); transform: translateY(-2px); }
 
+        /* WeChat QR modal */
+        .wechat-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .wechat-modal.open { display: flex; }
+        .wechat-modal-box {
+            background: #fff;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            max-width: 260px;
+            width: 90%;
+        }
+        .wechat-modal-box img { width: 100%; display: block; }
+        .wechat-modal-box span {
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--ink);
+        }
+        .wechat-modal-close {
+            align-self: flex-end;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+            line-height: 1;
+            color: var(--ink);
+            padding: 0;
+            margin-bottom: -8px;
+        }
+
         /* ============================================================
            SITE FOOTER
         ============================================================ */
@@ -1757,10 +1799,20 @@
             <div class="social-pills">
                 <a href="assets/files/resume_linyun_yu_en.pdf" class="resume-link social-pill" target="_blank" rel="noopener noreferrer">Resume</a>
                 <a href="https://www.linkedin.com/in/linyunyu" target="_blank" rel="noopener noreferrer" class="social-pill">LinkedIn</a>
+                <button class="social-pill" id="wechat-btn">WeChat</button>
             </div>
         </div>
     </div>
 </section>
+
+<!-- WeChat QR modal -->
+<div class="wechat-modal" id="wechat-modal">
+    <div class="wechat-modal-box">
+        <button class="wechat-modal-close" id="wechat-close">&times;</button>
+        <img src="assets/images/index/wechat_qr.jpg" alt="WeChat QR Code">
+        <span>Scan to add on WeChat</span>
+    </div>
+</div>
 
 <!-- ============ SITE FOOTER ============ -->
 <footer class="site-footer">
@@ -2415,6 +2467,18 @@ function initReveal () {
     new MutationObserver(updateResumeLink).observe(document.body, {
         attributes: true, attributeFilter: ['data-lang']
     });
+})();
+
+// WeChat QR modal
+(function() {
+    const btn   = document.getElementById('wechat-btn');
+    const modal = document.getElementById('wechat-modal');
+    const close = document.getElementById('wechat-close');
+    if (!btn || !modal) return;
+    btn.addEventListener('click', () => modal.classList.add('open'));
+    close.addEventListener('click', () => modal.classList.remove('open'));
+    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.classList.remove('open'); });
 })();
 
 </script>
