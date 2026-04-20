@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sky Sports AI App | Linyun Yu</title>
+    <link rel="preload" href="assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Black.woff2" as="font" type="font/woff2" crossorigin>
 
     <style>
         /* ── LOCAL FONTS ── */
-        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
-        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:block; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:block; }
 
         @font-face { font-family:'Outfit'; src:url('assets/fonts/Outfit/Outfit-VariableFont_wght.woff2') format('woff2 supports variations'), url('assets/fonts/Outfit/Outfit-VariableFont_wght.woff2') format('woff2'); font-weight:100 900; font-style:normal; font-display:swap; }
 
@@ -218,16 +220,30 @@
         /* Hamburger */
         .hamburger {
             display: none;
+            background: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            position: relative;
             cursor: pointer;
-            width: 36px; height: 36px;
-            background: none; border: none;
             padding: 0;
-            align-items: center; justify-content: center;
+            flex-shrink: 0;
+            color: var(--ink);
+            overflow: visible;
         }
-        .hamburger-icon { width: 22px; height: 22px; color: var(--ink); }
-        .hamburger-close { display: none; }
-        .hamburger.is-open .hamburger-open { display: none; }
-        .hamburger.is-open .hamburger-close { display: block; }
+        .hamburger-icon {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 24px; height: 24px;
+            display: block;
+            transform: translate(-50%, -50%);
+            transform-origin: center;
+            transition: opacity 0.25s ease;
+        }
+        .hamburger-close { opacity: 0; }
+        .hamburger.is-open .hamburger-open { opacity: 0; }
+        .hamburger.is-open .hamburger-close { opacity: 1; }
+        .hamburger.is-open { color: #fff; }
 
         .mobile-menu {
             display: none;
@@ -235,18 +251,28 @@
             background: var(--ink);
             z-index: 99;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
-            gap: 32px;
-            opacity: 0;
+            align-items: center;
+            padding: 80px 40px 40px;
             pointer-events: none;
-            transition: opacity 0.4s var(--easing);
+            clip-path: circle(0% at calc(100% - 30px) 35px);
+            transition: clip-path 0.6s cubic-bezier(0.65, 0, 0.35, 1);
         }
-        .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
+        .mobile-menu.is-open {
+            clip-path: circle(150% at calc(100% - 30px) 35px);
+            pointer-events: auto;
+        }
+        .mobile-menu-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            width: max-content;
+        }
         .mobile-menu-link {
             font-family: var(--font-display);
-            font-weight: 900;
-            font-size: clamp(2rem, 8vw, 3.5rem);
+            font-size: clamp(2.5rem, 10vw, 4rem);
+            font-weight: 700;
             text-transform: uppercase;
             color: #fff;
             text-decoration: none;
@@ -262,13 +288,15 @@
         .mobile-menu.is-open .mobile-menu-link { opacity: 1; transform: translateY(0); }
         .mobile-menu.is-open .mobile-menu-link:nth-child(1) { transition-delay: 0.1s; }
         .mobile-menu.is-open .mobile-menu-link:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-menu.is-open .mobile-menu-link:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-menu.is-open .mobile-menu-link:nth-child(4) { transition-delay: 0.25s; }
         .mobile-menu-link:active { color: var(--lavender); }
         .mobile-menu-footer {
             position: absolute;
             bottom: 40px; left: 50%;
             transform: translateX(-50%);
         }
-        .mobile-menu-footer .nav-status { display: flex; color: rgba(255,255,255,0.4); }
+        .mobile-menu-footer .nav-status { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.4); white-space: nowrap; }
         .mobile-menu-footer .status-dot { background: #22C55E; }
 
         /* --- HERO --- */
@@ -1380,7 +1408,7 @@
         @media (max-width: 640px) {
             :root { --spacing-container: 20px; --spacing-section: 64px; }
             nav {
-                padding: 16px 24px 16px 20px;
+                padding: 16px 20px;
                 display: grid;
                 grid-template-columns: minmax(0, 1fr) auto auto;
                 column-gap: 12px;
@@ -1395,11 +1423,14 @@
                 display: flex;
                 grid-column: 3;
                 justify-self: end;
+                margin-right: -6px;
             }
             .mobile-menu { display: flex; }
 
             nav.menu-open {
                 background: transparent;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
                 border-color: transparent;
             }
             nav.menu-open .nav-back { color: #fff; }
@@ -1593,9 +1624,10 @@
 
     <div class="mobile-menu" id="mobile-menu">
         <div class="mobile-menu-inner">
-            <a href="index.html" class="mobile-menu-link">Back to Portfolio</a>
-            <a href="#section-overview" class="mobile-menu-link lang-en">Overview</a>
-            <a href="#section-overview" class="mobile-menu-link lang-cn">项目概述</a>
+            <a href="index.html#hero" class="mobile-menu-link"><span class="lang-en">Welcome</span><span class="lang-cn">Welcome</span></a>
+            <a href="index.html#wid-b" class="mobile-menu-link"><span class="lang-en">Work</span><span class="lang-cn">Work</span></a>
+            <a href="index.html#about" class="mobile-menu-link"><span class="lang-en">About</span><span class="lang-cn">About</span></a>
+            <a href="index.html#contact" class="mobile-menu-link"><span class="lang-en">Contact</span><span class="lang-cn">Contact</span></a>
         </div>
         <div class="mobile-menu-footer">
             <div class="nav-status">
@@ -2095,19 +2127,28 @@
             const hamburger = document.getElementById('hamburger');
             const mobileMenu = document.getElementById('mobile-menu');
             if (hamburger && mobileMenu) {
+                function closeMenu() {
+                    hamburger.classList.remove('is-open');
+                    mobileMenu.classList.remove('is-open');
+                    document.body.style.overflow = '';
+                    setTimeout(() => {
+                        if (!mobileMenu.classList.contains('is-open')) {
+                            nav.classList.remove('menu-open');
+                        }
+                    }, 650);
+                }
                 hamburger.addEventListener('click', () => {
-                    const isOpen = mobileMenu.classList.toggle('is-open');
-                    hamburger.classList.toggle('is-open');
-                    nav.classList.toggle('menu-open');
-                    document.body.style.overflow = isOpen ? 'hidden' : '';
+                    if (mobileMenu.classList.contains('is-open')) {
+                        closeMenu();
+                    } else {
+                        hamburger.classList.add('is-open');
+                        mobileMenu.classList.add('is-open');
+                        nav.classList.add('menu-open');
+                        document.body.style.overflow = 'hidden';
+                    }
                 });
                 mobileMenu.querySelectorAll('.mobile-menu-link').forEach(link => {
-                    link.addEventListener('click', () => {
-                        mobileMenu.classList.remove('is-open');
-                        hamburger.classList.remove('is-open');
-                        nav.classList.remove('menu-open');
-                        document.body.style.overflow = '';
-                    });
+                    link.addEventListener('click', () => closeMenu());
                 });
             }
 

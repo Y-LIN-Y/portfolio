@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Linyun Yu | Portfolio</title>
+    <link rel="preload" href="assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Bold.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Black.woff2" as="font" type="font/woff2" crossorigin>
 
     <style>
         /* ── LOCAL FONTS ── */
-        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
-        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:swap; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:block; }
+        @font-face { font-family:'Mango Grotesque'; src:url('assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Black.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:block; }
 
         @font-face { font-family:'Outfit'; src:url('assets/fonts/Outfit/Outfit-VariableFont_wght.woff2') format('woff2 supports variations'), url('assets/fonts/Outfit/Outfit-VariableFont_wght.woff2') format('woff2'); font-weight:100 900; font-style:normal; font-display:swap; }
 
@@ -22,10 +24,16 @@
         @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-Italic.woff2') format('woff2'); font-weight:400; font-style:italic; font-display:swap; }
         @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
         @font-face { font-family:'Space Mono'; src:url('assets/fonts/Space_Mono/SpaceMono-BoldItalic.woff2') format('woff2'); font-weight:700; font-style:italic; font-display:swap; }
+
+        @font-face { font-family:'方正时尚碑宋 简'; src:url('assets/fonts/FZShiSBSJW/FZShiSBSJW-EB-subset.woff2') format('woff2'); font-weight:900; font-style:normal; font-display:swap; unicode-range:U+4FE1,U+5386,U+5FAE,U+6211,U+7B80,U+7CFB,U+82F1,U+8054,U+9886; }
     </style>
     <script>
         (function() {
             document.documentElement.style.opacity = '0';
+            // Force hide native cursor immediately, before any CSS loads
+            var noCursor = "url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') 0 0, none";
+            document.documentElement.style.setProperty('cursor', noCursor, 'important');
+            document.body && document.body.style.setProperty('cursor', noCursor, 'important');
             var lang = 'EN';
             try {
                 lang = localStorage.getItem('portfolioLang') || lang;
@@ -69,7 +77,9 @@
            RESET
         ============================================================ */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        * { cursor: none; }
+        html, body { cursor: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') 0 0, none !important; }
+        * { cursor: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') 0 0, none !important; }
+        a, button, input, select, textarea, [role="button"], label { cursor: url('data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7') 0 0, none !important; }
         html { scroll-behavior: smooth; overflow-x: hidden; transition: opacity 0.15s; }
 
         body {
@@ -528,7 +538,7 @@
             position: absolute;
             left: -0.3em;
             bottom: 0.05em;
-            width: calc(100% + 0.7em);
+            width: calc(100% - 0.2em);
             height: 0.48em;
             background: var(--forest);
             transform: skewX(-12deg);
@@ -684,7 +694,7 @@
         .hero-scroll {
             position: absolute;
             bottom: 0;
-            right: 12%;
+            right: 7%;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -985,7 +995,8 @@
             background: var(--ink);
             color: #fff;
             width: 180px;
-            padding: 12px 24px;
+            height: 46px;
+            padding: 0 24px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -1035,7 +1046,7 @@
             align-self: flex-end;
             background: none;
             border: none;
-            cursor: pointer;
+            cursor: none;
             font-size: 20px;
             line-height: 1;
             color: var(--ink);
@@ -1136,6 +1147,31 @@
         #wid-b .work-card-link { display:block; color:inherit; text-decoration:none; }
         #wid-b .wid-b-label { font-family:var(--font-mono); font-size:0.9rem; color:var(--ink-muted); padding-bottom:1rem; display:block; }
 
+        /* More Work entry */
+        .more-work-entry {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border);
+            color: var(--ink-muted);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: color 0.25s, border-color 0.25s;
+            margin-top: -3rem;
+        }
+        .more-work-entry:hover { color: var(--ink); border-color: var(--ink); }
+        .more-work-entry .more-work-arrow {
+            font-size: 1rem;
+            transition: transform 0.25s var(--easing);
+            letter-spacing: 0;
+        }
+        .more-work-entry:hover .more-work-arrow { transform: translateX(6px); }
+
         /* B Image placeholder */
         #wid-b .wid-b-img { background:#DCD9D0; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
         #wid-b .wid-b-img::after { content:'PROJECT IMAGE'; font-family:var(--font-mono); font-size:0.85rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.05em; z-index:1; }
@@ -1207,7 +1243,7 @@
         #wid-b .wid-b-voyage:hover .wid-b-arrow { background:var(--forest); border-color:var(--forest); transform:scale(1.1); }
         #wid-b .wid-b-voyage:hover .wid-b-arrow svg { stroke:var(--bg); transform:translateX(3px) rotate(0deg); }
         #wid-b .wid-b-voyage.mobile-active .wid-b-arrow { background:var(--forest); border-color:var(--forest); transform:scale(1.1); }
-        #wid-b .wid-b-voyage.mobile-active .wid-b-arrow svg { stroke:var(--bg); transform:translateX(3px) rotate(0deg); }
+        #wid-b .wid-b-voyage.mobile-active .wid-b-arrow svg { stroke:var(--bg); transform:rotate(0deg); }
         #wid-b .wid-b-voyage.is-ready .wid-b-voyage-visual { opacity:1; clip-path:none; }
 
         /* B Row 4: Planetarium Wide */
@@ -1251,8 +1287,8 @@
         #wid-b .wid-b-pano.mobile-active .br { bottom:20px; right:20px; }
         #wid-b .wid-b-pano-strip { display:none; }
         #wid-b .wid-b-pano-desc { font-size:1.05rem; line-height:1.6; color:var(--ink-muted); border-left:2px solid var(--forest); padding-left:1.5rem; margin-top:2.5rem; transition:color 0.4s var(--easing); }
-        #wid-b .wid-b-pano:hover .wid-b-pano-desc { color:var(--ink); }
-        #wid-b .wid-b-pano.mobile-active .wid-b-pano-desc { color:var(--ink); }
+        #wid-b .wid-b-pano:hover .wid-b-pano-desc { color:var(--ink-muted); }
+        #wid-b .wid-b-pano.mobile-active .wid-b-pano-desc { color:var(--ink-muted); }
 
         /* ============================================================
            RESPONSIVE
@@ -1359,8 +1395,11 @@
         }
         .mobile-menu-footer .nav-status {
             display: flex;
+            align-items: center;
+            gap: 6px;
             color: rgba(255,255,255,0.4);
         }
+        .mobile-menu-footer .nav-status span { display: inline; }
         .mobile-menu-footer .nav-status .status-dot {
             background: var(--green);
         }
@@ -1370,7 +1409,7 @@
                 left: 0;
                 right: 0;
                 width: auto;
-                padding: 16px 24px 16px 20px;
+                padding: 16px 24px;
                 display: grid;
                 grid-template-columns: minmax(0, 1fr) auto auto;
                 column-gap: 12px;
@@ -1726,6 +1765,11 @@
             <p class="wid-b-pano-desc reveal-left reveal-d4"><span class="lang-en">Sky Sports wanted to reach more viewers under 35. This project explored how AI personalisation could make football viewing fit more naturally into young fans' lives.</span><span class="lang-cn">Sky Sports希望吸引更多35岁以下的年轻用户。这个项目探索AI个性化如何让体育观看体验更贴近年轻用户的实际生活方式。</span></p>
         </article>
     </a>
+
+    <a href="more-work.html" class="more-work-entry reveal">
+        <span><span class="lang-en">More Work</span><span class="lang-cn">更多项目</span></span>
+        <span class="more-work-arrow">→</span>
+    </a>
 </section>
 
 <!-- ============ ABOUT ============ -->
@@ -1747,13 +1791,13 @@
     </div>
     <div class="about-body reveal-right reveal-d2">
         <p class="lang-en">
-            I work on large-screen interfaces and digital-physical experiences, with a background in product design. My work includes a broadcast management system for a cultural memorial and a venue dashboard for the Shanghai Astronomy Museum.
+            I work on interfaces and experiences that integrate digital and physical interactions, with a background in product design. My work includes a broadcast management system for a cultural memorial and a venue dashboard for the Shanghai Astronomy Museum.
         </p>
         <p class="lang-en">
             I focus on clarity and structure, aiming to make systems easy to navigate and intuitive to use, with visual design supporting how they are understood and used.
         </p>
         <p class="lang-cn">
-            主要从事大屏界面与数字与实体结合的体验设计，具备产品设计背景。参与过文化纪念场馆播控系统以及上海天文馆场馆管理看板的设计。
+            我从事界面与体验设计，将数字与实体互动相结合，具备产品设计背景。参与过文化纪念场馆播控系统以及上海天文馆场馆管理看板的设计。
         </p>
         <p class="lang-cn">
             关注信息结构与系统逻辑，致力于提升系统的可理解性与可用性，使视觉表达更好地服务于信息传达与实际使用。
@@ -1784,23 +1828,24 @@
         UI/UX designer with two years building products in culture and tech. Open to new opportunities.
     </p>
     <p class="contact-sub reveal reveal-d2 lang-cn">
-        UI/UX designer with two years building products in culture and tech. Open to new opportunities.
+        UI/UX 设计师，两年文化与科技领域产品设计经验，期待新的合作机会。
     </p>
     <div class="reveal reveal-d3">
-        <a href="mailto:yulinyune@gmail.com" class="btn" style="background: var(--ink);">
-            <span class="lang-en">Get In Touch</span><span class="lang-cn">Get In Touch</span> <span class="arrow">→</span>
+        <a href="mailto:yulinyune@gmail.com" class="btn" style="background: var(--ink); min-width: 230px; height: 52px; padding: 0 40px; justify-content: center;">
+            <span class="lang-en">Get In Touch</span><span class="lang-cn" style="font-family:var(--font-cn-display);font-size:17px;">联系我</span> <span class="arrow">→</span>
         </a>
     </div>
 
     <div class="contact-grid reveal reveal-d4">
         <div>
             <a href="mailto:yulinyune@gmail.com" class="contact-email-link">yulinyune@gmail.com</a>
+            <p style="margin-top:10px;font-size:12px;opacity:0.55;letter-spacing:0.03em;"><span class="lang-en">I usually respond within 24 hours.</span><span class="lang-cn">我通常会在 24 小时内回复邮件。</span></p>
         </div>
         <div>
             <div class="social-pills">
-                <a href="assets/files/resume_linyun_yu_en.pdf" class="resume-link social-pill" target="_blank" rel="noopener noreferrer">Resume</a>
-                <a href="https://www.linkedin.com/in/linyunyu" target="_blank" rel="noopener noreferrer" class="social-pill">LinkedIn</a>
-                <button class="social-pill" id="wechat-btn">WeChat</button>
+                <a href="assets/files/resume_linyun_yu_en.pdf" class="resume-link social-pill" target="_blank" rel="noopener noreferrer"><span class="lang-en">Resume</span><span class="lang-cn" style="font-family:var(--font-cn-display);letter-spacing:0.3em;font-weight:900;font-size:15px;">简历</span></a>
+                <a href="https://www.linkedin.com/in/linyunyu" target="_blank" rel="noopener noreferrer" class="social-pill"><span class="lang-en">LinkedIn</span><span class="lang-cn" style="font-family:var(--font-cn-display);letter-spacing:0.3em;font-weight:900;font-size:15px;">领英</span></a>
+                <button class="social-pill" id="wechat-btn"><span class="lang-en">WeChat</span><span class="lang-cn" style="font-family:var(--font-cn-display);letter-spacing:0.3em;font-weight:900;font-size:15px;">微信</span></button>
             </div>
         </div>
     </div>
@@ -1988,7 +2033,36 @@
             }
         });
         mobileMenu.querySelectorAll('.mobile-menu-link').forEach(link => {
-            link.addEventListener('click', () => closeMenu());
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                const target = href && href.startsWith('#') ? document.querySelector(href) : null;
+                // Prevent the native anchor jump — it races with the overflow restore
+                // and silently fails on iOS Safari on first tap
+                if (target) e.preventDefault();
+                closeMenu();
+                if (target) {
+                    // Raise flag before scroll so scrollHandler never triggers
+                    // hero reveal (which would scrollTo(0) and fight us)
+                    window._heroMenuNav = true;
+                    requestAnimationFrame(() => requestAnimationFrame(() => {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                        // Clear flag 300ms after scrolling stops (works for any distance)
+                        // If scroll never starts (already at target), clear after 500ms
+                        let clearTimer = setTimeout(() => {
+                            window._heroMenuNav = false;
+                            window.removeEventListener('scroll', onScroll);
+                        }, 500);
+                        const onScroll = () => {
+                            clearTimeout(clearTimer);
+                            clearTimer = setTimeout(() => {
+                                window._heroMenuNav = false;
+                                window.removeEventListener('scroll', onScroll);
+                            }, 300);
+                        };
+                        window.addEventListener('scroll', onScroll, { passive: true });
+                    }));
+                }
+            });
         });
 
         window.addEventListener('resize', queueMobileNavSync);
@@ -2124,6 +2198,8 @@
         // Trigger on scroll down, re-arm when scrolled back to top
         let scrollHandler = () => {
             if (!mobileTriggered && !mobileAnimating && window.scrollY > 1) {
+                // Don't fire hero reveal when the hamburger menu is driving the scroll
+                if (window._heroMenuNav) return;
                 triggerMobileReveal();
             }
             // Re-arm when user scrolls back to top
@@ -2338,6 +2414,24 @@
         el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
         el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
     });
+})();
+
+// ============================================================
+// CURSOR HIDE — Chrome inline-style override (CSS !important alone
+// is sometimes ignored by Chrome's cursor rendering; setting it as
+// an inline style on each element on first hover is the reliable fix)
+// ============================================================
+(function () {
+    // Only needed for non-touch devices
+    if (!window.matchMedia('(hover: none)').matches) {
+        document.addEventListener('mouseover', function (e) {
+            const t = e.target;
+            if (t && t.style && !t.__cursorFixed) {
+                t.style.setProperty('cursor', 'none', 'important');
+                t.__cursorFixed = true;
+            }
+        }, { capture: true, passive: true });
+    }
 })();
 
 // ============================================================
