@@ -69,17 +69,13 @@
 
 <iframe
     class="viewer-frame"
-    src="assets/files/early_portfolio.pdf#toolbar=0&navpanes=0&scrollbar=1&view=FitH"
-    title="Undergraduate & Pre-MA Portfolio">
+    src="https://docs.google.com/viewer?url=https%3A%2F%2Fy-lin-y.github.io%2Fportfolio%2Fassets%2Ffiles%2Fearly_portfolio.pdf&embedded=true"
+    title="Undergraduate & Pre-MA Portfolio"
+    allowfullscreen>
 </iframe>
 
 <script>
-    // On mobile, open the PDF directly — native viewer handles scaling properly
-    if (window.matchMedia('(max-width: 768px)').matches || 'ontouchstart' in window) {
-        window.location.replace('assets/files/early_portfolio.pdf');
-    }
-
-    // Block Ctrl+S / Cmd+S (save/download shortcut) on desktop
+    // Block Ctrl+S / Cmd+S / Cmd+P shortcuts
     document.addEventListener('keydown', function(e) {
         if ((e.ctrlKey || e.metaKey) && (e.key === 's' || e.key === 'S' || e.key === 'p' || e.key === 'P')) {
             e.preventDefault();
