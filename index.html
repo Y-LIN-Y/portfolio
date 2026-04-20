@@ -2341,6 +2341,16 @@
     const bgNum  = document.getElementById('loader-counter-bg');
     const fgNum  = document.getElementById('loader-num');
     const fill   = document.getElementById('loader-fill');
+
+    // Skip loader if already shown this session (e.g. returning from a project page)
+    if (sessionStorage.getItem('loaderShown')) {
+        loader.style.display = 'none';
+        document.body.style.overflow = '';
+        cursor?.classList.remove('cursor-hidden');
+        initReveal();
+        return;
+    }
+
     let n = 0;
 
     // Lock body scroll while loader is visible (prevents iOS Safari page scroll-behind)
@@ -2361,6 +2371,7 @@
                 loader.classList.add('done');
                 document.body.style.overflow = ''; // restore scroll after loader done
                 cursor?.classList.remove('cursor-hidden');
+                sessionStorage.setItem('loaderShown', '1');
                 initReveal();
             }, 700);
         }
