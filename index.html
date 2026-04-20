@@ -2193,8 +2193,12 @@
             }, 120);
         }
 
+        // Guard: ignore scroll/touch events fired automatically on page load
+        let readyForReveal = false;
+        setTimeout(() => { readyForReveal = true; }, 1200);
+
         function triggerMobileReveal() {
-            if (mobileTriggered || mobileAnimating) return;
+            if (!readyForReveal || mobileTriggered || mobileAnimating) return;
             mobileRevealAnimation();
         }
 
