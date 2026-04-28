@@ -6,6 +6,7 @@
 <title>More Work - EcoWorld | Linyun Yu</title>
 <link rel="preload" href="assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/MangoGrotesque/Web-PS/MangoGrotesque-Black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/misans@4.1.0/lib/Normal/result.css">
 <script>
 (function(){
   var lang='EN';
@@ -38,12 +39,12 @@
   --easing:cubic-bezier(0.19,1,0.22,1);
   --font-display:'Mango Grotesque','Arial Narrow',sans-serif;
   --font-cn-display:'Noto Serif SC',serif;
-  --font-body:'Outfit','Inter',sans-serif;
+  --font-body:'Outfit','MiSans',sans-serif;
   --font-mono:'Space Mono',monospace;
 }
 
 html{scroll-behavior:smooth;transition:opacity .15s}
-html,body{background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--font-body);-webkit-font-smoothing:antialiased}
 body{font-size:17px;line-height:1.75;overflow-x:hidden}
 a{color:inherit}
 p{font-size:15px;line-height:1.7}
@@ -308,6 +309,7 @@ html[data-initial-lang="CN"] .lang-en{display:none}
 
 /* Headlines */
 .h1{font-size:clamp(2.9rem,5vw,4.75rem);font-weight:700;letter-spacing:-.03em;line-height:.98}
+.h1 .lang-cn{font-size:.82em;font-weight:500;letter-spacing:0;line-height:1.18}
 .h2{font-size:28px;font-weight:700;letter-spacing:-.01em;line-height:1.2;margin-bottom:1rem}
 .h3{font-size:18px;font-weight:600;line-height:1.3;margin-bottom:.5rem}
 .lead{font-size:17px;line-height:1.7;color:var(--muted);max-width:760px;margin-top:24px}
@@ -739,8 +741,7 @@ html[data-initial-lang="CN"] .lang-en{display:none}
     </a>
   </div>
   <div class="nav-center">
-    <span class="u-mono lang-cn">更多作品 · 体验设计</span>
-    <span class="u-mono lang-en">MORE WORK · UX DESIGN</span>
+    <span class="u-mono">MORE WORK · UX DESIGN</span>
   </div>
   <div class="nav-right">
     <div class="nav-status">
@@ -780,7 +781,7 @@ html[data-initial-lang="CN"] .lang-en{display:none}
   <section class="block hero">
     <h1 class="h1">
       <span class="lang-en">Designing a smart-meter app for time-poor young families that turns climate action into a family game.</span>
-      <span class="lang-cn">为时间紧迫的年轻家庭设计一款智能电表应用，把气候行动变成一场家庭游戏。</span>
+      <span class="lang-cn">为忙碌的年轻家庭，设计一款智能电表应用 —— 把节能减碳，变成一场家庭游戏。</span>
     </h1>
     <p class="lead">
       <span class="lang-en">Understanding the behaviours, barriers and motivations of socially-active families - so energy management can fit into busy daily life rather than fight against it.</span>
