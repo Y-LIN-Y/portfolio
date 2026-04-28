@@ -25,6 +25,8 @@
             document.documentElement.setAttribute('data-initial-lang', lang);
             document.documentElement.lang = lang === 'CN' ? 'zh-CN' : 'en';
             document.write('<style>html[data-initial-lang="EN"] .lang-cn{display:none !important;}html[data-initial-lang="CN"] .lang-en{display:none !important;}</style>');
+            // Mark loader as already shown so returning to index won't replay it
+            try { sessionStorage.setItem('loaderShown', '1'); } catch(e) {}
         })();
     </script>
 
@@ -224,13 +226,175 @@
             nav.menu-open .lang-slider { background: #fff; }
         }
 
+        /* ── WORK GRID (additions for project cards) ── */
+        .work-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.75rem;
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 6rem;
+        }
+
+        .work-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: #FBFAF6;
+            border: 1px solid rgba(13,13,13,0.06);
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(13,13,13,0.03);
+            transition: transform 0.4s var(--easing), box-shadow 0.4s var(--easing), border-color 0.3s;
+        }
+        .work-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(13,13,13,0.12);
+            box-shadow: 0 18px 40px -20px rgba(13,13,13,0.18);
+        }
+
+        .work-card-thumb {
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            overflow: hidden;
+            background: #EFECE5;
+        }
+        .work-card-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s var(--easing);
+        }
+        .work-card:hover .work-card-thumb img {
+            transform: scale(1.04);
+        }
+
+        .work-card-body {
+            padding: 1.5rem 1.5rem 1.75rem;
+        }
+
+        .work-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.75rem;
+        }
+
+        .work-card-tag {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 3px 9px;
+            background: transparent;
+            color: var(--forest);
+            border: 1px solid currentColor;
+        }
+
+        .work-card-year {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--ink-muted);
+        }
+
+        .work-card-title {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 0.35rem;
+        }
+
+        .work-card-cn {
+            font-family: var(--font-body);
+            font-weight: 400;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--forest);
+            margin-bottom: 0.85rem;
+            font-style: italic;
+        }
+        .work-card-cn .lang-cn {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-weight: 300;
+            font-style: normal;
+        }
+
+        .work-card-desc {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--ink-muted);
+        }
+
+        /* Section heading above the COMING SOON block */
+        .section-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            margin-bottom: 3rem;
+        }
+
+        /* ── FOOTER (additions) ── */
+        footer.site-footer {
+            width: 100%;
+            padding: 2rem 72px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--ink-muted);
+            letter-spacing: 0.06em;
+        }
+        footer.site-footer .footer-socials {
+            display: flex;
+            gap: 1.5rem;
+        }
+        footer.site-footer .footer-socials a {
+            color: var(--ink-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        footer.site-footer .footer-socials a:hover {
+            color: var(--ink);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .work-grid { max-width: 100%; gap: 1.5rem; margin-bottom: 5rem; }
+        }
+        @media (max-width: 768px) {
+            .work-grid { grid-template-columns: 1fr; max-width: 520px; gap: 1.5rem; margin-bottom: 4rem; }
+            .work-card-body { padding: 1.35rem 1.35rem 1.6rem; }
+            .work-card-title { font-size: 1.6rem; }
+        }
+        @media (max-width: 640px) {
+            footer.site-footer {
+                padding: 1.5rem 24px;
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            .work-grid { margin-bottom: 3rem; gap: 1.25rem; }
+            .work-card-body { padding: 1.15rem 1.15rem 1.4rem; }
+            .work-card-title { font-size: 1.45rem; }
+            .work-card-cn,
+            .work-card-desc { font-size: 0.85rem; }
+            .work-card-meta { margin-bottom: 0.6rem; }
+        }
+
         /* ── MAIN CONTENT ── */
         .page-main {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            justify-content: center;
+            justify-content: flex-start;
             padding: 140px 72px 80px;
             min-height: 100vh;
         }
@@ -355,14 +519,37 @@
 <main class="page-main">
     <p class="page-tag"><span class="lang-en">More Work</span><span class="lang-cn">更多项目</span></p>
 
+    <!-- Card grid: 1 project + space for future -->
+    <div class="work-grid">
+        <a class="work-card" href="more-work-ecoworld.html">
+            <div class="work-card-thumb">
+                <img src="assets/images/eco-world/hero-showcase.jpg" alt="EcoWorld smart-meter app">
+            </div>
+            <div class="work-card-body">
+                <div class="work-card-meta">
+                    <span class="work-card-tag"><span class="lang-en">User Research</span><span class="lang-cn">用户研究</span></span>
+                    <span class="work-card-year">2024</span>
+                </div>
+                <h3 class="work-card-title">EcoWorld</h3>
+                <p class="work-card-cn"><span class="lang-en">Household Energy Behaviour Design</span><span class="lang-cn">家庭能源行为设计</span></p>
+                <p class="work-card-desc">
+                    <span class="lang-en">A solo coursework project based on a brief from Gengame Ltd — turning smart-meter data into a family-friendly behaviour-change app.</span>
+                    <span class="lang-cn">基于英国能源科技公司 Gengame Ltd 命题的硕士课程个人项目 —— 把智能电表数据转化为面向家庭的行为改变应用。</span>
+                </p>
+            </div>
+        </a>
+    </div>
+
+    <div class="section-divider"></div>
+
     <h1 class="page-heading">
         <span class="lang-en">COMING<br><span class="dim">SOON</span></span>
         <span class="lang-cn">敬请<br><span class="dim">期待</span></span>
     </h1>
 
     <p class="page-body">
-        <span class="lang-en">A few more projects are still being put together. More soon.</span>
-        <span class="lang-cn">还有几个项目正在整理中，敬请期待。</span>
+        <span class="lang-en">More projects are still being put together. Check back soon.</span>
+        <span class="lang-cn">更多项目正在整理中，敬请期待。</span>
     </p>
 
     <a href="index.html#wid-b" class="page-back-link">
@@ -370,6 +557,16 @@
         <span class="lang-cn">← 返回项目</span>
     </a>
 </main>
+
+<footer class="site-footer">
+    <span>&copy; 2026 Linyun Yu</span>
+    <div class="footer-socials">
+        <a href="mailto:yulinyune@gmail.com" class="lang-en">Email</a>
+        <a href="mailto:yulinyune@163.com" class="lang-cn">Email</a>
+        <a href="https://www.linkedin.com/in/linyunyu" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="assets/files/Linyun Yu_UI_UX_Designer_Resume.pdf" target="_blank" rel="noopener noreferrer"><span class="lang-en">Resume</span><span class="lang-cn">简历</span></a>
+    </div>
+</footer>
 
 <script>
 // Language toggle
